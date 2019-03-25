@@ -30,8 +30,8 @@
         {
             this.addFilesDialog = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.AddFilesBtn = new System.Windows.Forms.Button();
             this.addedFilesListView = new System.Windows.Forms.ListView();
+            this.AddFilesBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -57,6 +57,14 @@
             this.splitContainer1.SplitterDistance = 346;
             this.splitContainer1.TabIndex = 0;
             // 
+            // addedFilesListView
+            // 
+            this.addedFilesListView.Location = new System.Drawing.Point(12, 42);
+            this.addedFilesListView.Name = "addedFilesListView";
+            this.addedFilesListView.Size = new System.Drawing.Size(265, 365);
+            this.addedFilesListView.TabIndex = 1;
+            this.addedFilesListView.UseCompatibleStateImageBehavior = false;
+            // 
             // AddFilesBtn
             // 
             this.AddFilesBtn.Location = new System.Drawing.Point(12, 12);
@@ -66,14 +74,6 @@
             this.AddFilesBtn.Text = "AddFilesBtn";
             this.AddFilesBtn.UseVisualStyleBackColor = true;
             this.AddFilesBtn.Click += new System.EventHandler(this.AddFilesBtn_Click);
-            // 
-            // addedFilesListView
-            // 
-            this.addedFilesListView.Location = new System.Drawing.Point(12, 42);
-            this.addedFilesListView.Name = "addedFilesListView";
-            this.addedFilesListView.Size = new System.Drawing.Size(308, 365);
-            this.addedFilesListView.TabIndex = 1;
-            this.addedFilesListView.UseCompatibleStateImageBehavior = false;
             // 
             // Form1
             // 

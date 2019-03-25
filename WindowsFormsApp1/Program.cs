@@ -18,14 +18,5 @@ namespace WindowsFormsApp1
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
         }
-
-        private class Request
-        {
-            string ClientID { get; set; }
-            int RequestID { get; set; }
-            string Name { get; set; }
-            int Quantity { get; set; }
-            double Price { get; set; }
-        }
     }
 }
