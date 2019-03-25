@@ -56,7 +56,6 @@ namespace ReqRaportsApp
         public void ReqQuantBtn_Click(object sender, EventArgs e)
         {
             Dictionary<string, List<int>> allReqDict = AllRequests();
-
             int allReqsCount = 0;
             foreach (string k in allReqDict.Keys)
             {
@@ -73,13 +72,7 @@ namespace ReqRaportsApp
         public void ReqQuantForClientIdBtn_Click(object sender, EventArgs e)
         {
             string currentClientId = "1";
-
-            IEnumerable<int> getClientReqs = from request in RequestsList
-                                where request.clientId == currentClientId
-                                select request.requestId;
-
-            HashSet<int> reqIdsForClient = new HashSet<int>(getClientReqs.ToList());
-
+            HashSet<int> reqIdsForClient = AllReqsForClient(currentClientId);
             int clientReqsCount = reqIdsForClient.Count();
 
             DialogResult res = MessageBox.Show("Ilość zamówień dla klienta o identyfikatorze " + currentClientId + ": " + clientReqsCount.ToString() + "\nCzy chcesz zapisać raport?", "Ilość zamówień dla klienta", MessageBoxButtons.OKCancel);
@@ -91,16 +84,7 @@ namespace ReqRaportsApp
 
         public void ReqValueSumBtn_Click(object sender, EventArgs e)
         {
-            double allReqsValueSum = 0;
-
-            foreach (request r in RequestsList)
-            {
-                int quant = r.quantity;
-                double price = r.price;
-                double val = quant * price;
-
-                allReqsValueSum += val;
-            }
+            double allReqsValueSum = RequestsValuesSum(RequestsList);
 
             DialogResult res = MessageBox.Show("Łączna kwota zamówień: " + allReqsValueSum.ToString() + "\nCzy chcesz zapisać raport?", "Łączna kwota zamówień", MessageBoxButtons.OKCancel);
             if (res == DialogResult.OK)
@@ -112,23 +96,12 @@ namespace ReqRaportsApp
         public void ReqValueSumForClientIdBtn_Click(object sender, EventArgs e)
         {
             string currentClientId = "1";
-
             var getClientReqs = from request in RequestsList
                                 where request.clientId == currentClientId
                                 select request;
-
             List<request> clientReqs = getClientReqs.ToList();
 
-            double clientReqsValueSum = 0;
-
-            foreach (request r in clientReqs)
-            {
-                int quant = r.quantity;
-                double price = r.price;
-                double val = quant * price;
-
-                clientReqsValueSum += val;
-            }
+            double clientReqsValueSum = RequestsValuesSum(clientReqs);
 
             DialogResult res = MessageBox.Show("Łączna kwota zamówień dla klienta o identyfikatorze " + currentClientId + ": " + clientReqsValueSum.ToString() + "\nCzy chcesz zapisać raport?", "Łączna kwota zamówień dla klienta", MessageBoxButtons.OKCancel);
             if (res == DialogResult.OK)
@@ -151,7 +124,7 @@ namespace ReqRaportsApp
                 }
             }
 
-            DialogResult res = MessageBox.Show(reqsListString + "\nCzy chcesz zapisać raport?", "Łączna kwota zamówień dla klienta", MessageBoxButtons.OKCancel);
+            DialogResult res = MessageBox.Show(reqsListString + "\nCzy chcesz zapisać raport?", "Lista zamówień", MessageBoxButtons.OKCancel);
             if (res == DialogResult.OK)
             {
                 MessageBox.Show("Zapisano raport");
@@ -160,7 +133,20 @@ namespace ReqRaportsApp
 
         public void ReqsListForClientIdBtn_Click(object sender, EventArgs e)
         {
+            string currentClientId = "1";
+            HashSet<int> clientsReqs = AllReqsForClient(currentClientId);
 
+            string reqsListString = currentClientId + ":\n";
+            foreach (int rid in clientsReqs)
+            {
+                reqsListString += "    - " + rid.ToString() + "\n";
+            }
+
+            DialogResult res = MessageBox.Show(reqsListString + "\nCzy chcesz zapisać raport?", "Lista zamówień dla klienta", MessageBoxButtons.OKCancel);
+            if (res == DialogResult.OK)
+            {
+                MessageBox.Show("Zapisano raport");
+            }
         }
 
         public void AverageReqValueBtn_Click(object sender, EventArgs e)
