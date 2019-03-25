@@ -1,10 +1,9 @@
-﻿using System.Xml.Serialization;
-using System.Web.Script.Serialization;
-using System.IO;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Windows.Forms;
-using System;
+using System.Web.Script.Serialization;
+using System.Xml.Serialization;
 
 namespace ReqRaportsApp
 {
@@ -68,20 +67,17 @@ namespace ReqRaportsApp
             select new request()
             {
                 clientId = splitRequest[0],
-                requestId = Convert.ToInt32(splitRequest[1]),
+                requestId = Int32.Parse(splitRequest[1]),
                 name = splitRequest[2],
-                quantity = Convert.ToInt32(splitRequest[3]),
-                //price = Convert.ToDouble(splitRequest[4])
-                prices = splitRequest[4]
+                quantity = Int32.Parse(splitRequest[3]),
+                price = Double.Parse(splitRequest[4], System.Globalization.CultureInfo.InvariantCulture)
             };
 
             List<request> CsvRequestsList = queryRequests.ToList();
 
-            string toShow = string.Empty;
             foreach (request r in CsvRequestsList)
             {
                 MainReqList.Add(r);
-                toShow += r.ToString() + "/n";
             }
         }
     }

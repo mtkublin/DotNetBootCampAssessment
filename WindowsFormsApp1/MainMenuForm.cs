@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,6 +14,7 @@ namespace ReqRaportsApp
     public partial class Form1 : Form
     {
         List<request> RequestsList = new List<request>();
+        List<string> AddedFiles = new List<string>();
 
         public Form1()
         {
@@ -23,34 +23,40 @@ namespace ReqRaportsApp
 
         public void AddFilesBtn_Click(object sender, EventArgs e)
         {
-            string filePath = string.Empty;
-            string fileContent = string.Empty;
+            List<string> fileContents = new List<string>();
 
             if (this.addFilesDialog.ShowDialog() == DialogResult.OK)
             {
-                filePath = addFilesDialog.FileName;
+                string[] filePaths = addFilesDialog.FileNames;
 
-                string fileName = filePath.Substring(filePath.LastIndexOf("\\") + 1);
-                this.addedFilesListView.Items.Add(fileName);
+                foreach (string fp in filePaths) if (!AddedFiles.Contains(fp))
+                {
+                    string fileName = fp.Substring(fp.LastIndexOf("\\") + 1);
+                    this.addedFilesListView.Items.Add(fileName);
 
-                if (filePath.EndsWith(".xml"))
-                {
-                    MyXmlSerializer.DeserializeXmlObject(filePath, RequestsList);
-                }
-                else if (filePath.EndsWith(".json"))
-                {
-                    MyJsonSerializer.DesarializeJsonObject(filePath, RequestsList);
-                }
-                else if (filePath.EndsWith(".csv"))
-                {
-                    MyCsvSerializer.DeserializeCsvObject(filePath, RequestsList);
+                    if (fp.EndsWith(".xml"))
+                    {
+                        MyXmlSerializer.DeserializeXmlObject(fp, RequestsList);
+                    }
+                    else if (fp.EndsWith(".json"))
+                    {
+                        MyJsonSerializer.DesarializeJsonObject(fp, RequestsList);
+                    }
+                    else if (fp.EndsWith(".csv"))
+                    {
+                        MyCsvSerializer.DeserializeCsvObject(fp, RequestsList);
+                    }
+
+                    AddedFiles.Add(fp);
                 }
             }
         }
 
         public void ReqQuantBtn_Click(object sender, EventArgs e)
         {
-            DialogResult res = MessageBox.Show("Ilość zamówień: " + RequestsList.Count.ToString() + "\nCzy chcesz zapisać raport?", "Ilość zamówień", MessageBoxButtons.OKCancel);
+            int allReqsCount = RequestsList.Count;
+
+            DialogResult res = MessageBox.Show("Ilość zamówień: " + allReqsCount.ToString() + "\nCzy chcesz zapisać raport?", "Ilość zamówień", MessageBoxButtons.OKCancel);
 
             if (res == DialogResult.OK)
             {

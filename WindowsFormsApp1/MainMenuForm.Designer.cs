@@ -32,6 +32,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.addedFilesListView = new System.Windows.Forms.ListView();
             this.AddFilesBtn = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.raportBtnsGroup = new System.Windows.Forms.GroupBox();
             this.ReqsForValueRangeBtn = new System.Windows.Forms.Button();
             this.ReqQuantByNameForClientIdBtn = new System.Windows.Forms.Button();
@@ -44,7 +45,6 @@
             this.ReqValueSumBtn = new System.Windows.Forms.Button();
             this.ReqQuantForClientIdBtn = new System.Windows.Forms.Button();
             this.ReqQuantBtn = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -55,8 +55,10 @@
             // addFilesDialog
             // 
             this.addFilesDialog.FileName = "openFileDialog1";
-            this.addFilesDialog.Filter = "xml files (*.xml)|*.xml|csv files (*.csv)|*.csv|json files (*.json)|*.json";
+            this.addFilesDialog.Filter = "xml, csv and json files (*.xml, *.csv, *.json)|*.csv; *.json; *.xml|xml files (*." +
+    "xml)|*.xml|csv files (*.csv)|*.csv|json files (*.json)|*.json";
             this.addFilesDialog.InitialDirectory = "C:\\Users\\Użytkownik\\source\\repos\\WindowsFormsApp1\\Docs";
+            this.addFilesDialog.Multiselect = true;
             // 
             // splitContainer1
             // 
@@ -73,8 +75,8 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.label1);
             this.splitContainer1.Panel2.Controls.Add(this.raportBtnsGroup);
-            this.splitContainer1.Size = new System.Drawing.Size(800, 467);
-            this.splitContainer1.SplitterDistance = 229;
+            this.splitContainer1.Size = new System.Drawing.Size(797, 477);
+            this.splitContainer1.SplitterDistance = 228;
             this.splitContainer1.TabIndex = 0;
             // 
             // addedFilesListView
@@ -95,6 +97,15 @@
             this.AddFilesBtn.Text = "Dodaj pliki";
             this.AddFilesBtn.UseVisualStyleBackColor = true;
             this.AddFilesBtn.Click += new System.EventHandler(this.AddFilesBtn_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(36, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(183, 17);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Raporty do wygenerowania:";
             // 
             // raportBtnsGroup
             // 
@@ -225,20 +236,11 @@
             this.ReqQuantBtn.UseVisualStyleBackColor = true;
             this.ReqQuantBtn.Click += new System.EventHandler(this.ReqQuantBtn_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(36, 18);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(183, 17);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Raporty do wygenerowania:";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 467);
+            this.ClientSize = new System.Drawing.Size(797, 477);
             this.Controls.Add(this.splitContainer1);
             this.Name = "Form1";
             this.Text = "Form1";
