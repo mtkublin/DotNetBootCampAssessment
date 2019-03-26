@@ -11,10 +11,12 @@ namespace ReqRaportsApp
         public double price { get; set; }
     }
 
-    //public class RequestList
-    //{
-    //    public List<request> RequestsList = new List<request>();
-    //}
+    public class RequestList
+    {
+        public static List<request> ReqsList = new List<request>();
+        public static Dictionary<string, List<request>> AddedFiles = new Dictionary<string, List<request>>();
+
+    }
 
     public class RequestWithSummaricValue
     {

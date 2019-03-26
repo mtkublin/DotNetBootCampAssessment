@@ -7,32 +7,7 @@ using System.Windows.Forms;
 namespace ReqRaportsApp
 {
     public partial class Form1 : Form
-    {
-        string[] dropListItemsList =
-        {
-            "Ilość zamówień",
-            "Ilość zamówień dla klienta o wskazanym identyfikatorze",
-            "Łączna kwota zamówień",
-            "Łączna kwota zamówień dla klienta o wskazanym identyfikatorze",
-            "Lista wszystkich zamówień",
-            "Lista zamówień dla klienta o wskazanym identyfikatorze",
-            "Średnia wartość zamówienia",
-            "Średnia wartość zamówienia dla klienta o wskazanym identyfikatorze",
-            "Ilość zamówień pogrupowanych po nazwie",
-            "Ilość zamówień pogrupowanych po nazwie dla klienta o wskazanym identyfikatorze",
-            "Zamówienia w podanym przedziale cenowym"
-        };
-        string[] clientIdRaportsList =
-        {
-            "Ilość zamówień dla klienta o wskazanym identyfikatorze",
-            "Łączna kwota zamówień dla klienta o wskazanym identyfikatorze",
-            "Lista zamówień dla klienta o wskazanym identyfikatorze",
-            "Średnia wartość zamówienia dla klienta o wskazanym identyfikatorze",
-            "Ilość zamówień pogrupowanych po nazwie dla klienta o wskazanym identyfikatorze",
-        };
-        Dictionary<string, List<request>> AddedFiles = new Dictionary<string, List<request>>();
-        public List<request> RequestsList = new List<request>();
-        
+    {   
         public Form1()
         {
             InitializeComponent();
@@ -54,36 +29,36 @@ namespace ReqRaportsApp
             raportsDataGrid.EditMode = DataGridViewEditMode.EditProgrammatically;
             raportsDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            foreach (string n in dropListItemsList)
+            foreach (string n in RaportTypes.dropListItemsList)
             {
                 this.raportsComboBox.Items.Add(n);
                 this.raportsComboBox.SelectedItem = this.raportsComboBox.Items[0];
             }
         }
 
-        public void AddFilesBtn_Click(object sender, EventArgs e)
+        private void AddFilesBtn_Click(object sender, EventArgs e)
         {
             if (addFilesDialog.ShowDialog() == DialogResult.OK)
             {
                 string[] filePaths = addFilesDialog.FileNames;
                 
-                foreach (string fp in filePaths) if (!AddedFiles.Keys.Contains(fp))
+                foreach (string fp in filePaths) if (!RequestList.AddedFiles.Keys.Contains(fp))
                 {                    
                     if (fp.EndsWith(".xml"))
                     {
-                        MyXmlSerializer.DeserializeXmlObject(fp, RequestsList, AddedFiles);
+                        MyXmlSerializer.DeserializeXmlObject(fp, RequestList.ReqsList, RequestList.AddedFiles);
                     }
                     else if (fp.EndsWith(".json"))
                     {
-                        MyJsonSerializer.DesarializeJsonObject(fp, RequestsList, AddedFiles);
+                        MyJsonSerializer.DesarializeJsonObject(fp, RequestList.ReqsList, RequestList.AddedFiles);
                     }
                     else if (fp.EndsWith(".csv"))
                     {
-                        MyCsvSerializer.DeserializeCsvObject(fp, RequestsList, AddedFiles);
+                        MyCsvSerializer.DeserializeCsvObject(fp, RequestList.ReqsList, RequestList.AddedFiles);
                     }
 
                     string fileName = fp.Substring(fp.LastIndexOf("\\") + 1);
-                    if (AddedFiles.Keys.Contains(fileName))
+                    if (RequestList.AddedFiles.Keys.Contains(fileName))
                     {
                         addedFilesListView.Items.Add(fileName);
                     }
@@ -97,25 +72,66 @@ namespace ReqRaportsApp
                 }
             }
         }
-        
-        public void raportsComboBoxSelectionChange(object sender, EventArgs e)
+
+        private void deleteFilesBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<object> toRemove = new List<object>();
+                foreach (object item in addedFilesListView.SelectedItems)
+                {
+                    toRemove.Add(item);
+                }
+                foreach (object item in toRemove)
+                {
+                    addedFilesListView.Items.Remove(item);
+
+                    foreach (request r in RequestList.AddedFiles[item.ToString()])
+                    {
+                        RequestList.ReqsList.Remove(r);
+                    }
+
+                    RequestList.AddedFiles.Remove(item.ToString());
+                }
+                toRemove.Clear();
+
+                if (addedFilesListView.Items.Count == 0)
+                {
+                    raportsComboBox.SelectedItem = raportsComboBox.Items[0];
+                    raportsComboBox.Enabled = false;
+                    clientIdBox.Visible = false;
+                    valueRangeBox.Visible = false;
+                    raportGenBtn.Enabled = false;
+                    deleteFilesBtn.Enabled = false;
+                    saveRaportBtn.Enabled = false;
+
+                    raportsDataGrid.ColumnCount = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void raportsComboBoxSelectionChange(object sender, EventArgs e)
         {
             string selectedItem = raportsComboBox.SelectedItem.ToString();
-            if (clientIdRaportsList.Contains(selectedItem))
+            if (RaportTypes.clientIdRaportsList.Contains(selectedItem))
             {
                 valueRangeBox.Visible = false;
                 showClientIdsComboBox();
             }
-            else if (selectedItem == dropListItemsList[dropListItemsList.Length - 1])
+            else if (selectedItem == RaportTypes.dropListItemsList[RaportTypes.dropListItemsList.Length - 1])
             {
                 clientIdBox.Visible = false;
                 clientIdComboBox.Visible = false;
                 clientIdLabel.Visible = false;
                 valueRangeBox.Visible = true;
-                
+
                 try
                 {
-                    double maxPriceVal = maxPrice();
+                    double maxPriceVal = RapGenOperations.maxPrice();
                     maxMaxValLabel.Text = maxPriceVal.ToString();
                     minValueTextBox.Text = 0.ToString();
                     maxValueTextBox.Text = maxPriceVal.ToString();
@@ -134,7 +150,47 @@ namespace ReqRaportsApp
             }
         }
 
-        public void minValueTextBox_Leave(object sender, EventArgs e)
+        private static HashSet<string> getClientIds()
+        {
+            IEnumerable<string> getClientIdsQuery = from request in RequestList.ReqsList
+                                                    select request.clientId;
+
+            HashSet<string> clientIds = new HashSet<string>(getClientIdsQuery.ToList());
+
+            return clientIds;
+        }
+
+        private void showClientIdsComboBox()
+        {
+            clientIdBox.Visible = true;
+            clientIdComboBox.Visible = true;
+            clientIdLabel.Visible = true;
+
+            HashSet<string> clientIds = getClientIds();
+
+            List<object> toRemove = new List<object>();
+            foreach (object item in clientIdComboBox.Items) if (!clientIds.Contains(item.ToString()))
+            {
+                toRemove.Add(item);
+            }
+            foreach (object tr in toRemove)
+            {
+                clientIdComboBox.Items.Remove(tr);
+            }
+            toRemove.Clear();
+
+            foreach (string id in clientIds) if (!clientIdComboBox.Items.Contains(id))
+            {
+                clientIdComboBox.Items.Add(id);
+            }
+
+            if (clientIdComboBox.SelectedItem == null & clientIdComboBox.Items.Count != 0)
+            {
+                clientIdComboBox.SelectedItem = clientIdComboBox.Items[0];
+            }
+        }
+
+        private void minValueTextBox_Leave(object sender, EventArgs e)
         {
             try
             {
@@ -166,7 +222,7 @@ namespace ReqRaportsApp
             }
         }
 
-        public void maxValueTextBox_Leave(object sender, EventArgs e)
+        private void maxValueTextBox_Leave(object sender, EventArgs e)
         {
             try
             {
@@ -198,9 +254,9 @@ namespace ReqRaportsApp
             }
         }
 
-        public void raportGenBtn_Click(object sender, EventArgs e)
+        private void raportGenBtn_Click(object sender, EventArgs e)
         {
-            RaportChoiceSwitch();
+            RaportGenerators.RaportChoiceSwitch(raportsComboBox, raportsDataGrid, clientIdComboBox, minValueTextBox, maxValueTextBox);
 
             if (raportsDataGrid.ColumnCount != 0)
             {
@@ -212,7 +268,7 @@ namespace ReqRaportsApp
         {
             if (saveRaportDialog.ShowDialog() == DialogResult.OK)
             {
-                List<string> dataToWrite = GatherGridDataToCsv();
+                List<string> dataToWrite = GridViewHandler.GatherGridDataToCsv(raportsDataGrid);
 
                 using (StreamWriter outputFile = new StreamWriter(saveRaportDialog.FileName))
                 {
@@ -221,44 +277,6 @@ namespace ReqRaportsApp
                         outputFile.WriteLine(line);
                     }
                 }
-            }
-        }
-
-        private void deleteFilesBtn_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                List<object> toRemove = new List<object>();
-                foreach (object item in addedFilesListView.SelectedItems)
-                {
-                    toRemove.Add(item);
-                }
-                foreach (object item in toRemove)
-                {
-                    addedFilesListView.Items.Remove(item);
-
-                    foreach (request r in AddedFiles[item.ToString()])
-                    {
-                        RequestsList.Remove(r);
-                    }
-
-                    AddedFiles.Remove(item.ToString());
-                }
-                toRemove.Clear();
-
-                if (addedFilesListView.Items.Count == 0)
-                {
-                    raportsComboBox.Enabled = false;
-                    raportGenBtn.Enabled = false;
-                    deleteFilesBtn.Enabled = false;
-                    saveRaportBtn.Enabled = false;
-
-                    raportsDataGrid.ColumnCount = 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
             }
         }
     }

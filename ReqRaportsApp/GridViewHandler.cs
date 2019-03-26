@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace ReqRaportsApp
 {
-    public partial class Form1
+    public partial class GridViewHandler
     {
-        public void GridViewPopulate(string[] colNames, List<List<object>> rows)
+        public static void GridViewPopulate(string[] colNames, List<List<object>> rows, DataGridView raportsDataGrid)
         {
             raportsDataGrid.Rows.Clear();
 
@@ -37,7 +37,7 @@ namespace ReqRaportsApp
             }
         }
 
-        public List<string> GatherGridDataToCsv()
+        public static List<string> GatherGridDataToCsv(DataGridView raportsDataGrid)
         {
             List<string> textData = new List<string>();
 

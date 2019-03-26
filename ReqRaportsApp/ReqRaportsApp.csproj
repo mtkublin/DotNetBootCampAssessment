@@ -47,15 +47,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GridViewHandler.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Operations.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="GridViewHandler.cs" />
+    <Compile Include="RapGenOperations.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="RequestObject.cs" />
-    <Compile Include="Serializers.cs" />
+    <Compile Include="RaportGenerators.cs" />
+    <Compile Include="RaportTypes.cs" />
+    <Compile Include="RequestObjects.cs" />
+    <Compile Include="Deserializers.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
