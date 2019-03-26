@@ -18,28 +18,28 @@ namespace ReqRaportsApp
             }
         }
 
-        public HashSet<int> AllReqsForClient(string currentClientId)
+        public HashSet<long> AllReqsForClient(string currentClientId)
         {
-            IEnumerable<int> getClientReqs = from request in RequestsList
+            IEnumerable<long> getClientReqs = from request in RequestsList
                                              where request.clientId == currentClientId
                                              select request.requestId;
 
-            HashSet<int> reqIdsForClient = new HashSet<int>(getClientReqs.ToList());
+            HashSet<long> reqIdsForClient = new HashSet<long>(getClientReqs.ToList());
 
             return reqIdsForClient;
         }
 
-        public Dictionary<string, List<int>> AllRequests()
+        public Dictionary<string, List<long>> AllRequests()
         {
             IEnumerable<string> getClientIds = from request in RequestsList
                                                select request.clientId;
 
             HashSet<string> clientIds = getClientIds.ToHashSet();
 
-            Dictionary<string, List<int>> allReqsDict = new Dictionary<string, List<int>>();
+            Dictionary<string, List<long>> allReqsDict = new Dictionary<string, List<long>>();
             foreach (string cid in clientIds)
             {
-                HashSet<int> reqIds = AllReqsForClient(cid);
+                HashSet<long> reqIds = AllReqsForClient(cid);
 
                 allReqsDict[cid] = reqIds.ToList();
             }
@@ -99,6 +99,213 @@ namespace ReqRaportsApp
             }
 
             return reqsListString;
+        }
+
+        public HashSet<string> getClientIds()
+        {
+            IEnumerable<string> getClientIdsQuery = from request in RequestsList
+                                                    select request.clientId;
+
+            HashSet<string> clientIds = new HashSet<string>(getClientIdsQuery.ToList());
+
+            return clientIds;
+        }
+
+        public void showClientIdsComboBox()
+        {
+            clientIdComboBox.Visible = true;
+
+            HashSet<string> clientIds = getClientIds();
+
+            foreach (string id in clientIds) if (!clientIdComboBox.Items.Contains(id))
+            {
+                clientIdComboBox.Items.Add(id);
+            }
+
+            if (clientIdComboBox.SelectedItem == null & clientIdComboBox.Items.Count != 0)
+            {
+                clientIdComboBox.SelectedItem = clientIdComboBox.Items[0];
+            }
+        }
+
+        public void ReqQuant()
+        {
+            Dictionary<string, List<long>> allReqDict = AllRequests();
+            int allReqsCount = 0;
+            foreach (string k in allReqDict.Keys)
+            {
+                allReqsCount += allReqDict[k].Count;
+            }
+
+            RaportMessageBox("Ilość zamówień: " + allReqsCount.ToString(), "Ilość zamówień");
+        }
+
+        public void ReqQuantForClient()
+        {
+            if (clientIdComboBox.SelectedItem != null)
+            {
+                string currentClientId = clientIdComboBox.SelectedItem.ToString();
+
+                HashSet<long> reqIdsForClient = AllReqsForClient(currentClientId);
+                int clientReqsCount = reqIdsForClient.Count();
+
+                RaportMessageBox("Ilość zamówień dla klienta o identyfikatorze " + currentClientId + ": " + clientReqsCount.ToString(), "Ilość zamówień dla klienta");
+            }
+        }
+
+        public void ReqValueSum()
+        {
+            double allReqsValueSum = RequestsValuesSum(RequestsList);
+
+            RaportMessageBox("Łączna kwota zamówień: " + allReqsValueSum.ToString(), "Łączna kwota zamówień");
+        }
+
+        public void ReqValueSumForClientId()
+        {
+            if (clientIdComboBox.SelectedItem != null)
+            {
+                string currentClientId = clientIdComboBox.SelectedItem.ToString();
+
+                double clientReqsValueSum = ClientsValuesSum(currentClientId);
+
+                RaportMessageBox("Łączna kwota zamówień dla klienta o identyfikatorze " + currentClientId + ": " + clientReqsValueSum.ToString(), "Łączna kwota zamówień dla klienta");
+            }
+        }
+
+        public void AllReqsList()
+        {
+            Dictionary<string, List<long>> allReqDict = AllRequests();
+            string reqsListString = string.Empty;
+
+            foreach (string k in allReqDict.Keys)
+            {
+                reqsListString += k + ":\n";
+                foreach (int rid in allReqDict[k])
+                {
+                    reqsListString += "    - " + rid.ToString() + "\n";
+                }
+            }
+
+            RaportMessageBox(reqsListString, "Lista zamówień");
+        }
+
+        public void ReqsListForClientId()
+        {
+            if (clientIdComboBox.SelectedItem != null)
+            {
+                string currentClientId = clientIdComboBox.SelectedItem.ToString();
+
+                HashSet<long> clientsReqs = AllReqsForClient(currentClientId);
+
+                string reqsListString = currentClientId + ":\n";
+                foreach (int rid in clientsReqs)
+                {
+                    reqsListString += "    - " + rid.ToString() + "\n";
+                }
+
+                RaportMessageBox(reqsListString, "Lista zamówień dla klienta");
+            }
+        }
+
+        public void AverageReqValue()
+        {
+            double allReqsValueSum = RequestsValuesSum(RequestsList);
+            Dictionary<string, List<long>> allReqDict = AllRequests();
+
+            int allReqsCount = 0;
+            foreach (string k in allReqDict.Keys)
+            {
+                allReqsCount += allReqDict[k].Count;
+            }
+
+            double avgReqValue = allReqsValueSum / allReqsCount;
+            double roundedAvgReqValue = Math.Round(avgReqValue, 2);
+
+            RaportMessageBox("Średnia wartość zamówienia: " + roundedAvgReqValue.ToString(), "Średnia wartość zamówienia");
+        }
+
+        public void AverageReqValueForClientId()
+        {
+            if (clientIdComboBox.SelectedItem != null)
+            {
+                string currentClientId = clientIdComboBox.SelectedItem.ToString();
+
+                double clientReqsValueSum = ClientsValuesSum(currentClientId);
+
+                HashSet<long> reqIdsForClient = AllReqsForClient(currentClientId);
+                int clientReqsCount = reqIdsForClient.Count();
+
+                double avgReqValue = clientReqsValueSum / clientReqsCount;
+                double roundedAvgReqValue = Math.Round(avgReqValue, 2);
+
+                RaportMessageBox("Średnia wartość zamówienia dla klienta " + currentClientId + ": " + roundedAvgReqValue.ToString(), "Średnia wartość zamówienia dla klienta");
+            }
+        }
+
+        public void ReqQuantByName()
+        {
+            string reqsListString = ProductReqIds(RequestsList);
+
+            RaportMessageBox(reqsListString, "Ilość zamówień pogrupowanych po nazwie");
+        }
+
+        public void ReqQuantByNameForClientId()
+        {
+            if (clientIdComboBox.SelectedItem != null)
+            {
+                string currentClientId = clientIdComboBox.SelectedItem.ToString();
+
+                IEnumerable<request> getClientsReqs = from request in RequestsList
+                                                      where request.clientId == currentClientId
+                                                      select request;
+
+                List<request> currentClientRequests = getClientsReqs.ToList();
+
+                string reqsListString = ProductReqIds(currentClientRequests);
+
+                RaportMessageBox(reqsListString, "Ilość zamówień pogrupowanych po nazwie");
+            }
+        }
+
+        public void ReqsForValueRange()
+        {
+            double startValue = 0;
+            double endValue = 120.00;
+
+            Dictionary<string, List<long>> allReqDict = AllRequests();
+            List<WholeReq> AllReqsWithValues = new List<WholeReq>();
+            foreach (string cid in allReqDict.Keys)
+            {
+                foreach (int rid in allReqDict[cid])
+                {
+                    var getReq = from req in RequestsList
+                                 where req.clientId == cid & req.requestId == rid
+                                 select req;
+
+                    WholeReq curReq = new WholeReq();
+                    curReq.clientId = cid;
+                    curReq.requestId = rid;
+                    double val = 0;
+                    foreach (var r in getReq)
+                    {
+                        val += r.quantity * r.price;
+                    }
+                    curReq.value = val;
+                    AllReqsWithValues.Add(curReq);
+                }
+            }
+
+            IEnumerable<WholeReq> getReqsInRange = from wr in AllReqsWithValues
+                                                   where startValue < wr.value & wr.value < endValue
+                                                   select wr;
+
+            string reqValues = string.Empty;
+            foreach (WholeReq w in getReqsInRange)
+            {
+                reqValues += "Client " + w.clientId + ": request " + w.requestId + ": " + w.value + "\n";
+            }
+
+            RaportMessageBox(reqValues, "Zamówienia w podanym przedziale cenowym");
         }
     }
 }

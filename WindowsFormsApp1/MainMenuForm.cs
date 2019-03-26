@@ -14,12 +14,43 @@ namespace ReqRaportsApp
 {
     public partial class Form1 : Form
     {
-        List<request> RequestsList = new List<request>();
+        string[] dropListItemsList =
+        {
+            "Ilość zamówień",
+            "Ilość zamówień dla klienta o wskazanym identyfikatorze",
+            "Łączna kwota zamówień",
+            "Łączna kwota zamówień dla klienta o wskazanym identyfikatorze",
+            "Lista wszystkich zamówień",
+            "Lista zamówień dla klienta o wskazanym identyfikatorze",
+            "Średnia wartość zamówienia",
+            "Średnia wartość zamówienia dla klienta o wskazanym identyfikatorze",
+            "Ilość zamówień pogrupowanych po nazwie",
+            "Ilość zamówień pogrupowanych po nazwie dla klienta o wskazanym identyfikatorze",
+            "Zamówienia w podanym przedziale cenowym"
+        };
+
+        string[] clientIdRaportsList =
+        {
+            "Ilość zamówień dla klienta o wskazanym identyfikatorze",
+            "Łączna kwota zamówień dla klienta o wskazanym identyfikatorze",
+            "Lista zamówień dla klienta o wskazanym identyfikatorze",
+            "Średnia wartość zamówienia dla klienta o wskazanym identyfikatorze",
+            "Ilość zamówień pogrupowanych po nazwie dla klienta o wskazanym identyfikatorze",
+        };
+
         List<string> AddedFiles = new List<string>();
 
+        public List<request> RequestsList = new List<request>();
+        
         public Form1()
         {
             InitializeComponent();
+
+            foreach (string n in dropListItemsList)
+            {
+                this.raportsComboBox.Items.Add(n);
+                this.raportsComboBox.SelectedItem = this.raportsComboBox.Items[0];
+            }
         }
 
         public void AddFilesBtn_Click(object sender, EventArgs e)
@@ -52,165 +83,68 @@ namespace ReqRaportsApp
                 }
             }
         }
-
-        public void ReqQuantBtn_Click(object sender, EventArgs e)
+        
+        public void raportsComboBoxSelectionChange(object sender, EventArgs e)
         {
-            Dictionary<string, List<int>> allReqDict = AllRequests();
-            int allReqsCount = 0;
-            foreach (string k in allReqDict.Keys)
+            string selectedItem = raportsComboBox.SelectedItem.ToString();
+            if (clientIdRaportsList.Contains(selectedItem))
             {
-                allReqsCount += allReqDict[k].Count;
+                showClientIdsComboBox();
             }
-
-            RaportMessageBox("Ilość zamówień: " + allReqsCount.ToString(), "Ilość zamówień");
-        }
-
-        public void ReqQuantForClientIdBtn_Click(object sender, EventArgs e)
-        {
-            string currentClientId = "1";
-            HashSet<int> reqIdsForClient = AllReqsForClient(currentClientId);
-            int clientReqsCount = reqIdsForClient.Count();
-
-            RaportMessageBox("Ilość zamówień dla klienta o identyfikatorze " + currentClientId + ": " + clientReqsCount.ToString(), "Ilość zamówień dla klienta");
-        }
-
-        public void ReqValueSumBtn_Click(object sender, EventArgs e)
-        {
-            double allReqsValueSum = RequestsValuesSum(RequestsList);
-
-            RaportMessageBox("Łączna kwota zamówień: " + allReqsValueSum.ToString(), "Łączna kwota zamówień");
-        }
-
-        public void ReqValueSumForClientIdBtn_Click(object sender, EventArgs e)
-        {
-            string currentClientId = "1";
-            double clientReqsValueSum = ClientsValuesSum(currentClientId);
-
-            RaportMessageBox("Łączna kwota zamówień dla klienta o identyfikatorze " + currentClientId + ": " + clientReqsValueSum.ToString(), "Łączna kwota zamówień dla klienta");
-        }
-
-        public void AllReqsListBtn_Click(object sender, EventArgs e)
-        {
-            Dictionary<string, List<int>> allReqDict = AllRequests();
-            string reqsListString = string.Empty;
-
-            foreach (string k in allReqDict.Keys)
+            else
             {
-                reqsListString += k + ":\n";
-                foreach (int rid in allReqDict[k])
-                {
-                    reqsListString += "    - " + rid.ToString() + "\n";
-                }
+                clientIdComboBox.Visible = false;
             }
-
-            RaportMessageBox(reqsListString, "Lista zamówień");
         }
 
-        public void ReqsListForClientIdBtn_Click(object sender, EventArgs e)
+        public void raportGenBtn_Click(object sender, EventArgs e)
         {
-            string currentClientId = "1";
-            HashSet<int> clientsReqs = AllReqsForClient(currentClientId);
+            string raportType = this.raportsComboBox.SelectedItem.ToString();
 
-            string reqsListString = currentClientId + ":\n";
-            foreach (int rid in clientsReqs)
+            if (raportType == dropListItemsList[0])
             {
-                reqsListString += "    - " + rid.ToString() + "\n";
+                ReqQuant();
             }
-
-            RaportMessageBox(reqsListString, "Lista zamówień dla klienta");
-        }
-
-        public void AverageReqValueBtn_Click(object sender, EventArgs e)
-        {
-            double allReqsValueSum = RequestsValuesSum(RequestsList);
-            Dictionary<string, List<int>> allReqDict = AllRequests();
-
-            int allReqsCount = 0;
-            foreach (string k in allReqDict.Keys)
+            else if (raportType == dropListItemsList[1])
             {
-                allReqsCount += allReqDict[k].Count;
+                ReqQuantForClient();
             }
-
-            double avgReqValue = allReqsValueSum / allReqsCount;
-            double roundedAvgReqValue = Math.Round(avgReqValue, 2);
-
-            RaportMessageBox("Średnia wartość zamówienia: " + roundedAvgReqValue.ToString(), "Średnia wartość zamówienia");
-        }
-
-        public void AverageReqValueForClientIdBtn_Click(object sender, EventArgs e)
-        {
-            string currentClientId = "1";
-            double clientReqsValueSum = ClientsValuesSum(currentClientId);
-
-            HashSet<int> reqIdsForClient = AllReqsForClient(currentClientId);
-            int clientReqsCount = reqIdsForClient.Count();
-
-            double avgReqValue = clientReqsValueSum / clientReqsCount;
-            double roundedAvgReqValue = Math.Round(avgReqValue, 2);
-
-            RaportMessageBox("Średnia wartość zamówienia dla klienta " + currentClientId + ": " + roundedAvgReqValue.ToString(), "Średnia wartość zamówienia dla klienta");
-        }
-
-        public void ReqQuantByNameBtn_Click(object sender, EventArgs e)
-        {
-            string reqsListString = ProductReqIds(RequestsList);
-
-            RaportMessageBox(reqsListString, "Ilość zamówień pogrupowanych po nazwie");
-        }
-
-        public void ReqQuantByNameForClientIdBtn_Click(object sender, EventArgs e)
-        {
-            string currentClientId = "1";
-            IEnumerable<request> getClientsReqs = from request in RequestsList
-                                                  where request.clientId == currentClientId
-                                                  select request;
-
-            List<request> currentClientRequests = getClientsReqs.ToList();
-
-            string reqsListString = ProductReqIds(currentClientRequests);
-
-            RaportMessageBox(reqsListString, "Ilość zamówień pogrupowanych po nazwie");
-        }
-
-        private void ReqsForValueRangeBtn_Click(object sender, EventArgs e)
-        {
-            double startValue = 0;
-            double endValue = 120.00;
-
-            Dictionary<string, List<int>> allReqDict = AllRequests();
-            List<WholeReq> AllReqsWithValues = new List<WholeReq>();
-            foreach (string cid in allReqDict.Keys)
+            else if (raportType == dropListItemsList[2])
             {
-                foreach (int rid in allReqDict[cid])
-                {
-                    var getReq = from req in RequestsList
-                                 where req.clientId == cid & req.requestId == rid
-                                 select req;
-
-                    WholeReq curReq = new WholeReq();
-                    curReq.clientId = cid;
-                    curReq.requestId = rid;
-                    double val = 0;
-                    foreach (var r in getReq)
-                    {
-                        val += r.quantity * r.price;
-                    }
-                    curReq.value = val;
-                    AllReqsWithValues.Add(curReq);
-                }
+                ReqValueSum();
             }
-
-            IEnumerable<WholeReq> getReqsInRange = from wr in AllReqsWithValues
-                                                   where startValue < wr.value & wr.value < endValue
-                                                   select wr;
-
-            string reqValues = string.Empty;
-            foreach (WholeReq w in getReqsInRange)
+            else if (raportType == dropListItemsList[3])
             {
-                reqValues += "Client " + w.clientId + ": request " + w.requestId + ": " + w.value + "\n";
+                ReqValueSumForClientId();
             }
-
-            RaportMessageBox(reqValues, "Zamówienia w podanym przedziale cenowym");
+            else if (raportType == dropListItemsList[4])
+            {
+                AllReqsList();
+            }
+            else if (raportType == dropListItemsList[5])
+            {
+                ReqsListForClientId();
+            }
+            else if (raportType == dropListItemsList[6])
+            {
+                AverageReqValue();
+            }
+            else if (raportType == dropListItemsList[7])
+            {
+                AverageReqValueForClientId();
+            }
+            else if (raportType == dropListItemsList[8])
+            {
+                ReqQuantByName();
+            }
+            else if (raportType == dropListItemsList[9])
+            {
+                ReqQuantByNameForClientId();
+            }
+            else if (raportType == dropListItemsList[10])
+            {
+                ReqsForValueRange();
+            }
         }
     }
 }
