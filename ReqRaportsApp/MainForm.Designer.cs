@@ -66,7 +66,7 @@
             this.addFilesDialog.FileName = "openFileDialog1";
             this.addFilesDialog.Filter = "xml, csv and json files (*.xml, *.csv, *.json)|*.csv; *.json; *.xml|xml files (*." +
     "xml)|*.xml|csv files (*.csv)|*.csv|json files (*.json)|*.json";
-            this.addFilesDialog.InitialDirectory = "C:\\Users\\Użytkownik\\source\\repos\\WindowsFormsApp1\\Docs";
+            this.addFilesDialog.InitialDirectory = "C:\\Users\\Użytkownik\\source\\repos\\WindowsFormsApp1\\SampleData";
             this.addFilesDialog.Multiselect = true;
             // 
             // splitContainer1
