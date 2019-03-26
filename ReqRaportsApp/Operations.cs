@@ -57,6 +57,7 @@ namespace ReqRaportsApp
             }
 
             double maxPr = reqValuesList.Max();
+            maxPr = Math.Round(maxPr, 2);
             return maxPr;
         }
 
@@ -210,7 +211,7 @@ namespace ReqRaportsApp
             string[] colNames = { "Łączna kwota zamówień" };
             List<List<object>> rows = new List<List<object>>();
             List<object> row = new List<object>();
-            row.Add(allReqsValueSum);
+            row.Add(Math.Round(allReqsValueSum, 2));
 
             rows.Add(row);
             GridViewPopulate(colNames, rows);
@@ -228,7 +229,7 @@ namespace ReqRaportsApp
                 List<List<object>> rows = new List<List<object>>();
                 List<object> row = new List<object>();
                 row.Add(currentClientId);
-                row.Add(clientReqsValueSum);
+                row.Add(Math.Round(clientReqsValueSum, 2));
 
                 rows.Add(row);
                 GridViewPopulate(colNames, rows);
@@ -257,7 +258,7 @@ namespace ReqRaportsApp
                         row.Add(rid);
                         row.Add(r.name);
                         row.Add(r.quantity);
-                        row.Add(r.price);
+                        row.Add(Math.Round(r.price, 2));
 
                         rows.Add(row);
                     }
@@ -289,7 +290,7 @@ namespace ReqRaportsApp
                         row.Add(rid);
                         row.Add(r.name);
                         row.Add(r.quantity);
-                        row.Add(r.price);
+                        row.Add(Math.Round(r.price,2));
 
                         rows.Add(row);
                     }
@@ -422,7 +423,7 @@ namespace ReqRaportsApp
                     List<object> row = new List<object>();
                     row.Add(r.clientId);
                     row.Add(r.requestId);
-                    row.Add(r.value);
+                    row.Add(Math.Round(r.value,2));
 
                     rows.Add(row);
                 }

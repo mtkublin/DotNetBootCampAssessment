@@ -143,13 +143,11 @@ namespace ReqRaportsApp
 
                 if (minValue < 0)
                 {
-                    MessageBox.Show("Wartość nie może być mniejsza od zera");
-                    minValueTextBox.Text = null;
+                    minValueTextBox.Text = 0.ToString();
                 }
                 else if (minValue >= maxMaxValue)
                 {
-                    MessageBox.Show("Wartość nie może być większa od najwyższej ceny zamówienia (" + maxMaxValue.ToString() + ")");
-                    minValueTextBox.Text = null;
+                    minValueTextBox.Text = 0.ToString();
                 }
                 else if (maxValueTextBox.Text != "" & maxValueTextBox.Text != null) 
                 {
@@ -157,8 +155,7 @@ namespace ReqRaportsApp
 
                     if (minValue >= maxValue)
                     {
-                        MessageBox.Show("Wartość minimalna nie może być większa od maksymalnej");
-                        minValueTextBox.Text = null;
+                        minValueTextBox.Text = 0.ToString();
                     }
                 }
             }
@@ -178,13 +175,11 @@ namespace ReqRaportsApp
 
                 if (maxValue < 0)
                 {
-                    MessageBox.Show("Wartość nie może być mniejsza od zera");
-                    maxValueTextBox.Text = null;
+                    maxValueTextBox.Text = maxMaxValue.ToString();
                 }
                 else if (maxValue > maxMaxValue)
                 {
-                    MessageBox.Show("Wartość nie może być większa od najwyższej ceny zamówienia (" + maxMaxValue.ToString() + ")");
-                    maxValueTextBox.Text = null;
+                    maxValueTextBox.Text = maxMaxValue.ToString();
                 }
                 else if(minValueTextBox.Text != "" & minValueTextBox.Text != null)
                 {
@@ -192,8 +187,7 @@ namespace ReqRaportsApp
 
                     if (minValue >= maxValue)
                     {
-                        MessageBox.Show("Wartość maksymalna nie może być mniejsza od minimalnej");
-                        maxValueTextBox.Text = null;
+                        maxValueTextBox.Text = maxMaxValue.ToString();
                     }
                 }
             }
@@ -207,53 +201,6 @@ namespace ReqRaportsApp
         public void raportGenBtn_Click(object sender, EventArgs e)
         {
             RaportChoiceSwitch();
-
-            //string raportType = this.raportsComboBox.SelectedItem.ToString();
-
-            //if (raportType == dropListItemsList[0])
-            //{
-            //    ReqQuant();
-            //}
-            //else if (raportType == dropListItemsList[1])
-            //{
-            //    ReqQuantForClient();
-            //}
-            //else if (raportType == dropListItemsList[2])
-            //{
-            //    ReqValueSum();
-            //}
-            //else if (raportType == dropListItemsList[3])
-            //{
-            //    ReqValueSumForClientId();
-            //}
-            //else if (raportType == dropListItemsList[4])
-            //{
-            //    AllReqsList();
-            //}
-            //else if (raportType == dropListItemsList[5])
-            //{
-            //    ReqsListForClientId();
-            //}
-            //else if (raportType == dropListItemsList[6])
-            //{
-            //    AverageReqValue();
-            //}
-            //else if (raportType == dropListItemsList[7])
-            //{
-            //    AverageReqValueForClientId();
-            //}
-            //else if (raportType == dropListItemsList[8])
-            //{
-            //    ReqQuantByName();
-            //}
-            //else if (raportType == dropListItemsList[9])
-            //{
-            //    ReqQuantByNameForClientId();
-            //}
-            //else if (raportType == dropListItemsList[10])
-            //{
-            //    ReqsForValueRange();
-            //}
 
             if (raportsDataGrid.ColumnCount != 0)
             {
@@ -279,30 +226,39 @@ namespace ReqRaportsApp
 
         private void deleteFilesBtn_Click(object sender, EventArgs e)
         {
-            List<object> toRemove = new List<object>();
-            foreach (object item in addedFilesListView.SelectedItems)
+            try
             {
-                toRemove.Add(item);
-            }
-            foreach (object item in toRemove)
-            {
-                addedFilesListView.Items.Remove(item);
-                
-                foreach (request r in AddedFiles[item.ToString()])
+                List<object> toRemove = new List<object>();
+                foreach (object item in addedFilesListView.SelectedItems)
                 {
-                    RequestsList.Remove(r);
+                    toRemove.Add(item);
                 }
+                foreach (object item in toRemove)
+                {
+                    addedFilesListView.Items.Remove(item);
 
-                AddedFiles.Remove(item.ToString());
+                    foreach (request r in AddedFiles[item.ToString()])
+                    {
+                        RequestsList.Remove(r);
+                    }
+
+                    AddedFiles.Remove(item.ToString());
+                }
+                toRemove.Clear();
+
+                if (addedFilesListView.Items.Count == 0)
+                {
+                    raportsComboBox.Enabled = false;
+                    raportGenBtn.Enabled = false;
+                    deleteFilesBtn.Enabled = false;
+                    saveRaportBtn.Enabled = false;
+
+                    raportsDataGrid.ColumnCount = 0;
+                }
             }
-            toRemove.Clear();
-
-            if (addedFilesListView.Items.Count == 0)
+            catch (Exception ex)
             {
-                raportsComboBox.Enabled = false;
-                raportGenBtn.Enabled = false;
-                deleteFilesBtn.Enabled = false;
-                saveRaportBtn.Enabled = false;
+                MessageBox.Show(ex.Message);
             }
         }
     }

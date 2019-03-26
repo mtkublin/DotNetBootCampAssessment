@@ -1,32 +1,39 @@
 ﻿{
-"requests":[
-{
-"clientId":"1",
-"requestId":"1",
-"name":"Bułka",
-"quantity":"1",
-"price":"10.00"
-},
-{
-"clientId":"1",
-"requestId":"2",
-"name":"Chleb",
-"quantity":"2",
-"price":"15.00"
-},
-{
-"clientId":"1",
-"requestId":"2",
-"name":"Chleb",
-"quantity":"5",
-"price":"15.00"
-},
-{
-"clientId":"2",
-"requestId":"1",
-"name":"Chleb",
-"quantity":"1",
-"price":"10.00"
-}
-]
+  "requests": [
+    {
+      "clientId": "1",
+      "requestId": "1",
+      "name": "Masło",
+      "quantity": "1",
+      "price": "5.69"
+    },
+    {
+      "clientId": "7",
+      "requestId": "1",
+      "name": "Chleb",
+      "quantity": "2",
+      "price": "15.12"
+    },
+    {
+      "clientId": "2",
+      "requestId": "2",
+      "name": "Chleb",
+      "quantity": "5",
+      "price": "15.32"
+    },
+    {
+      "clientId": "2",
+      "requestId": "1",
+      "name": "Chleb",
+      "quantity": "1",
+      "price": "10.76"
+    },
+    {
+      "clientId": "6",
+      "requestId": "1",
+      "name": "Kiełbasa",
+      "quantity": "1",
+      "price": "13.76"
+    }
+  ]
 }
