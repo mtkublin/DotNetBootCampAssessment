@@ -4,22 +4,32 @@ using System.IO;
 using System.Linq;
 using System.Web.Script.Serialization;
 using System.Xml.Serialization;
+using System.Windows.Forms;
 
 namespace ReqRaportsApp
 {
     public class MyXmlSerializer
     {
-        public static void DeserializeXmlObject(string path, List<request> MainReqList)
+        public static void DeserializeXmlObject(string path, List<request> MainReqList, List<string> AddedFiles)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(List<request>), new XmlRootAttribute("requests"));
-
-            StreamReader reader = new StreamReader(path);
-
-            List<request> XmlRequestsList = (List<request>)serializer.Deserialize(reader);
-
-            foreach (request r in XmlRequestsList)
+            try
             {
-                MainReqList.Add(r);
+                XmlSerializer serializer = new XmlSerializer(typeof(List<request>), new XmlRootAttribute("requests"));
+
+                StreamReader reader = new StreamReader(path);
+
+                List<request> XmlRequestsList = (List<request>)serializer.Deserialize(reader);
+
+                foreach (request r in XmlRequestsList)
+                {
+                    MainReqList.Add(r);
+                }
+
+                AddedFiles.Add(path);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }
@@ -31,53 +41,71 @@ namespace ReqRaportsApp
             public List<request> requests { get; set; }
         }
 
-        public static void DesarializeJsonObject(string path, List<request> MainReqList)
+        public static void DesarializeJsonObject(string path, List<request> MainReqList, List<string> AddedFiles)
         {
-            string jsonData = string.Empty;
-            using (StreamReader reader = new StreamReader(path))
+            try
             {
-                string line;
-                while ((line = reader.ReadLine()) != null)
+                string jsonData = string.Empty;
+                using (StreamReader reader = new StreamReader(path))
                 {
-                    jsonData += line;
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        jsonData += line;
+                    }
                 }
+
+                JsonRequestsObject jsonReqObject = new JavaScriptSerializer().Deserialize<JsonRequestsObject>(jsonData);
+
+                List<request> JsonRequestsList = jsonReqObject.requests;
+
+                foreach (request r in JsonRequestsList)
+                {
+                    MainReqList.Add(r);
+                }
+
+                AddedFiles.Add(path);
             }
-
-            JsonRequestsObject jsonReqObject = new JavaScriptSerializer().Deserialize<JsonRequestsObject>(jsonData);
-
-            List<request> JsonRequestsList = jsonReqObject.requests;
-
-            foreach (request r in JsonRequestsList)
+            catch (Exception ex)
             {
-                MainReqList.Add(r);
+                MessageBox.Show(ex.Message);
             }
         }
     }
 
     public class MyCsvSerializer
     {
-        public static void DeserializeCsvObject(string path, List<request> MainReqList)
+        public static void DeserializeCsvObject(string path, List<request> MainReqList, List<string> AddedFiles)
         {
-            string[] table = File.ReadAllLines(path);
-            var requests = table.Skip(1);
-
-            IEnumerable<request> queryRequests =
-            from requestLine in requests
-            let splitRequest = requestLine.Split(',')
-            select new request()
+            try
             {
-                clientId = splitRequest[0],
-                requestId = Int32.Parse(splitRequest[1]),
-                name = splitRequest[2],
-                quantity = Int32.Parse(splitRequest[3]),
-                price = Double.Parse(splitRequest[4], System.Globalization.CultureInfo.InvariantCulture)
-            };
+                string[] table = File.ReadAllLines(path);
+                var requests = table.Skip(1);
 
-            List<request> CsvRequestsList = queryRequests.ToList();
+                IEnumerable<request> queryRequests =
+                from requestLine in requests
+                let splitRequest = requestLine.Split(',')
+                select new request()
+                {
+                    clientId = splitRequest[0],
+                    requestId = Int32.Parse(splitRequest[1]),
+                    name = splitRequest[2],
+                    quantity = Int32.Parse(splitRequest[3]),
+                    price = Double.Parse(splitRequest[4], System.Globalization.CultureInfo.InvariantCulture)
+                };
 
-            foreach (request r in CsvRequestsList)
+                List<request> CsvRequestsList = queryRequests.ToList();
+
+                foreach (request r in CsvRequestsList)
+                {
+                    MainReqList.Add(r);
+                }
+
+                AddedFiles.Add(path);
+            }
+            catch (Exception ex)
             {
-                MainReqList.Add(r);
+                MessageBox.Show(ex.Message);
             }
         }
     }

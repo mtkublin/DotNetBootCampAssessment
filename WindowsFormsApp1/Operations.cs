@@ -18,6 +18,33 @@ namespace ReqRaportsApp
             }
         }
 
+        public double maxPrice()
+        {
+            Dictionary<string, List<long>> allReqs = AllRequests();
+
+            List<double> reqValuesList = new List<double>();
+
+            foreach(string cid in allReqs.Keys)
+            {
+                foreach(long rid in allReqs[cid])
+                {
+                    IEnumerable<request> getCurrentRequest = from req in RequestsList
+                                                             where req.clientId == cid & req.requestId == rid
+                                                             select req;
+
+                    double reqValue = 0;
+
+                    foreach (request r in getCurrentRequest)
+                    {
+                        reqValue += r.quantity * r.price;
+                    }
+                    reqValuesList.Add(reqValue);
+                }
+            }
+            double maxPr = reqValuesList.Max();
+            return maxPr;
+        }
+
         public HashSet<long> AllReqsForClient(string currentClientId)
         {
             IEnumerable<long> getClientReqs = from request in RequestsList
@@ -113,7 +140,9 @@ namespace ReqRaportsApp
 
         public void showClientIdsComboBox()
         {
+            clientIdBox.Visible = true;
             clientIdComboBox.Visible = true;
+            clientIdLabel.Visible = true;
 
             HashSet<string> clientIds = getClientIds();
 
@@ -269,43 +298,50 @@ namespace ReqRaportsApp
 
         public void ReqsForValueRange()
         {
-            double startValue = 0;
-            double endValue = 120.00;
-
-            Dictionary<string, List<long>> allReqDict = AllRequests();
-            List<WholeReq> AllReqsWithValues = new List<WholeReq>();
-            foreach (string cid in allReqDict.Keys)
+            try
             {
-                foreach (int rid in allReqDict[cid])
+                double startValue = Double.Parse(minValueTextBox.Text, System.Globalization.CultureInfo.InvariantCulture);
+                double endValue = Double.Parse(maxValueTextBox.Text, System.Globalization.CultureInfo.InvariantCulture);
+
+                Dictionary<string, List<long>> allReqDict = AllRequests();
+                List<WholeReq> AllReqsWithValues = new List<WholeReq>();
+                foreach (string cid in allReqDict.Keys)
                 {
-                    var getReq = from req in RequestsList
-                                 where req.clientId == cid & req.requestId == rid
-                                 select req;
-
-                    WholeReq curReq = new WholeReq();
-                    curReq.clientId = cid;
-                    curReq.requestId = rid;
-                    double val = 0;
-                    foreach (var r in getReq)
+                    foreach (int rid in allReqDict[cid])
                     {
-                        val += r.quantity * r.price;
+                        var getReq = from req in RequestsList
+                                     where req.clientId == cid & req.requestId == rid
+                                     select req;
+
+                        WholeReq curReq = new WholeReq();
+                        curReq.clientId = cid;
+                        curReq.requestId = rid;
+                        double val = 0;
+                        foreach (var r in getReq)
+                        {
+                            val += r.quantity * r.price;
+                        }
+                        curReq.value = val;
+                        AllReqsWithValues.Add(curReq);
                     }
-                    curReq.value = val;
-                    AllReqsWithValues.Add(curReq);
                 }
+
+                IEnumerable<WholeReq> getReqsInRange = from wr in AllReqsWithValues
+                                                       where startValue < wr.value & wr.value < endValue
+                                                       select wr;
+
+                string reqValues = string.Empty;
+                foreach (WholeReq w in getReqsInRange)
+                {
+                    reqValues += "Client " + w.clientId + ": request " + w.requestId + ": " + w.value + "\n";
+                }
+
+                RaportMessageBox(reqValues, "Zamówienia w podanym przedziale cenowym");
             }
-
-            IEnumerable<WholeReq> getReqsInRange = from wr in AllReqsWithValues
-                                                   where startValue < wr.value & wr.value < endValue
-                                                   select wr;
-
-            string reqValues = string.Empty;
-            foreach (WholeReq w in getReqsInRange)
+            catch (Exception ex)
             {
-                reqValues += "Client " + w.clientId + ": request " + w.requestId + ": " + w.value + "\n";
+                MessageBox.Show(ex.Message);
             }
-
-            RaportMessageBox(reqValues, "Zamówienia w podanym przedziale cenowym");
         }
     }
 }
