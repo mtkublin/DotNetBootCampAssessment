@@ -62,11 +62,7 @@ namespace ReqRaportsApp
                 allReqsCount += allReqDict[k].Count;
             }
 
-            DialogResult res = MessageBox.Show("Ilość zamówień: " + allReqsCount.ToString() + "\nCzy chcesz zapisać raport?", "Ilość zamówień", MessageBoxButtons.OKCancel);
-            if (res == DialogResult.OK)
-            {
-                MessageBox.Show("Zapisano raport");
-            }
+            RaportMessageBox("Ilość zamówień: " + allReqsCount.ToString(), "Ilość zamówień");
         }
 
         public void ReqQuantForClientIdBtn_Click(object sender, EventArgs e)
@@ -75,39 +71,22 @@ namespace ReqRaportsApp
             HashSet<int> reqIdsForClient = AllReqsForClient(currentClientId);
             int clientReqsCount = reqIdsForClient.Count();
 
-            DialogResult res = MessageBox.Show("Ilość zamówień dla klienta o identyfikatorze " + currentClientId + ": " + clientReqsCount.ToString() + "\nCzy chcesz zapisać raport?", "Ilość zamówień dla klienta", MessageBoxButtons.OKCancel);
-            if (res == DialogResult.OK)
-            {
-                MessageBox.Show("Zapisano raport");
-            }
+            RaportMessageBox("Ilość zamówień dla klienta o identyfikatorze " + currentClientId + ": " + clientReqsCount.ToString(), "Ilość zamówień dla klienta");
         }
 
         public void ReqValueSumBtn_Click(object sender, EventArgs e)
         {
             double allReqsValueSum = RequestsValuesSum(RequestsList);
 
-            DialogResult res = MessageBox.Show("Łączna kwota zamówień: " + allReqsValueSum.ToString() + "\nCzy chcesz zapisać raport?", "Łączna kwota zamówień", MessageBoxButtons.OKCancel);
-            if (res == DialogResult.OK)
-            {
-                MessageBox.Show("Zapisano raport");
-            }
+            RaportMessageBox("Łączna kwota zamówień: " + allReqsValueSum.ToString(), "Łączna kwota zamówień");
         }
 
         public void ReqValueSumForClientIdBtn_Click(object sender, EventArgs e)
         {
             string currentClientId = "1";
-            var getClientReqs = from request in RequestsList
-                                where request.clientId == currentClientId
-                                select request;
-            List<request> clientReqs = getClientReqs.ToList();
+            double clientReqsValueSum = ClientsValuesSum(currentClientId);
 
-            double clientReqsValueSum = RequestsValuesSum(clientReqs);
-
-            DialogResult res = MessageBox.Show("Łączna kwota zamówień dla klienta o identyfikatorze " + currentClientId + ": " + clientReqsValueSum.ToString() + "\nCzy chcesz zapisać raport?", "Łączna kwota zamówień dla klienta", MessageBoxButtons.OKCancel);
-            if (res == DialogResult.OK)
-            {
-                MessageBox.Show("Zapisano raport");
-            }
+            RaportMessageBox("Łączna kwota zamówień dla klienta o identyfikatorze " + currentClientId + ": " + clientReqsValueSum.ToString(), "Łączna kwota zamówień dla klienta");
         }
 
         public void AllReqsListBtn_Click(object sender, EventArgs e)
@@ -124,11 +103,7 @@ namespace ReqRaportsApp
                 }
             }
 
-            DialogResult res = MessageBox.Show(reqsListString + "\nCzy chcesz zapisać raport?", "Lista zamówień", MessageBoxButtons.OKCancel);
-            if (res == DialogResult.OK)
-            {
-                MessageBox.Show("Zapisano raport");
-            }
+            RaportMessageBox(reqsListString, "Lista zamówień");
         }
 
         public void ReqsListForClientIdBtn_Click(object sender, EventArgs e)
@@ -142,36 +117,100 @@ namespace ReqRaportsApp
                 reqsListString += "    - " + rid.ToString() + "\n";
             }
 
-            DialogResult res = MessageBox.Show(reqsListString + "\nCzy chcesz zapisać raport?", "Lista zamówień dla klienta", MessageBoxButtons.OKCancel);
-            if (res == DialogResult.OK)
-            {
-                MessageBox.Show("Zapisano raport");
-            }
+            RaportMessageBox(reqsListString, "Lista zamówień dla klienta");
         }
 
         public void AverageReqValueBtn_Click(object sender, EventArgs e)
         {
+            double allReqsValueSum = RequestsValuesSum(RequestsList);
+            Dictionary<string, List<int>> allReqDict = AllRequests();
 
+            int allReqsCount = 0;
+            foreach (string k in allReqDict.Keys)
+            {
+                allReqsCount += allReqDict[k].Count;
+            }
+
+            double avgReqValue = allReqsValueSum / allReqsCount;
+            double roundedAvgReqValue = Math.Round(avgReqValue, 2);
+
+            RaportMessageBox("Średnia wartość zamówienia: " + roundedAvgReqValue.ToString(), "Średnia wartość zamówienia");
         }
 
         public void AverageReqValueForClientIdBtn_Click(object sender, EventArgs e)
         {
+            string currentClientId = "1";
+            double clientReqsValueSum = ClientsValuesSum(currentClientId);
 
+            HashSet<int> reqIdsForClient = AllReqsForClient(currentClientId);
+            int clientReqsCount = reqIdsForClient.Count();
+
+            double avgReqValue = clientReqsValueSum / clientReqsCount;
+            double roundedAvgReqValue = Math.Round(avgReqValue, 2);
+
+            RaportMessageBox("Średnia wartość zamówienia dla klienta " + currentClientId + ": " + roundedAvgReqValue.ToString(), "Średnia wartość zamówienia dla klienta");
         }
 
         public void ReqQuantByNameBtn_Click(object sender, EventArgs e)
         {
+            string reqsListString = ProductReqIds(RequestsList);
 
+            RaportMessageBox(reqsListString, "Ilość zamówień pogrupowanych po nazwie");
         }
 
         public void ReqQuantByNameForClientIdBtn_Click(object sender, EventArgs e)
         {
+            string currentClientId = "1";
+            IEnumerable<request> getClientsReqs = from request in RequestsList
+                                                  where request.clientId == currentClientId
+                                                  select request;
 
+            List<request> currentClientRequests = getClientsReqs.ToList();
+
+            string reqsListString = ProductReqIds(currentClientRequests);
+
+            RaportMessageBox(reqsListString, "Ilość zamówień pogrupowanych po nazwie");
         }
 
         private void ReqsForValueRangeBtn_Click(object sender, EventArgs e)
         {
+            double startValue = 0;
+            double endValue = 120.00;
 
+            Dictionary<string, List<int>> allReqDict = AllRequests();
+            List<WholeReq> AllReqsWithValues = new List<WholeReq>();
+            foreach (string cid in allReqDict.Keys)
+            {
+                foreach (int rid in allReqDict[cid])
+                {
+                    var getReq = from req in RequestsList
+                                 where req.clientId == cid & req.requestId == rid
+                                 select req;
+
+                    WholeReq curReq = new WholeReq();
+                    curReq.clientId = cid;
+                    curReq.requestId = rid;
+                    double val = 0;
+                    foreach (var r in getReq)
+                    {
+                        val += r.quantity * r.price;
+                    }
+                    curReq.value = val;
+                    AllReqsWithValues.Add(curReq);
+                }
+            }
+
+            IEnumerable<WholeReq> getReqsInRange = from wr in AllReqsWithValues
+                                                   where startValue < wr.value & wr.value < endValue
+                                                   select wr;
+
+            string reqValues = string.Empty;
+            foreach (WholeReq w in getReqsInRange)
+            {
+                reqValues += "Client " + w.clientId + ": request " + w.requestId + ": " + w.value + "\n";
+            }
+
+            RaportMessageBox(reqValues, "Zamówienia w podanym przedziale cenowym");
         }
     }
 }

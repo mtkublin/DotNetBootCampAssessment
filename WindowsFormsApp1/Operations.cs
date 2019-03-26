@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,15 @@ namespace ReqRaportsApp
 {
     public partial class Form1
     {
+        public void RaportMessageBox(string messageText, string messageLabel)
+        {
+            DialogResult res = MessageBox.Show(messageText + "\nCzy chcesz zapisać raport?", messageLabel, MessageBoxButtons.OKCancel);
+            if (res == DialogResult.OK)
+            {
+                MessageBox.Show("Zapisano raport");
+            }
+        }
+
         public HashSet<int> AllReqsForClient(string currentClientId)
         {
             IEnumerable<int> getClientReqs = from request in RequestsList
@@ -50,6 +60,45 @@ namespace ReqRaportsApp
             }
 
             return allReqsValueSum;
+        }
+
+        public double ClientsValuesSum(string currentClientId)
+        {
+            var getClientReqs = from request in RequestsList
+                                where request.clientId == currentClientId
+                                select request;
+            List<request> clientReqs = getClientReqs.ToList();
+            double clientReqsValueSum = RequestsValuesSum(clientReqs);
+
+            return clientReqsValueSum;
+        }
+
+        public string ProductReqIds(List<request> currentRequestsList)
+        {
+            IEnumerable<string> getProdNames = from request in currentRequestsList
+                                               select request.name;
+
+            HashSet<string> prodNames = new HashSet<string>(getProdNames.ToList());
+
+            Dictionary<string, int> prodReqIdsDict = new Dictionary<string, int>();
+
+            foreach (string pn in prodNames)
+            {
+                IEnumerable<request> getReqIdsForProd = from request in currentRequestsList
+                                                        where request.name == pn
+                                                        select request;
+
+                prodReqIdsDict[pn] = getReqIdsForProd.Count();
+            }
+
+            string reqsListString = string.Empty;
+
+            foreach (string k in prodReqIdsDict.Keys)
+            {
+                reqsListString += k + ": " + prodReqIdsDict[k].ToString() + "\n";
+            }
+
+            return reqsListString;
         }
     }
 }
