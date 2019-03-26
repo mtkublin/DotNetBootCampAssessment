@@ -30,8 +30,10 @@
         {
             this.addFilesDialog = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.deleteFilesBtn = new System.Windows.Forms.Button();
             this.addedFilesListView = new System.Windows.Forms.ListBox();
             this.AddFilesBtn = new System.Windows.Forms.Button();
+            this.raportsDataGrid = new System.Windows.Forms.DataGridView();
             this.valueRangeBox = new System.Windows.Forms.GroupBox();
             this.maxMaxValLabel = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -47,16 +49,14 @@
             this.raportsComboBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.raportGenBtn = new System.Windows.Forms.Button();
-            this.deleteFilesBtn = new System.Windows.Forms.Button();
-            this.raportsDataGrid = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.raportsDataGrid)).BeginInit();
             this.valueRangeBox.SuspendLayout();
             this.clientIdBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.raportsDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // addFilesDialog
@@ -90,6 +90,15 @@
             this.splitContainer1.SplitterDistance = 236;
             this.splitContainer1.TabIndex = 0;
             // 
+            // deleteFilesBtn
+            // 
+            this.deleteFilesBtn.Location = new System.Drawing.Point(12, 41);
+            this.deleteFilesBtn.Name = "deleteFilesBtn";
+            this.deleteFilesBtn.Size = new System.Drawing.Size(197, 23);
+            this.deleteFilesBtn.TabIndex = 2;
+            this.deleteFilesBtn.Text = "Usuń pliki";
+            this.deleteFilesBtn.UseVisualStyleBackColor = true;
+            // 
             // addedFilesListView
             // 
             this.addedFilesListView.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
@@ -108,6 +117,15 @@
             this.AddFilesBtn.Text = "Dodaj pliki";
             this.AddFilesBtn.UseVisualStyleBackColor = true;
             this.AddFilesBtn.Click += new System.EventHandler(this.AddFilesBtn_Click);
+            // 
+            // raportsDataGrid
+            // 
+            this.raportsDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.raportsDataGrid.Location = new System.Drawing.Point(10, 125);
+            this.raportsDataGrid.Name = "raportsDataGrid";
+            this.raportsDataGrid.RowTemplate.Height = 24;
+            this.raportsDataGrid.Size = new System.Drawing.Size(830, 577);
+            this.raportsDataGrid.TabIndex = 13;
             // 
             // valueRangeBox
             // 
@@ -243,31 +261,13 @@
             // 
             // raportGenBtn
             // 
-            this.raportGenBtn.Location = new System.Drawing.Point(680, 27);
+            this.raportGenBtn.Location = new System.Drawing.Point(680, 12);
             this.raportGenBtn.Name = "raportGenBtn";
-            this.raportGenBtn.Size = new System.Drawing.Size(102, 24);
+            this.raportGenBtn.Size = new System.Drawing.Size(160, 107);
             this.raportGenBtn.TabIndex = 3;
             this.raportGenBtn.Text = "Generuj";
             this.raportGenBtn.UseVisualStyleBackColor = true;
             this.raportGenBtn.Click += new System.EventHandler(this.raportGenBtn_Click);
-            // 
-            // deleteFilesBtn
-            // 
-            this.deleteFilesBtn.Location = new System.Drawing.Point(12, 41);
-            this.deleteFilesBtn.Name = "deleteFilesBtn";
-            this.deleteFilesBtn.Size = new System.Drawing.Size(197, 23);
-            this.deleteFilesBtn.TabIndex = 2;
-            this.deleteFilesBtn.Text = "Usuń pliki";
-            this.deleteFilesBtn.UseVisualStyleBackColor = true;
-            // 
-            // raportsDataGrid
-            // 
-            this.raportsDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.raportsDataGrid.Location = new System.Drawing.Point(10, 125);
-            this.raportsDataGrid.Name = "raportsDataGrid";
-            this.raportsDataGrid.RowTemplate.Height = 24;
-            this.raportsDataGrid.Size = new System.Drawing.Size(830, 577);
-            this.raportsDataGrid.TabIndex = 13;
             // 
             // Form1
             // 
@@ -281,13 +281,13 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.raportsDataGrid)).EndInit();
             this.valueRangeBox.ResumeLayout(false);
             this.valueRangeBox.PerformLayout();
             this.clientIdBox.ResumeLayout(false);
             this.clientIdBox.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.raportsDataGrid)).EndInit();
             this.ResumeLayout(false);
 
         }

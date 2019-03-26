@@ -1,14 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Linq;
-using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 
 namespace ReqRaportsApp
 {
@@ -47,6 +40,14 @@ namespace ReqRaportsApp
             clientIdComboBox.Visible = false;
             clientIdLabel.Visible = false;
             valueRangeBox.Visible = false;
+
+            raportsDataGrid.AllowUserToAddRows = false;
+            raportsDataGrid.AllowUserToDeleteRows = false;
+            raportsDataGrid.AllowUserToOrderColumns = false;
+            raportsDataGrid.AllowUserToResizeColumns = false;
+            raportsDataGrid.AllowUserToResizeRows = false;
+            raportsDataGrid.EditMode = DataGridViewEditMode.EditProgrammatically;
+            raportsDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
             foreach (string n in dropListItemsList)
             {

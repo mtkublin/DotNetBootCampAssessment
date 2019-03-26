@@ -16,15 +16,15 @@ namespace ReqRaportsApp
             }
         }
 
-        public double maxPrice()
+        public Dictionary<string, Dictionary<long, double>> wholeReqValueDict()
         {
             Dictionary<string, List<long>> allReqs = AllRequests();
 
-            List<double> reqValuesList = new List<double>();
-
-            foreach(string cid in allReqs.Keys)
+            Dictionary<string, Dictionary<long, double>> clientReqWholeValDict = new Dictionary<string, Dictionary<long, double>>();
+            foreach (string cid in allReqs.Keys)
             {
-                foreach(long rid in allReqs[cid])
+                Dictionary<long, double> reqValuesDict = new Dictionary<long, double>();
+                foreach (long rid in allReqs[cid])
                 {
                     IEnumerable<request> getCurrentRequest = from req in RequestsList
                                                              where req.clientId == cid & req.requestId == rid
@@ -36,9 +36,26 @@ namespace ReqRaportsApp
                     {
                         reqValue += r.quantity * r.price;
                     }
-                    reqValuesList.Add(reqValue);
+                    reqValuesDict[rid] = reqValue;
+                }
+                clientReqWholeValDict[cid] = reqValuesDict;
+            }
+            return clientReqWholeValDict;
+        }
+
+        public double maxPrice()
+        {
+            List<double> reqValuesList = new List<double>();
+
+            Dictionary<string, Dictionary<long, double>> reqValsDict = wholeReqValueDict();
+            foreach (string cid in reqValsDict.Keys)
+            {
+                foreach (long r in reqValsDict[cid].Keys)
+                {
+                    reqValuesList.Add(reqValsDict[cid][r]);
                 }
             }
+
             double maxPr = reqValuesList.Max();
             return maxPr;
         }
@@ -98,7 +115,7 @@ namespace ReqRaportsApp
             return clientReqsValueSum;
         }
 
-        public string ProductReqIds(List<request> currentRequestsList)
+        public Dictionary<string, int> ProductReqIds(List<request> currentRequestsList)
         {
             IEnumerable<string> getProdNames = from request in currentRequestsList
                                                select request.name;
@@ -116,14 +133,14 @@ namespace ReqRaportsApp
                 prodReqIdsDict[pn] = getReqIdsForProd.Count();
             }
 
-            string reqsListString = string.Empty;
+            //string reqsListString = string.Empty;
 
-            foreach (string k in prodReqIdsDict.Keys)
-            {
-                reqsListString += k + ": " + prodReqIdsDict[k].ToString() + "\n";
-            }
+            //foreach (string k in prodReqIdsDict.Keys)
+            //{
+            //    reqsListString += k + ": " + prodReqIdsDict[k].ToString() + "\n";
+            //}
 
-            return reqsListString;
+            return prodReqIdsDict;
         }
 
         public HashSet<string> getClientIds()
@@ -165,9 +182,9 @@ namespace ReqRaportsApp
             }
 
             string[] colNames = { "Ilość zamówień"};
-            string[] row1 = { allReqsCount.ToString() };
             List<string[]> rows = new List<string[]>();
-            rows.Add(row1);
+            string[] row = { allReqsCount.ToString() };
+            rows.Add(row);
             GridViewPopulate(colNames, rows);
         }
 
@@ -180,10 +197,10 @@ namespace ReqRaportsApp
                 HashSet<long> reqIdsForClient = AllReqsForClient(currentClientId);
                 int clientReqsCount = reqIdsForClient.Count();
 
-                string[] colNames = { "Ilość zamówień dla klienta \"" + currentClientId + "\""};
-                string[] row1 = { clientReqsCount.ToString() };
+                string[] colNames = { "Identyfikator klienta", "Ilość zamówień" };
                 List<string[]> rows = new List<string[]>();
-                rows.Add(row1);
+                string[] row = { currentClientId, clientReqsCount.ToString() };
+                rows.Add(row);
                 GridViewPopulate(colNames, rows);
             }
         }
@@ -193,9 +210,9 @@ namespace ReqRaportsApp
             double allReqsValueSum = RequestsValuesSum(RequestsList);
 
             string[] colNames = { "Łączna kwota zamówień" };
-            string[] row1 = { allReqsValueSum.ToString() };
             List<string[]> rows = new List<string[]>();
-            rows.Add(row1);
+            string[] row = { allReqsValueSum.ToString() };
+            rows.Add(row);
             GridViewPopulate(colNames, rows);
         }
 
@@ -207,10 +224,10 @@ namespace ReqRaportsApp
 
                 double clientReqsValueSum = ClientsValuesSum(currentClientId);
 
-                string[] colNames = { "Łączna kwota zamówień dla klienta \"" + currentClientId + "\"" };
-                string[] row1 = { clientReqsValueSum.ToString() };
+                string[] colNames = { "Identyfikator klienta", "Łączna kwota zamówień" };
                 List<string[]> rows = new List<string[]>();
-                rows.Add(row1);
+                string[] row = { currentClientId, clientReqsValueSum.ToString() };
+                rows.Add(row);
                 GridViewPopulate(colNames, rows);
             }
         }
@@ -220,15 +237,21 @@ namespace ReqRaportsApp
             Dictionary<string, List<long>> allReqDict = AllRequests();
             string reqsListString = string.Empty;
 
-            string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia" };
+            string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Nazwa produktu", "Ilość","Cena produktu" };
             List<string[]> rows = new List<string[]>();
 
             foreach (string cid in allReqDict.Keys)
             {
                 foreach (long rid in allReqDict[cid])
                 {
-                    string[] row = { cid, rid.ToString() };
-                    rows.Add(row);
+                    IEnumerable<request> getAllInstancesOfRequest = from req in RequestsList
+                                                                    where req.clientId == cid & req.requestId == rid
+                                                                    select req;
+                    foreach (request r in getAllInstancesOfRequest)
+                    {
+                        string[] row = { cid, rid.ToString(), r.name, r.quantity.ToString(), r.price.ToString() };
+                        rows.Add(row);
+                    }
                 }
             }
             GridViewPopulate(colNames, rows);
@@ -242,13 +265,21 @@ namespace ReqRaportsApp
 
                 HashSet<long> clientsReqs = AllReqsForClient(currentClientId);
 
-                string reqsListString = currentClientId + ":\n";
+                string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Nazwa produktu", "Ilość", "Cena produktu" };
+                List<string[]> rows = new List<string[]>();
+
                 foreach (int rid in clientsReqs)
                 {
-                    reqsListString += "    - " + rid.ToString() + "\n";
+                    IEnumerable<request> getAllInstancesOfRequest = from req in RequestsList
+                                                                    where req.clientId == currentClientId & req.requestId == rid
+                                                                    select req;
+                    foreach (request r in getAllInstancesOfRequest)
+                    {
+                        string[] row = { currentClientId, rid.ToString(), r.name, r.quantity.ToString(), r.price.ToString() };
+                        rows.Add(row);
+                    }
                 }
-
-                RaportMessageBox(reqsListString, "Lista zamówień dla klienta");
+                GridViewPopulate(colNames, rows);
             }
         }
 
@@ -266,7 +297,11 @@ namespace ReqRaportsApp
             double avgReqValue = allReqsValueSum / allReqsCount;
             double roundedAvgReqValue = Math.Round(avgReqValue, 2);
 
-            RaportMessageBox("Średnia wartość zamówienia: " + roundedAvgReqValue.ToString(), "Średnia wartość zamówienia");
+            string[] colNames = { "Średnia wartość zamówienia" };
+            List<string[]> rows = new List<string[]>();
+            string[] row = { roundedAvgReqValue.ToString() };
+            rows.Add(row);
+            GridViewPopulate(colNames, rows);
         }
 
         public void AverageReqValueForClientId()
@@ -283,15 +318,26 @@ namespace ReqRaportsApp
                 double avgReqValue = clientReqsValueSum / clientReqsCount;
                 double roundedAvgReqValue = Math.Round(avgReqValue, 2);
 
-                RaportMessageBox("Średnia wartość zamówienia dla klienta " + currentClientId + ": " + roundedAvgReqValue.ToString(), "Średnia wartość zamówienia dla klienta");
+                string[] colNames = { "Identyfikator klienta", "Średnia wartość zamówienia" };
+                List<string[]> rows = new List<string[]>();
+                string[] row = { currentClientId, roundedAvgReqValue.ToString() };
+                rows.Add(row);
+                GridViewPopulate(colNames, rows);
             }
         }
 
         public void ReqQuantByName()
         {
-            string reqsListString = ProductReqIds(RequestsList);
+            Dictionary<string, int> reqsListString = ProductReqIds(RequestsList);
 
-            RaportMessageBox(reqsListString, "Ilość zamówień pogrupowanych po nazwie");
+            string[] colNames = { "Nazwa produktu" , "Ilość zamówień"};
+            List<string[]> rows = new List<string[]>();
+            foreach (string prodName in reqsListString.Keys)
+            {
+                string[] row = { prodName, reqsListString[prodName].ToString() };
+                rows.Add(row);
+            }
+            GridViewPopulate(colNames, rows);
         }
 
         public void ReqQuantByNameForClientId()
@@ -306,9 +352,16 @@ namespace ReqRaportsApp
 
                 List<request> currentClientRequests = getClientsReqs.ToList();
 
-                string reqsListString = ProductReqIds(currentClientRequests);
+                Dictionary<string, int> reqsListString = ProductReqIds(currentClientRequests);
 
-                RaportMessageBox(reqsListString, "Ilość zamówień pogrupowanych po nazwie");
+                string[] colNames = { "Identyfikator klienta", "Nazwa produktu", "Ilość zamówień" };
+                List<string[]> rows = new List<string[]>();
+                foreach (string prodName in reqsListString.Keys)
+                {
+                    string[] row = { currentClientId, prodName, reqsListString[prodName].ToString() };
+                    rows.Add(row);
+                }
+                GridViewPopulate(colNames, rows);
             }
         }
 
@@ -316,43 +369,33 @@ namespace ReqRaportsApp
         {
             try
             {
-                double startValue = Double.Parse(minValueTextBox.Text, System.Globalization.CultureInfo.InvariantCulture);
-                double endValue = Double.Parse(maxValueTextBox.Text, System.Globalization.CultureInfo.InvariantCulture);
+                double minValue = Double.Parse(minValueTextBox.Text, System.Globalization.CultureInfo.InvariantCulture);
+                double maxValue = Double.Parse(maxValueTextBox.Text, System.Globalization.CultureInfo.InvariantCulture);
 
-                Dictionary<string, List<long>> allReqDict = AllRequests();
-                List<WholeReq> AllReqsWithValues = new List<WholeReq>();
-                foreach (string cid in allReqDict.Keys)
+                List<RequestWithSummaricValue> requestWithSummaricValueList = new List<RequestWithSummaricValue>();
+
+                Dictionary<string, Dictionary<long, double>> allReqValsDict = wholeReqValueDict();
+                foreach (string cid in allReqValsDict.Keys)
                 {
-                    foreach (int rid in allReqDict[cid])
+                    foreach (long rid in allReqValsDict[cid].Keys)
                     {
-                        var getReq = from req in RequestsList
-                                     where req.clientId == cid & req.requestId == rid
-                                     select req;
-
-                        WholeReq curReq = new WholeReq();
-                        curReq.clientId = cid;
-                        curReq.requestId = rid;
-                        double val = 0;
-                        foreach (var r in getReq)
-                        {
-                            val += r.quantity * r.price;
-                        }
-                        curReq.value = val;
-                        AllReqsWithValues.Add(curReq);
+                        RequestWithSummaricValue requestWithSummaricValue = new RequestWithSummaricValue(cid, rid, allReqValsDict[cid][rid]);
+                        requestWithSummaricValueList.Add(requestWithSummaricValue);
                     }
                 }
 
-                IEnumerable<WholeReq> getReqsInRange = from wr in AllReqsWithValues
-                                                       where startValue < wr.value & wr.value < endValue
-                                                       select wr;
+                IEnumerable<RequestWithSummaricValue> getReqValsInRange = from req in requestWithSummaricValueList
+                                                                          where req.value >= minValue & req.value <= maxValue
+                                                                          select req;
 
-                string reqValues = string.Empty;
-                foreach (WholeReq w in getReqsInRange)
+                string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Wartość zamówienia" };
+                List<string[]> rows = new List<string[]>();
+                foreach (RequestWithSummaricValue r in getReqValsInRange)
                 {
-                    reqValues += "Client " + w.clientId + ": request " + w.requestId + ": " + w.value + "\n";
+                    string[] row = { r.clientId, r.requestId.ToString(), r.value.ToString() };
+                    rows.Add(row);
                 }
-
-                RaportMessageBox(reqValues, "Zamówienia w podanym przedziale cenowym");
+                GridViewPopulate(colNames, rows);
             }
             catch (Exception ex)
             {

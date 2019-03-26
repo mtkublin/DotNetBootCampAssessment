@@ -16,11 +16,17 @@ namespace ReqRaportsApp
     //    public List<request> RequestsList = new List<request>();
     //}
 
-    public class WholeReq
+    public class RequestWithSummaricValue
     {
         public string clientId { get; set; }
-        public int requestId { get; set; }
-        public List<string> names { get; set; }
+        public long requestId { get; set; }
         public double value { get; set; }
+
+        public RequestWithSummaricValue (string cid, long rid, double val)
+        {
+            clientId = cid;
+            requestId = rid;
+            value = val;
+        }
     }
 }
