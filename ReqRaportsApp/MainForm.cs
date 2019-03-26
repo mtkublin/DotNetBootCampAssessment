@@ -30,9 +30,7 @@ namespace ReqRaportsApp
             "Średnia wartość zamówienia dla klienta o wskazanym identyfikatorze",
             "Ilość zamówień pogrupowanych po nazwie dla klienta o wskazanym identyfikatorze",
         };
-        //List<string> AddedFiles = new List<string>();
         Dictionary<string, List<request>> AddedFiles = new Dictionary<string, List<request>>();
-
         public List<request> RequestsList = new List<request>();
         
         public Form1()
@@ -42,6 +40,11 @@ namespace ReqRaportsApp
             clientIdComboBox.Visible = false;
             clientIdLabel.Visible = false;
             valueRangeBox.Visible = false;
+
+            raportsComboBox.Enabled = false;
+            raportGenBtn.Enabled = false;
+            deleteFilesBtn.Enabled = false;
+            saveRaportBtn.Enabled = false;
 
             raportsDataGrid.AllowUserToAddRows = false;
             raportsDataGrid.AllowUserToDeleteRows = false;
@@ -60,17 +63,12 @@ namespace ReqRaportsApp
 
         public void AddFilesBtn_Click(object sender, EventArgs e)
         {
-            //List<string> fileContents = new List<string>();
-
             if (addFilesDialog.ShowDialog() == DialogResult.OK)
             {
                 string[] filePaths = addFilesDialog.FileNames;
                 
                 foreach (string fp in filePaths) if (!AddedFiles.Keys.Contains(fp))
-                {
-                    string fileName = fp.Substring(fp.LastIndexOf("\\") + 1);
-                    addedFilesListView.Items.Add(fileName);
-                    
+                {                    
                     if (fp.EndsWith(".xml"))
                     {
                         MyXmlSerializer.DeserializeXmlObject(fp, RequestsList, AddedFiles);
@@ -83,6 +81,19 @@ namespace ReqRaportsApp
                     {
                         MyCsvSerializer.DeserializeCsvObject(fp, RequestsList, AddedFiles);
                     }
+
+                    string fileName = fp.Substring(fp.LastIndexOf("\\") + 1);
+                    if (AddedFiles.Keys.Contains(fileName))
+                    {
+                        addedFilesListView.Items.Add(fileName);
+                    }
+                }
+
+                if (addedFilesListView.Items.Count != 0)
+                {
+                    raportsComboBox.Enabled = true;
+                    raportGenBtn.Enabled = true;
+                    deleteFilesBtn.Enabled = true;
                 }
             }
         }
@@ -195,51 +206,58 @@ namespace ReqRaportsApp
 
         public void raportGenBtn_Click(object sender, EventArgs e)
         {
-            string raportType = this.raportsComboBox.SelectedItem.ToString();
+            RaportChoiceSwitch();
 
-            if (raportType == dropListItemsList[0])
+            //string raportType = this.raportsComboBox.SelectedItem.ToString();
+
+            //if (raportType == dropListItemsList[0])
+            //{
+            //    ReqQuant();
+            //}
+            //else if (raportType == dropListItemsList[1])
+            //{
+            //    ReqQuantForClient();
+            //}
+            //else if (raportType == dropListItemsList[2])
+            //{
+            //    ReqValueSum();
+            //}
+            //else if (raportType == dropListItemsList[3])
+            //{
+            //    ReqValueSumForClientId();
+            //}
+            //else if (raportType == dropListItemsList[4])
+            //{
+            //    AllReqsList();
+            //}
+            //else if (raportType == dropListItemsList[5])
+            //{
+            //    ReqsListForClientId();
+            //}
+            //else if (raportType == dropListItemsList[6])
+            //{
+            //    AverageReqValue();
+            //}
+            //else if (raportType == dropListItemsList[7])
+            //{
+            //    AverageReqValueForClientId();
+            //}
+            //else if (raportType == dropListItemsList[8])
+            //{
+            //    ReqQuantByName();
+            //}
+            //else if (raportType == dropListItemsList[9])
+            //{
+            //    ReqQuantByNameForClientId();
+            //}
+            //else if (raportType == dropListItemsList[10])
+            //{
+            //    ReqsForValueRange();
+            //}
+
+            if (raportsDataGrid.ColumnCount != 0)
             {
-                ReqQuant();
-            }
-            else if (raportType == dropListItemsList[1])
-            {
-                ReqQuantForClient();
-            }
-            else if (raportType == dropListItemsList[2])
-            {
-                ReqValueSum();
-            }
-            else if (raportType == dropListItemsList[3])
-            {
-                ReqValueSumForClientId();
-            }
-            else if (raportType == dropListItemsList[4])
-            {
-                AllReqsList();
-            }
-            else if (raportType == dropListItemsList[5])
-            {
-                ReqsListForClientId();
-            }
-            else if (raportType == dropListItemsList[6])
-            {
-                AverageReqValue();
-            }
-            else if (raportType == dropListItemsList[7])
-            {
-                AverageReqValueForClientId();
-            }
-            else if (raportType == dropListItemsList[8])
-            {
-                ReqQuantByName();
-            }
-            else if (raportType == dropListItemsList[9])
-            {
-                ReqQuantByNameForClientId();
-            }
-            else if (raportType == dropListItemsList[10])
-            {
-                ReqsForValueRange();
+                saveRaportBtn.Enabled = true;
             }
         }
 
@@ -278,6 +296,14 @@ namespace ReqRaportsApp
                 AddedFiles.Remove(item.ToString());
             }
             toRemove.Clear();
+
+            if (addedFilesListView.Items.Count == 0)
+            {
+                raportsComboBox.Enabled = false;
+                raportGenBtn.Enabled = false;
+                deleteFilesBtn.Enabled = false;
+                saveRaportBtn.Enabled = false;
+            }
         }
     }
 }

@@ -63,8 +63,8 @@ namespace ReqRaportsApp
         public HashSet<long> AllReqsForClient(string currentClientId)
         {
             IEnumerable<long> getClientReqs = from request in RequestsList
-                                             where request.clientId == currentClientId
-                                             select request.requestId;
+                                              where request.clientId == currentClientId
+                                              select request.requestId;
 
             HashSet<long> reqIdsForClient = new HashSet<long>(getClientReqs.ToList());
 
@@ -155,9 +155,9 @@ namespace ReqRaportsApp
             HashSet<string> clientIds = getClientIds();
 
             foreach (string id in clientIds) if (!clientIdComboBox.Items.Contains(id))
-            {
-                clientIdComboBox.Items.Add(id);
-            }
+                {
+                    clientIdComboBox.Items.Add(id);
+                }
 
             if (clientIdComboBox.SelectedItem == null & clientIdComboBox.Items.Count != 0)
             {
@@ -174,7 +174,7 @@ namespace ReqRaportsApp
                 allReqsCount += allReqDict[k].Count;
             }
 
-            string[] colNames = { "Ilość zamówień"};
+            string[] colNames = { "Ilość zamówień" };
             List<List<object>> rows = new List<List<object>>();
             List<object> row = new List<object>();
             row.Add(allReqsCount);
@@ -240,7 +240,7 @@ namespace ReqRaportsApp
             Dictionary<string, List<long>> allReqDict = AllRequests();
             string reqsListString = string.Empty;
 
-            string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Nazwa produktu", "Ilość","Cena produktu" };
+            string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Nazwa produktu", "Ilość", "Cena produktu" };
             List<List<object>> rows = new List<List<object>>();
 
             foreach (string cid in allReqDict.Keys)
@@ -350,11 +350,11 @@ namespace ReqRaportsApp
         {
             Dictionary<string, int> reqsListString = ProductReqIds(RequestsList);
 
-            string[] colNames = { "Nazwa produktu" , "Ilość zamówień"};
+            string[] colNames = { "Nazwa produktu", "Ilość zamówień" };
             List<List<object>> rows = new List<List<object>>();
             foreach (string prodName in reqsListString.Keys)
             {
-                List<object> row = new List<object>(); 
+                List<object> row = new List<object>();
                 row.Add(prodName);
                 row.Add(reqsListString[prodName]);
 
@@ -419,7 +419,7 @@ namespace ReqRaportsApp
                 List<List<object>> rows = new List<List<object>>();
                 foreach (RequestWithSummaricValue r in getReqValsInRange)
                 {
-                    List<object> row = new List<object>(); 
+                    List<object> row = new List<object>();
                     row.Add(r.clientId);
                     row.Add(r.requestId);
                     row.Add(r.value);
@@ -431,6 +431,48 @@ namespace ReqRaportsApp
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void RaportChoiceSwitch()
+        {
+            string raportType = this.raportsComboBox.SelectedItem.ToString();
+
+            switch (raportType)
+            {
+                case "Ilość zamówień":
+                    ReqQuant();
+                    break;
+                case "Ilość zamówień dla klienta o wskazanym identyfikatorze":
+                    ReqQuantForClient();
+                    break;
+                case "Łączna kwota zamówień":
+                    ReqValueSum();
+                    break;
+                case "Łączna kwota zamówień dla klienta o wskazanym identyfikatorze":
+                    ReqValueSumForClientId();
+                    break;
+                case "Lista wszystkich zamówień":
+                    AllReqsList();
+                    break;
+                case "Lista zamówień dla klienta o wskazanym identyfikatorze":
+                    ReqsListForClientId();
+                    break;
+                case "Średnia wartość zamówienia":
+                    AverageReqValue();
+                    break;
+                case "Średnia wartość zamówienia dla klienta o wskazanym identyfikatorze":
+                    AverageReqValueForClientId();
+                    break;
+                case "Ilość zamówień pogrupowanych po nazwie":
+                    ReqQuantByName();
+                    break;
+                case "Ilość zamówień pogrupowanych po nazwie dla klienta o wskazanym identyfikatorze":
+                    ReqQuantByNameForClientId();
+                    break;
+                case "Zamówienia w podanym przedziale cenowym":
+                    ReqsForValueRange();
+                    break;
             }
         }
     }

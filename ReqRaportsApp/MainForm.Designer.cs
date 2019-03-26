@@ -68,12 +68,6 @@
     "xml)|*.xml|csv files (*.csv)|*.csv|json files (*.json)|*.json";
             this.addFilesDialog.InitialDirectory = "C:\\Users\\Użytkownik\\source\\repos\\WindowsFormsApp1\\Docs";
             this.addFilesDialog.Multiselect = true;
-            //
-            //saveRaportDialog
-            //
-            this.saveRaportDialog.Filter = "csv files (*.csv)|*.csv";
-            this.saveRaportDialog.InitialDirectory = "C:";
-            this.saveRaportDialog.Title = "Zapisz raport";
             // 
             // splitContainer1
             // 
@@ -244,6 +238,7 @@
             // 
             // clientIdComboBox
             // 
+            this.clientIdComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.clientIdComboBox.FormattingEnabled = true;
             this.clientIdComboBox.Location = new System.Drawing.Point(195, 15);
             this.clientIdComboBox.Name = "clientIdComboBox";
@@ -263,6 +258,7 @@
             // 
             // raportsComboBox
             // 
+            this.raportsComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.raportsComboBox.FormattingEnabled = true;
             this.raportsComboBox.Location = new System.Drawing.Point(195, 15);
             this.raportsComboBox.Name = "raportsComboBox";
@@ -288,6 +284,12 @@
             this.raportGenBtn.Text = "Generuj";
             this.raportGenBtn.UseVisualStyleBackColor = true;
             this.raportGenBtn.Click += new System.EventHandler(this.raportGenBtn_Click);
+            // 
+            // saveRaportDialog
+            // 
+            this.saveRaportDialog.Filter = "csv files (*.csv)|*.csv";
+            this.saveRaportDialog.InitialDirectory = "C:";
+            this.saveRaportDialog.Title = "Zapisz raport";
             // 
             // Form1
             // 
