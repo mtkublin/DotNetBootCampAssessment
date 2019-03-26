@@ -46,7 +46,7 @@ namespace ReqRaportsApp
             {
                 if (col != 0)
                 {
-                    rowText += ", ";
+                    rowText += ",";
                 }
                 rowText += raportsDataGrid.Columns[col].Name;
             }
@@ -59,7 +59,7 @@ namespace ReqRaportsApp
                 {
                     if (cell != 0)
                     {
-                        rowText += ", ";
+                        rowText += ",";
                     }
                     rowText += raportsDataGrid.Rows[row].Cells[cell].Value.ToString();
                 }
