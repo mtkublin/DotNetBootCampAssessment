@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ReqRaportsApp
 {
@@ -194,7 +192,11 @@ namespace ReqRaportsApp
         {
             double allReqsValueSum = RequestsValuesSum(RequestsList);
 
-            RaportMessageBox("Łączna kwota zamówień: " + allReqsValueSum.ToString(), "Łączna kwota zamówień");
+            string[] colNames = { "Łączna kwota zamówień" };
+            string[] row1 = { allReqsValueSum.ToString() };
+            List<string[]> rows = new List<string[]>();
+            rows.Add(row1);
+            GridViewPopulate(colNames, rows);
         }
 
         public void ReqValueSumForClientId()
@@ -205,7 +207,11 @@ namespace ReqRaportsApp
 
                 double clientReqsValueSum = ClientsValuesSum(currentClientId);
 
-                RaportMessageBox("Łączna kwota zamówień dla klienta o identyfikatorze " + currentClientId + ": " + clientReqsValueSum.ToString(), "Łączna kwota zamówień dla klienta");
+                string[] colNames = { "Łączna kwota zamówień dla klienta \"" + currentClientId + "\"" };
+                string[] row1 = { clientReqsValueSum.ToString() };
+                List<string[]> rows = new List<string[]>();
+                rows.Add(row1);
+                GridViewPopulate(colNames, rows);
             }
         }
 
@@ -214,16 +220,18 @@ namespace ReqRaportsApp
             Dictionary<string, List<long>> allReqDict = AllRequests();
             string reqsListString = string.Empty;
 
-            foreach (string k in allReqDict.Keys)
+            string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia" };
+            List<string[]> rows = new List<string[]>();
+
+            foreach (string cid in allReqDict.Keys)
             {
-                reqsListString += k + ":\n";
-                foreach (int rid in allReqDict[k])
+                foreach (long rid in allReqDict[cid])
                 {
-                    reqsListString += "    - " + rid.ToString() + "\n";
+                    string[] row = { cid, rid.ToString() };
+                    rows.Add(row);
                 }
             }
-
-            RaportMessageBox(reqsListString, "Lista zamówień");
+            GridViewPopulate(colNames, rows);
         }
 
         public void ReqsListForClientId()
