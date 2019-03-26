@@ -133,13 +133,6 @@ namespace ReqRaportsApp
                 prodReqIdsDict[pn] = getReqIdsForProd.Count();
             }
 
-            //string reqsListString = string.Empty;
-
-            //foreach (string k in prodReqIdsDict.Keys)
-            //{
-            //    reqsListString += k + ": " + prodReqIdsDict[k].ToString() + "\n";
-            //}
-
             return prodReqIdsDict;
         }
 
@@ -182,8 +175,10 @@ namespace ReqRaportsApp
             }
 
             string[] colNames = { "Ilość zamówień"};
-            List<string[]> rows = new List<string[]>();
-            string[] row = { allReqsCount.ToString() };
+            List<List<object>> rows = new List<List<object>>();
+            List<object> row = new List<object>();
+            row.Add(allReqsCount);
+
             rows.Add(row);
             GridViewPopulate(colNames, rows);
         }
@@ -198,8 +193,11 @@ namespace ReqRaportsApp
                 int clientReqsCount = reqIdsForClient.Count();
 
                 string[] colNames = { "Identyfikator klienta", "Ilość zamówień" };
-                List<string[]> rows = new List<string[]>();
-                string[] row = { currentClientId, clientReqsCount.ToString() };
+                List<List<object>> rows = new List<List<object>>();
+                List<object> row = new List<object>();
+                row.Add(currentClientId);
+                row.Add(clientReqsCount);
+
                 rows.Add(row);
                 GridViewPopulate(colNames, rows);
             }
@@ -210,8 +208,10 @@ namespace ReqRaportsApp
             double allReqsValueSum = RequestsValuesSum(RequestsList);
 
             string[] colNames = { "Łączna kwota zamówień" };
-            List<string[]> rows = new List<string[]>();
-            string[] row = { allReqsValueSum.ToString() };
+            List<List<object>> rows = new List<List<object>>();
+            List<object> row = new List<object>();
+            row.Add(allReqsValueSum);
+
             rows.Add(row);
             GridViewPopulate(colNames, rows);
         }
@@ -225,8 +225,11 @@ namespace ReqRaportsApp
                 double clientReqsValueSum = ClientsValuesSum(currentClientId);
 
                 string[] colNames = { "Identyfikator klienta", "Łączna kwota zamówień" };
-                List<string[]> rows = new List<string[]>();
-                string[] row = { currentClientId, clientReqsValueSum.ToString() };
+                List<List<object>> rows = new List<List<object>>();
+                List<object> row = new List<object>();
+                row.Add(currentClientId);
+                row.Add(clientReqsValueSum);
+
                 rows.Add(row);
                 GridViewPopulate(colNames, rows);
             }
@@ -238,7 +241,7 @@ namespace ReqRaportsApp
             string reqsListString = string.Empty;
 
             string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Nazwa produktu", "Ilość","Cena produktu" };
-            List<string[]> rows = new List<string[]>();
+            List<List<object>> rows = new List<List<object>>();
 
             foreach (string cid in allReqDict.Keys)
             {
@@ -249,7 +252,13 @@ namespace ReqRaportsApp
                                                                     select req;
                     foreach (request r in getAllInstancesOfRequest)
                     {
-                        string[] row = { cid, rid.ToString(), r.name, r.quantity.ToString(), r.price.ToString() };
+                        List<object> row = new List<object>();
+                        row.Add(cid);
+                        row.Add(rid);
+                        row.Add(r.name);
+                        row.Add(r.quantity);
+                        row.Add(r.price);
+
                         rows.Add(row);
                     }
                 }
@@ -266,7 +275,7 @@ namespace ReqRaportsApp
                 HashSet<long> clientsReqs = AllReqsForClient(currentClientId);
 
                 string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Nazwa produktu", "Ilość", "Cena produktu" };
-                List<string[]> rows = new List<string[]>();
+                List<List<object>> rows = new List<List<object>>();
 
                 foreach (int rid in clientsReqs)
                 {
@@ -275,7 +284,13 @@ namespace ReqRaportsApp
                                                                     select req;
                     foreach (request r in getAllInstancesOfRequest)
                     {
-                        string[] row = { currentClientId, rid.ToString(), r.name, r.quantity.ToString(), r.price.ToString() };
+                        List<object> row = new List<object>();
+                        row.Add(currentClientId);
+                        row.Add(rid);
+                        row.Add(r.name);
+                        row.Add(r.quantity);
+                        row.Add(r.price);
+
                         rows.Add(row);
                     }
                 }
@@ -298,8 +313,10 @@ namespace ReqRaportsApp
             double roundedAvgReqValue = Math.Round(avgReqValue, 2);
 
             string[] colNames = { "Średnia wartość zamówienia" };
-            List<string[]> rows = new List<string[]>();
-            string[] row = { roundedAvgReqValue.ToString() };
+            List<List<object>> rows = new List<List<object>>();
+            List<object> row = new List<object>();
+            row.Add(roundedAvgReqValue);
+
             rows.Add(row);
             GridViewPopulate(colNames, rows);
         }
@@ -319,8 +336,11 @@ namespace ReqRaportsApp
                 double roundedAvgReqValue = Math.Round(avgReqValue, 2);
 
                 string[] colNames = { "Identyfikator klienta", "Średnia wartość zamówienia" };
-                List<string[]> rows = new List<string[]>();
-                string[] row = { currentClientId, roundedAvgReqValue.ToString() };
+                List<List<object>> rows = new List<List<object>>();
+                List<object> row = new List<object>();
+                row.Add(currentClientId);
+                row.Add(roundedAvgReqValue);
+
                 rows.Add(row);
                 GridViewPopulate(colNames, rows);
             }
@@ -331,10 +351,13 @@ namespace ReqRaportsApp
             Dictionary<string, int> reqsListString = ProductReqIds(RequestsList);
 
             string[] colNames = { "Nazwa produktu" , "Ilość zamówień"};
-            List<string[]> rows = new List<string[]>();
+            List<List<object>> rows = new List<List<object>>();
             foreach (string prodName in reqsListString.Keys)
             {
-                string[] row = { prodName, reqsListString[prodName].ToString() };
+                List<object> row = new List<object>(); 
+                row.Add(prodName);
+                row.Add(reqsListString[prodName]);
+
                 rows.Add(row);
             }
             GridViewPopulate(colNames, rows);
@@ -355,10 +378,14 @@ namespace ReqRaportsApp
                 Dictionary<string, int> reqsListString = ProductReqIds(currentClientRequests);
 
                 string[] colNames = { "Identyfikator klienta", "Nazwa produktu", "Ilość zamówień" };
-                List<string[]> rows = new List<string[]>();
+                List<List<object>> rows = new List<List<object>>();
                 foreach (string prodName in reqsListString.Keys)
                 {
-                    string[] row = { currentClientId, prodName, reqsListString[prodName].ToString() };
+                    List<object> row = new List<object>();
+                    row.Add(currentClientId);
+                    row.Add(prodName);
+                    row.Add(reqsListString[prodName]);
+
                     rows.Add(row);
                 }
                 GridViewPopulate(colNames, rows);
@@ -389,10 +416,14 @@ namespace ReqRaportsApp
                                                                           select req;
 
                 string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Wartość zamówienia" };
-                List<string[]> rows = new List<string[]>();
+                List<List<object>> rows = new List<List<object>>();
                 foreach (RequestWithSummaricValue r in getReqValsInRange)
                 {
-                    string[] row = { r.clientId, r.requestId.ToString(), r.value.ToString() };
+                    List<object> row = new List<object>(); 
+                    row.Add(r.clientId);
+                    row.Add(r.requestId);
+                    row.Add(r.value);
+
                     rows.Add(row);
                 }
                 GridViewPopulate(colNames, rows);

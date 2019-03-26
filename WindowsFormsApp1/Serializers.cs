@@ -10,7 +10,7 @@ namespace ReqRaportsApp
 {
     public class MyXmlSerializer
     {
-        public static void DeserializeXmlObject(string path, List<request> MainReqList, List<string> AddedFiles)
+        public static void DeserializeXmlObject(string path, List<request> MainReqList, Dictionary<string, List<request>> AddedFiles)
         {
             try
             {
@@ -20,12 +20,12 @@ namespace ReqRaportsApp
 
                 List<request> XmlRequestsList = (List<request>)serializer.Deserialize(reader);
 
+                AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)] = new List<request>();
                 foreach (request r in XmlRequestsList)
                 {
                     MainReqList.Add(r);
+                    AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)].Add(r);
                 }
-
-                AddedFiles.Add(path);
             }
             catch (Exception ex)
             {
@@ -41,7 +41,7 @@ namespace ReqRaportsApp
             public List<request> requests { get; set; }
         }
 
-        public static void DesarializeJsonObject(string path, List<request> MainReqList, List<string> AddedFiles)
+        public static void DesarializeJsonObject(string path, List<request> MainReqList, Dictionary<string, List<request>> AddedFiles)
         {
             try
             {
@@ -59,12 +59,12 @@ namespace ReqRaportsApp
 
                 List<request> JsonRequestsList = jsonReqObject.requests;
 
+                AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)] = new List<request>();
                 foreach (request r in JsonRequestsList)
                 {
                     MainReqList.Add(r);
+                    AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)].Add(r);
                 }
-
-                AddedFiles.Add(path);
             }
             catch (Exception ex)
             {
@@ -75,7 +75,7 @@ namespace ReqRaportsApp
 
     public class MyCsvSerializer
     {
-        public static void DeserializeCsvObject(string path, List<request> MainReqList, List<string> AddedFiles)
+        public static void DeserializeCsvObject(string path, List<request> MainReqList, Dictionary<string, List<request>> AddedFiles)
         {
             try
             {
@@ -96,12 +96,12 @@ namespace ReqRaportsApp
 
                 List<request> CsvRequestsList = queryRequests.ToList();
 
+                AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)] = new List<request>();
                 foreach (request r in CsvRequestsList)
                 {
                     MainReqList.Add(r);
+                    AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)].Add(r);
                 }
-
-                AddedFiles.Add(path);
             }
             catch (Exception ex)
             {
