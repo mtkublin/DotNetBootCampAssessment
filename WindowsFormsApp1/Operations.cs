@@ -166,7 +166,11 @@ namespace ReqRaportsApp
                 allReqsCount += allReqDict[k].Count;
             }
 
-            RaportMessageBox("Ilość zamówień: " + allReqsCount.ToString(), "Ilość zamówień");
+            string[] colNames = { "Ilość zamówień"};
+            string[] row1 = { allReqsCount.ToString() };
+            List<string[]> rows = new List<string[]>();
+            rows.Add(row1);
+            GridViewPopulate(colNames, rows);
         }
 
         public void ReqQuantForClient()
@@ -178,7 +182,11 @@ namespace ReqRaportsApp
                 HashSet<long> reqIdsForClient = AllReqsForClient(currentClientId);
                 int clientReqsCount = reqIdsForClient.Count();
 
-                RaportMessageBox("Ilość zamówień dla klienta o identyfikatorze " + currentClientId + ": " + clientReqsCount.ToString(), "Ilość zamówień dla klienta");
+                string[] colNames = { "Ilość zamówień dla klienta \"" + currentClientId + "\""};
+                string[] row1 = { clientReqsCount.ToString() };
+                List<string[]> rows = new List<string[]>();
+                rows.Add(row1);
+                GridViewPopulate(colNames, rows);
             }
         }
 

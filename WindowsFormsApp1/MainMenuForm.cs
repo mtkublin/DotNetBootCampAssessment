@@ -48,8 +48,6 @@ namespace ReqRaportsApp
             clientIdLabel.Visible = false;
             valueRangeBox.Visible = false;
 
-            
-
             foreach (string n in dropListItemsList)
             {
                 this.raportsComboBox.Items.Add(n);

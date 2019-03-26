@@ -314,7 +314,7 @@
         private System.Windows.Forms.Label maxMaxValLabel;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button deleteFilesBtn;
-        private System.Windows.Forms.DataGridView raportsDataGrid;
+        public System.Windows.Forms.DataGridView raportsDataGrid;
     }
 }
 
