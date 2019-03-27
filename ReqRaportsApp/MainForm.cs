@@ -39,9 +39,9 @@ namespace ReqRaportsApp
             string addFilesInitialDir = Directory.GetCurrentDirectory();
             for (int i = 0; i < 3; i++)
             {
-                addFilesInitialDir = addFilesInitialDir.Substring(addFilesInitialDir.LastIndexOf('\\'));
+                addFilesInitialDir = addFilesInitialDir.Substring(0, addFilesInitialDir.LastIndexOf('\\'));
             }
-            addFilesInitialDir += "SampleData";
+            addFilesInitialDir += "\\SampleData";
             AddFilesDialog.InitialDirectory = addFilesInitialDir;
             
             SaveRaportDialog.InitialDirectory = SpecialDirectories.MyDocuments;
