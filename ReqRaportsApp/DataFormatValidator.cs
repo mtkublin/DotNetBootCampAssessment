@@ -13,32 +13,32 @@
             if (r.clientId.Length > 6 || r.clientId.Contains(" "))
             {
                 isRequestFormatCorrect = false;
-                errMessage = "Zły format identyfikatora klientaw zamówieniu \"" + r.requestId.ToString() + " klienta \"" + r.clientId + "\"";
+                errMessage = "Zły format identyfikatora klienta w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
             }
-            else if (r.clientId == null)
+            else if (r.clientId == null || r.clientId == string.Empty)
             {
                 isRequestFormatCorrect = false;
-                errMessage = "Brak identyfikatora klientaw zamówieniu \"" + r.requestId.ToString() + " klienta \"" + r.clientId + "\"";
+                errMessage = "Brak identyfikatora klienta w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
             }
-            else if (r.name == null)
+            else if (r.name == null || r.name == string.Empty)
             {
                 isRequestFormatCorrect = false;
-                errMessage = "Brak nazwy produktuw zamówieniu \"" + r.requestId.ToString() + " klienta \"" + r.clientId + "\"";
+                errMessage = "Brak nazwy produktu w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
             }
             else if (r.name.Length > 255)
             {
                 isRequestFormatCorrect = false;
-                errMessage = "Zły format nazwy produktuw zamówieniu \"" + r.requestId.ToString() + " klienta \"" + r.clientId + "\"";
+                errMessage = "Za długa nazwa produktu w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
             }
             else if (r.price == 0)
             {
                 isRequestFormatCorrect = false;
-                errMessage = "Brak ceny produktu w zamówieniu \"" + r.requestId.ToString() + " klienta \"" + r.clientId + "\"";
+                errMessage = "Brak ceny produktu w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
             }
             else if (r.quantity == 0)
             {
                 isRequestFormatCorrect = false;
-                errMessage = "Brak ilości produktu w zamówieniu \"" + r.requestId.ToString() + " klienta \"" + r.clientId + "\"";
+                errMessage = "Brak ilości produktu w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
             }
         }
     }
