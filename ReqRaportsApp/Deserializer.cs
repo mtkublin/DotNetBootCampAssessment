@@ -103,37 +103,44 @@ namespace ReqRaportsApp
             try
             {
                 string[] table = File.ReadAllLines(path);
-                var requests = table.Skip(1);
-
-                IEnumerable<request> queryRequests =
-                from requestLine in requests
-                let splitRequest = requestLine.Split(',')
-                select new request()
+                if (table[0] == "Client_Id,Request_id,Name,Quantity,Price")
                 {
-                    clientId = splitRequest[0],
-                    requestId = Int32.Parse(splitRequest[1]),
-                    name = splitRequest[2],
-                    quantity = Int32.Parse(splitRequest[3]),
-                    price = Double.Parse(splitRequest[4], System.Globalization.CultureInfo.InvariantCulture)
-                };
+                    var requests = table.Skip(1);
 
-                List<request> CsvRequestsList = queryRequests.ToList();
+                    IEnumerable<request> queryRequests =
+                    from requestLine in requests
+                    let splitRequest = requestLine.Split(',')
+                    select new request()
+                    {
+                        clientId = splitRequest[0],
+                        requestId = Int32.Parse(splitRequest[1]),
+                        name = splitRequest[2],
+                        quantity = Int32.Parse(splitRequest[3]),
+                        price = Double.Parse(splitRequest[4], System.Globalization.CultureInfo.InvariantCulture)
+                    };
 
-                AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)] = new List<request>();
-                foreach (request r in CsvRequestsList)
+                    List<request> CsvRequestsList = queryRequests.ToList();
+
+                    AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)] = new List<request>();
+                    foreach (request r in CsvRequestsList)
+                    {
+                        bool isRequestFormatCorrect = true;
+                        string errMessage = string.Empty;
+                        DataFormatValidator dataFormatValidator = new DataFormatValidator(isRequestFormatCorrect, errMessage, r);
+                        if (dataFormatValidator.isRequestFormatCorrect)
+                        {
+                            MainReqList.Add(r);
+                            AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)].Add(r);
+                        }
+                        else
+                        {
+                            MessageBox.Show(dataFormatValidator.errMessage);
+                        }
+                    }
+                }
+                else
                 {
-                    bool isRequestFormatCorrect = true;
-                    string errMessage = string.Empty;
-                    DataFormatValidator dataFormatValidator = new DataFormatValidator(isRequestFormatCorrect, errMessage, r);
-                    if (dataFormatValidator.isRequestFormatCorrect)
-                    {
-                        MainReqList.Add(r);
-                        AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)].Add(r);
-                    }
-                    else
-                    {
-                        MessageBox.Show(dataFormatValidator.errMessage);
-                    }
+                    MessageBox.Show("Nieprawidłowe nazwy kolumn");
                 }
             }
             catch (Exception ex)
