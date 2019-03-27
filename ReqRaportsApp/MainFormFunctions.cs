@@ -7,7 +7,8 @@ namespace ReqRaportsApp
 {
     public class MainFormFunctions
     {
-        public static void AddFiles(OpenFileDialog addFilesDialog, ListBox addedFilesListBox, ComboBox raportsComboBox, ComboBox clientIdComboBox, Button raportGenBtn, Button deleteFilesBtn)
+        public static void AddFiles(OpenFileDialog addFilesDialog, ListBox addedFilesListBox, ComboBox raportsComboBox, ComboBox clientIdComboBox, 
+                                    Button raportGenBtn, Button deleteFilesBtn, Label maxMaxValLabel, TextBox minValueTextBox, TextBox maxValueTextBox)
         {
             try
             {
@@ -52,6 +53,11 @@ namespace ReqRaportsApp
                         raportGenBtn.Enabled = true;
                         deleteFilesBtn.Enabled = true;
                     }
+
+                    double maxPriceVal = RapGenOperations.maxPrice();
+                    maxMaxValLabel.Text = maxPriceVal.ToString();
+                    minValueTextBox.Text = 0.ToString();
+                    maxValueTextBox.Text = Math.Round(maxPriceVal).ToString();
                 }
             }
             catch (Exception ex)
@@ -61,7 +67,8 @@ namespace ReqRaportsApp
         }
 
         public static void DeleteFiles(ListBox addedFilesListBox, ComboBox raportsComboBox, GroupBox clientIdBox, ComboBox clientIdComboBox, GroupBox valueRangeBox, 
-                                        Button raportGenBtn, Button deleteFilesBtn, Button saveRaportBtn, DataGridView raportsDataGrid)
+                                        Button raportGenBtn, Button deleteFilesBtn, Button saveRaportBtn, DataGridView raportsDataGrid, Label maxMaxValLabel, 
+                                        TextBox minValueTextBox, TextBox maxValueTextBox)
         {
             try
             {
@@ -112,6 +119,11 @@ namespace ReqRaportsApp
 
                     raportsDataGrid.ColumnCount = 0;
                 }
+
+                double maxPriceVal = RapGenOperations.maxPrice();
+                maxMaxValLabel.Text = maxPriceVal.ToString();
+                minValueTextBox.Text = 0.ToString();
+                maxValueTextBox.Text = Math.Round(maxPriceVal).ToString();
             }
             catch (Exception ex)
             {
@@ -177,7 +189,7 @@ namespace ReqRaportsApp
                     valueRangeBox.Visible = false;
                     showClientIdsComboBox(clientIdBox, clientIdComboBox, clientIdLabel);
                 }
-                else if (selectedItem == RaportTypes.dropListItemsList[RaportTypes.dropListItemsList.Length - 1])
+                else if (selectedItem == RaportTypes.dropListItemsList.Last())
                 {
                     clientIdBox.Visible = false;
                     clientIdComboBox.Visible = false;
@@ -189,7 +201,7 @@ namespace ReqRaportsApp
                         double maxPriceVal = RapGenOperations.maxPrice();
                         maxMaxValLabel.Text = maxPriceVal.ToString();
                         minValueTextBox.Text = 0.ToString();
-                        maxValueTextBox.Text = Math.Round(maxPriceVal, 2, MidpointRounding.AwayFromZero).ToString();
+                        maxValueTextBox.Text = Math.Round(maxPriceVal).ToString();
                     }
                     catch (Exception ex)
                     {
