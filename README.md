@@ -1,4 +1,4 @@
-﻿##Instrukcja obsługi:
+﻿## Instrukcja obsługi:
 1. Uruchamiamy aplikację.
 2. Po naciśnięciu guzika "Dodaj pliki" wybieramy w wyświetlonym oknie pliki, które chcemy przeanalizować (dopuszczalne pliki .csv, .xml, .json; przykładowe dobre formatowanie plików w folderze "SampleData").
 3. W każdym momencie możemy usunąć dodane pliki. Wystarczy na liście wybrać plik do usunięcia i nacisnąć guzik "Usuń plik" (spowoduje to też usunięcie z bazy danych aplikacji wszystkich danych pochodzących z tego pliku)
