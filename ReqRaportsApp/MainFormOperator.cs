@@ -69,7 +69,7 @@ namespace ReqRaportsApp
                 {
                     string[] filePaths = AddFilesDialog.FileNames;
 
-                    foreach (string fp in filePaths) if (!AddedFiles.Keys.Contains(fp))
+                    foreach (string fp in filePaths) if (!AddedFiles.Keys.Contains(fp.Substring(fp.LastIndexOf("\\") + 1)))
                         {
                             if (fp.EndsWith(".xml"))
                             {

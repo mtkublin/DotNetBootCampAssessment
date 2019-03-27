@@ -128,9 +128,27 @@ namespace ReqRaportsApp
                                                         where request.name == pn
                                                         select request;
 
-                prodReqIdsDict[pn] = getReqIdsForProd.Count();
+                Dictionary<string, List<long>> workDict = new Dictionary<string, List<long>>();
+                int reqCounter = 0;
+                foreach (request r in getReqIdsForProd)
+                {
+                    if (workDict.Keys.Contains(r.clientId))
+                    {
+                        if (!workDict[r.clientId].Contains(r.requestId))
+                        {
+                            workDict[r.clientId].Add(r.requestId);
+                            reqCounter++;
+                        }
+                    }
+                    else
+                    {
+                        workDict[r.clientId] = new List<long>();
+                        workDict[r.clientId].Add(r.requestId);
+                        reqCounter++;
+                    }
+                }
+                prodReqIdsDict[pn] = reqCounter;
             }
-
             return prodReqIdsDict;
         }
     }
