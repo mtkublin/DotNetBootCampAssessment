@@ -1,0 +1,8 @@
+﻿Client_Id,Request_id,Name,Quantity,Price
+1,1,Bułka,1,10.23
+1,2,Chleb,2,15.65
+1,2,Chleb,5,15.02
+2,1,Chleb,1,10.12
+3,Kiełbasa,1,1,13.26
+4,1,Masło,4,5.69
+4,Mleko,3,4.56
