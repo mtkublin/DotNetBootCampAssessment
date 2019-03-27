@@ -245,6 +245,7 @@
             this.clientIdComboBox.Size = new System.Drawing.Size(458, 24);
             this.clientIdComboBox.TabIndex = 1;
             this.clientIdComboBox.Visible = false;
+            this.clientIdComboBox.Sorted = true;
             // 
             // groupBox1
             // 

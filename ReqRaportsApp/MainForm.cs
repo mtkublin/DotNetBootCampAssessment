@@ -37,12 +37,12 @@ namespace ReqRaportsApp
 
         private void AddFilesBtn_Click(object sender, EventArgs e)
         {
-            MainFormFunctions.AddFiles(addFilesDialog, addedFilesListBox, raportsComboBox, raportGenBtn, deleteFilesBtn);
+            MainFormFunctions.AddFiles(addFilesDialog, addedFilesListBox, raportsComboBox, clientIdComboBox, raportGenBtn, deleteFilesBtn);
         }
 
         private void deleteFilesBtn_Click(object sender, EventArgs e)
         {
-            MainFormFunctions.DeleteFiles(addedFilesListBox, raportsComboBox, clientIdBox, valueRangeBox, raportGenBtn, deleteFilesBtn, saveRaportBtn, raportsDataGrid);
+            MainFormFunctions.DeleteFiles(addedFilesListBox, raportsComboBox, clientIdBox, clientIdComboBox, valueRangeBox, raportGenBtn, deleteFilesBtn, saveRaportBtn, raportsDataGrid);
         }
 
         private void raportsComboBoxSelectionChange(object sender, EventArgs e)

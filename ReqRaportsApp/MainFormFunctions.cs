@@ -7,13 +7,15 @@ namespace ReqRaportsApp
 {
     public class MainFormFunctions
     {
-        public static void AddFiles(OpenFileDialog addFilesDialog, ListBox addedFilesListBox, ComboBox raportsComboBox, Button raportGenBtn, Button deleteFilesBtn)
+        public static void AddFiles(OpenFileDialog addFilesDialog, ListBox addedFilesListBox, ComboBox raportsComboBox, ComboBox clientIdComboBox, Button raportGenBtn, Button deleteFilesBtn)
         {
-            if (addFilesDialog.ShowDialog() == DialogResult.OK)
+            try
             {
-                string[] filePaths = addFilesDialog.FileNames;
+                if (addFilesDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string[] filePaths = addFilesDialog.FileNames;
 
-                foreach (string fp in filePaths) if (!RequestList.AddedFiles.Keys.Contains(fp))
+                    foreach (string fp in filePaths) if (!RequestList.AddedFiles.Keys.Contains(fp))
                     {
                         if (fp.EndsWith(".xml"))
                         {
@@ -33,18 +35,32 @@ namespace ReqRaportsApp
                         {
                             addedFilesListBox.Items.Add(fileName);
                         }
+
+                        foreach (request r in RequestList.AddedFiles[fileName])
+                        {
+                            string cid = r.clientId;
+                            if (!clientIdComboBox.Items.Contains(cid))
+                            {
+                                clientIdComboBox.Items.Add(cid);
+                            }
+                        }
                     }
 
-                if (addedFilesListBox.Items.Count != 0)
-                {
-                    raportsComboBox.Enabled = true;
-                    raportGenBtn.Enabled = true;
-                    deleteFilesBtn.Enabled = true;
+                    if (addedFilesListBox.Items.Count != 0)
+                    {
+                        raportsComboBox.Enabled = true;
+                        raportGenBtn.Enabled = true;
+                        deleteFilesBtn.Enabled = true;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
-        public static void DeleteFiles(ListBox addedFilesListBox, ComboBox raportsComboBox, GroupBox clientIdBox, GroupBox valueRangeBox, 
+        public static void DeleteFiles(ListBox addedFilesListBox, ComboBox raportsComboBox, GroupBox clientIdBox, ComboBox clientIdComboBox, GroupBox valueRangeBox, 
                                         Button raportGenBtn, Button deleteFilesBtn, Button saveRaportBtn, DataGridView raportsDataGrid)
         {
             try
@@ -54,6 +70,8 @@ namespace ReqRaportsApp
                 {
                     toRemove.Add(item);
                 }
+
+                List<string> clientIdsToCheckList = new List<string>();
                 foreach (object item in toRemove)
                 {
                     addedFilesListBox.Items.Remove(item);
@@ -61,11 +79,26 @@ namespace ReqRaportsApp
                     foreach (request r in RequestList.AddedFiles[item.ToString()])
                     {
                         RequestList.ReqsList.Remove(r);
+                        clientIdsToCheckList.Add(r.clientId);
                     }
 
                     RequestList.AddedFiles.Remove(item.ToString());
                 }
                 toRemove.Clear();
+
+                HashSet<string> clientIdsToCheckSet = new HashSet<string>(clientIdsToCheckList);
+                foreach (string cid in clientIdsToCheckSet)
+                {
+                    IEnumerable<string> getClientIdsToRemove = from req in RequestList.ReqsList
+                                                               where req.clientId == cid
+                                                               select req.clientId;
+
+                    if (getClientIdsToRemove.Count() == 0)
+                    {
+                        clientIdComboBox.Items.Remove(cid);
+                    }
+                }
+                
 
                 if (addedFilesListBox.Items.Count == 0)
                 {
@@ -98,68 +131,82 @@ namespace ReqRaportsApp
 
         private static void showClientIdsComboBox(GroupBox clientIdBox, ComboBox clientIdComboBox, Label clientIdLabel)
         {
-            clientIdBox.Visible = true;
-            clientIdComboBox.Visible = true;
-            clientIdLabel.Visible = true;
+            try
+            {
+                clientIdBox.Visible = true;
+                clientIdComboBox.Visible = true;
+                clientIdLabel.Visible = true;
 
-            HashSet<string> clientIds = getClientIds();
+                HashSet<string> clientIds = getClientIds();
 
-            List<object> toRemove = new List<object>();
-            foreach (object item in clientIdComboBox.Items) if (!clientIds.Contains(item.ToString()))
+                List<object> toRemove = new List<object>();
+                foreach (object item in clientIdComboBox.Items) if (!clientIds.Contains(item.ToString()))
                 {
                     toRemove.Add(item);
                 }
-            foreach (object tr in toRemove)
-            {
-                clientIdComboBox.Items.Remove(tr);
-            }
-            toRemove.Clear();
+                foreach (object tr in toRemove)
+                {
+                    clientIdComboBox.Items.Remove(tr);
+                }
+                toRemove.Clear();
 
-            foreach (string id in clientIds) if (!clientIdComboBox.Items.Contains(id))
+                foreach (string id in clientIds) if (!clientIdComboBox.Items.Contains(id))
                 {
                     clientIdComboBox.Items.Add(id);
                 }
 
-            if (clientIdComboBox.SelectedItem == null & clientIdComboBox.Items.Count != 0)
+                if (clientIdComboBox.SelectedItem == null & clientIdComboBox.Items.Count != 0)
+                {
+                    clientIdComboBox.SelectedItem = clientIdComboBox.Items[0];
+                }
+            }
+            catch (Exception ex)
             {
-                clientIdComboBox.SelectedItem = clientIdComboBox.Items[0];
+                MessageBox.Show(ex.Message);
             }
         }
 
         public static void RaportTypeChanged(ComboBox raportsComboBox, GroupBox valueRangeBox, GroupBox clientIdBox, ComboBox clientIdComboBox, 
                                                 Label clientIdLabel, Label maxMaxValLabel, TextBox minValueTextBox, TextBox maxValueTextBox)
         {
-            string selectedItem = raportsComboBox.SelectedItem.ToString();
-            if (RaportTypes.clientIdRaportsList.Contains(selectedItem))
+            try
             {
-                valueRangeBox.Visible = false;
-                showClientIdsComboBox(clientIdBox, clientIdComboBox, clientIdLabel);
-            }
-            else if (selectedItem == RaportTypes.dropListItemsList[RaportTypes.dropListItemsList.Length - 1])
-            {
-                clientIdBox.Visible = false;
-                clientIdComboBox.Visible = false;
-                clientIdLabel.Visible = false;
-                valueRangeBox.Visible = true;
+                string selectedItem = raportsComboBox.SelectedItem.ToString();
+                if (RaportTypes.clientIdRaportsList.Contains(selectedItem))
+                {
+                    valueRangeBox.Visible = false;
+                    showClientIdsComboBox(clientIdBox, clientIdComboBox, clientIdLabel);
+                }
+                else if (selectedItem == RaportTypes.dropListItemsList[RaportTypes.dropListItemsList.Length - 1])
+                {
+                    clientIdBox.Visible = false;
+                    clientIdComboBox.Visible = false;
+                    clientIdLabel.Visible = false;
+                    valueRangeBox.Visible = true;
 
-                try
-                {
-                    double maxPriceVal = RapGenOperations.maxPrice();
-                    maxMaxValLabel.Text = maxPriceVal.ToString();
-                    minValueTextBox.Text = 0.ToString();
-                    maxValueTextBox.Text = Math.Round(maxPriceVal, 2, MidpointRounding.AwayFromZero).ToString();
+                    try
+                    {
+                        double maxPriceVal = RapGenOperations.maxPrice();
+                        maxMaxValLabel.Text = maxPriceVal.ToString();
+                        minValueTextBox.Text = 0.ToString();
+                        maxValueTextBox.Text = Math.Round(maxPriceVal, 2, MidpointRounding.AwayFromZero).ToString();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.Message);
+                    clientIdBox.Visible = false;
+                    clientIdComboBox.Visible = false;
+                    clientIdLabel.Visible = false;
+                    valueRangeBox.Visible = false;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                clientIdBox.Visible = false;
-                clientIdComboBox.Visible = false;
-                clientIdLabel.Visible = false;
-                valueRangeBox.Visible = false;
+                MessageBox.Show(ex.Message);
             }
         }
 
