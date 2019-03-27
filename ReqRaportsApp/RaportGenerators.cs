@@ -213,15 +213,17 @@ namespace ReqRaportsApp
 
         private void ReqQuantByName()
         {
-            Dictionary<string, int> reqsListString = RapGenOps.ProductReqIds(ReqsList);
+            Dictionary<string, ProductObject> reqsListString = RapGenOps.ProductReqIds(ReqsList);
 
-            string[] colNames = { "Nazwa produktu", "Ilość zamówień" };
+            string[] colNames = { "Nazwa produktu", "Ilość zamówień", "Ilość produktu we wszystkich zamówienia", "Sumaryczna kwota produktu" };
             List<List<object>> rows = new List<List<object>>();
             foreach (string prodName in reqsListString.Keys)
             {
                 List<object> row = new List<object>();
                 row.Add(prodName);
-                row.Add(reqsListString[prodName]);
+                row.Add(reqsListString[prodName].requestQuantity);
+                row.Add(reqsListString[prodName].productQuantity);
+                row.Add(reqsListString[prodName].productValue);
 
                 rows.Add(row);
             }
@@ -240,16 +242,18 @@ namespace ReqRaportsApp
 
                 List<request> currentClientRequests = getClientsReqs.ToList();
 
-                Dictionary<string, int> reqsListString = RapGenOps.ProductReqIds(currentClientRequests);
+                Dictionary<string, ProductObject> reqsListString = RapGenOps.ProductReqIds(currentClientRequests);
 
-                string[] colNames = { "Identyfikator klienta", "Nazwa produktu", "Ilość zamówień" };
+                string[] colNames = { "Identyfikator klienta", "Nazwa produktu", "Ilość zamówień", "Ilość produktu we wszystkich zamówienia", "Sumaryczna kwota produktu" };
                 List<List<object>> rows = new List<List<object>>();
                 foreach (string prodName in reqsListString.Keys)
                 {
                     List<object> row = new List<object>();
                     row.Add(currentClientId);
                     row.Add(prodName);
-                    row.Add(reqsListString[prodName]);
+                    row.Add(reqsListString[prodName].requestQuantity);
+                    row.Add(reqsListString[prodName].productQuantity);
+                    row.Add(reqsListString[prodName].productValue);
 
                     rows.Add(row);
                 }

@@ -113,14 +113,14 @@ namespace ReqRaportsApp
             return clientReqsValueSum;
         }
 
-        public Dictionary<string, int> ProductReqIds(List<request> currentRequestsList)
+        public Dictionary<string, ProductObject> ProductReqIds(List<request> currentRequestsList)
         {
             IEnumerable<string> getProdNames = from request in currentRequestsList
                                                select request.name;
 
             HashSet<string> prodNames = new HashSet<string>(getProdNames.ToList());
 
-            Dictionary<string, int> prodReqIdsDict = new Dictionary<string, int>();
+            Dictionary<string, ProductObject> prodReqIdsDict = new Dictionary<string, ProductObject>();
 
             foreach (string pn in prodNames)
             {
@@ -130,6 +130,8 @@ namespace ReqRaportsApp
 
                 Dictionary<string, List<long>> workDict = new Dictionary<string, List<long>>();
                 int reqCounter = 0;
+                int prodQuant = 0;
+                double prodPrice = 0;
                 foreach (request r in getReqIdsForProd)
                 {
                     if (workDict.Keys.Contains(r.clientId))
@@ -146,8 +148,10 @@ namespace ReqRaportsApp
                         workDict[r.clientId].Add(r.requestId);
                         reqCounter++;
                     }
+                    prodQuant += r.quantity;
+                    prodPrice += r.price * r.quantity;
                 }
-                prodReqIdsDict[pn] = reqCounter;
+                prodReqIdsDict[pn] = new ProductObject(reqCounter, prodQuant, Math.Round(prodPrice, 2));
             }
             return prodReqIdsDict;
         }

@@ -22,4 +22,18 @@
             value = val;
         }
     }
+
+    public class ProductObject
+    {
+        public int requestQuantity { get; set; }
+        public int productQuantity { get; set; }
+        public double productValue { get; set; }
+
+        public ProductObject(int rq, int pq, double pv)
+        {
+            requestQuantity = rq;
+            productQuantity = pq;
+            productValue = pv;
+        }
+    }
 }
