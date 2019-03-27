@@ -7,9 +7,34 @@ namespace ReqRaportsApp
 {
     public class RaportGenerators
     {
-        private static void ReqQuant(DataGridView raportsDataGrid)
+        List<request> ReqsList { get; set; }
+        ComboBox RaportsComboBox { get; set; }
+        ComboBox ClientIdComboBox { get; set; }
+        TextBox MinValueTextBox { get; set; }
+        TextBox MaxValueTextBox { get; set; }
+        DataGridView RaportsDataGrid { get; set; }
+
+        GridViewHandler GridViewHand { get; set; }
+
+        RapGenOperations RapGenOps { get; set; }
+
+        public RaportGenerators(GridViewHandler gvHand, RapGenOperations rgOps, List<request> rList, ComboBox rCombo, ComboBox cidCombo, TextBox minvTextBox, TextBox maxvTextBox, DataGridView rDataGrid)
         {
-            Dictionary<string, List<long>> allReqDict = RapGenOperations.AllRequests();
+            ReqsList = rList;
+            RaportsComboBox = rCombo;
+            ClientIdComboBox = cidCombo;
+            MinValueTextBox = minvTextBox;
+            MaxValueTextBox = maxvTextBox;
+            RaportsDataGrid = rDataGrid;
+
+            GridViewHand = gvHand;
+
+            RapGenOps = rgOps;
+        }
+
+        private void ReqQuant()
+        {
+            Dictionary<string, List<long>> allReqDict = RapGenOps.AllRequests();
             int allReqsCount = 0;
             foreach (string k in allReqDict.Keys)
             {
@@ -22,16 +47,16 @@ namespace ReqRaportsApp
             row.Add(allReqsCount);
 
             rows.Add(row);
-            GridViewHandler.GridViewPopulate(colNames, rows, raportsDataGrid);
+            GridViewHand.GridViewPopulate(colNames, rows);
         }
 
-        private static void ReqQuantForClient(DataGridView raportsDataGrid, ComboBox clientIdComboBox)
+        private void ReqQuantForClient()
         {
-            if (clientIdComboBox.SelectedItem != null)
+            if (ClientIdComboBox.SelectedItem != null)
             {
-                string currentClientId = clientIdComboBox.SelectedItem.ToString();
+                string currentClientId = ClientIdComboBox.SelectedItem.ToString();
 
-                HashSet<long> reqIdsForClient = RapGenOperations.AllReqsForClient(currentClientId);
+                HashSet<long> reqIdsForClient = RapGenOps.AllReqsForClient(currentClientId);
                 int clientReqsCount = reqIdsForClient.Count();
 
                 string[] colNames = { "Identyfikator klienta", "Ilość zamówień" };
@@ -41,13 +66,13 @@ namespace ReqRaportsApp
                 row.Add(clientReqsCount);
 
                 rows.Add(row);
-                GridViewHandler.GridViewPopulate(colNames, rows, raportsDataGrid);
+                GridViewHand.GridViewPopulate(colNames, rows);
             }
         }
 
-        private static void ReqValueSum(DataGridView raportsDataGrid)
+        private void ReqValueSum()
         {
-            double allReqsValueSum = RapGenOperations.RequestsValuesSum(RequestList.ReqsList);
+            double allReqsValueSum = RapGenOps.RequestsValuesSum(ReqsList);
 
             string[] colNames = { "Łączna kwota zamówień" };
             List<List<object>> rows = new List<List<object>>();
@@ -55,16 +80,16 @@ namespace ReqRaportsApp
             row.Add(Math.Round(allReqsValueSum, 2));
 
             rows.Add(row);
-            GridViewHandler.GridViewPopulate(colNames, rows, raportsDataGrid);
+            GridViewHand.GridViewPopulate(colNames, rows);
         }
 
-        private static void ReqValueSumForClientId(DataGridView raportsDataGrid, ComboBox clientIdComboBox)
+        private void ReqValueSumForClientId()
         {
-            if (clientIdComboBox.SelectedItem != null)
+            if (ClientIdComboBox.SelectedItem != null)
             {
-                string currentClientId = clientIdComboBox.SelectedItem.ToString();
+                string currentClientId = ClientIdComboBox.SelectedItem.ToString();
 
-                double clientReqsValueSum = RapGenOperations.ClientsValuesSum(currentClientId);
+                double clientReqsValueSum = RapGenOps.ClientsValuesSum(currentClientId);
 
                 string[] colNames = { "Identyfikator klienta", "Łączna kwota zamówień" };
                 List<List<object>> rows = new List<List<object>>();
@@ -73,13 +98,13 @@ namespace ReqRaportsApp
                 row.Add(Math.Round(clientReqsValueSum, 2));
 
                 rows.Add(row);
-                GridViewHandler.GridViewPopulate(colNames, rows, raportsDataGrid);
+                GridViewHand.GridViewPopulate(colNames, rows);
             }
         }
 
-        private static void AllReqsList(DataGridView raportsDataGrid)
+        private void AllReqsList()
         {
-            Dictionary<string, List<long>> allReqDict = RapGenOperations.AllRequests();
+            Dictionary<string, List<long>> allReqDict = RapGenOps.AllRequests();
             string reqsListString = string.Empty;
 
             string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Nazwa produktu", "Ilość", "Cena produktu" };
@@ -89,7 +114,7 @@ namespace ReqRaportsApp
             {
                 foreach (long rid in allReqDict[cid])
                 {
-                    IEnumerable<request> getAllInstancesOfRequest = from req in RequestList.ReqsList
+                    IEnumerable<request> getAllInstancesOfRequest = from req in ReqsList
                                                                     where req.clientId == cid & req.requestId == rid
                                                                     select req;
                     foreach (request r in getAllInstancesOfRequest)
@@ -105,23 +130,23 @@ namespace ReqRaportsApp
                     }
                 }
             }
-            GridViewHandler.GridViewPopulate(colNames, rows, raportsDataGrid);
+            GridViewHand.GridViewPopulate(colNames, rows);
         }
 
-        private static void ReqsListForClientId(DataGridView raportsDataGrid, ComboBox clientIdComboBox)
+        private void ReqsListForClientId()
         {
-            if (clientIdComboBox.SelectedItem != null)
+            if (ClientIdComboBox.SelectedItem != null)
             {
-                string currentClientId = clientIdComboBox.SelectedItem.ToString();
+                string currentClientId = ClientIdComboBox.SelectedItem.ToString();
 
-                HashSet<long> clientsReqs = RapGenOperations.AllReqsForClient(currentClientId);
+                HashSet<long> clientsReqs = RapGenOps.AllReqsForClient(currentClientId);
 
                 string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Nazwa produktu", "Ilość", "Cena produktu" };
                 List<List<object>> rows = new List<List<object>>();
 
                 foreach (int rid in clientsReqs)
                 {
-                    IEnumerable<request> getAllInstancesOfRequest = from req in RequestList.ReqsList
+                    IEnumerable<request> getAllInstancesOfRequest = from req in ReqsList
                                                                     where req.clientId == currentClientId & req.requestId == rid
                                                                     select req;
                     foreach (request r in getAllInstancesOfRequest)
@@ -136,14 +161,14 @@ namespace ReqRaportsApp
                         rows.Add(row);
                     }
                 }
-                GridViewHandler.GridViewPopulate(colNames, rows, raportsDataGrid);
+                GridViewHand.GridViewPopulate(colNames, rows);
             }
         }
 
-        private static void AverageReqValue(DataGridView raportsDataGrid)
+        private void AverageReqValue()
         {
-            double allReqsValueSum = RapGenOperations.RequestsValuesSum(RequestList.ReqsList);
-            Dictionary<string, List<long>> allReqDict = RapGenOperations.AllRequests();
+            double allReqsValueSum = RapGenOps.RequestsValuesSum(ReqsList);
+            Dictionary<string, List<long>> allReqDict = RapGenOps.AllRequests();
 
             int allReqsCount = 0;
             foreach (string k in allReqDict.Keys)
@@ -160,18 +185,18 @@ namespace ReqRaportsApp
             row.Add(roundedAvgReqValue);
 
             rows.Add(row);
-            GridViewHandler.GridViewPopulate(colNames, rows, raportsDataGrid);
+            GridViewHand.GridViewPopulate(colNames, rows);
         }
 
-        private static void AverageReqValueForClientId(DataGridView raportsDataGrid, ComboBox clientIdComboBox)
+        private void AverageReqValueForClientId()
         {
-            if (clientIdComboBox.SelectedItem != null)
+            if (ClientIdComboBox.SelectedItem != null)
             {
-                string currentClientId = clientIdComboBox.SelectedItem.ToString();
+                string currentClientId = ClientIdComboBox.SelectedItem.ToString();
 
-                double clientReqsValueSum = RapGenOperations.ClientsValuesSum(currentClientId);
+                double clientReqsValueSum = RapGenOps.ClientsValuesSum(currentClientId);
 
-                HashSet<long> reqIdsForClient = RapGenOperations.AllReqsForClient(currentClientId);
+                HashSet<long> reqIdsForClient = RapGenOps.AllReqsForClient(currentClientId);
                 int clientReqsCount = reqIdsForClient.Count();
 
                 double avgReqValue = clientReqsValueSum / clientReqsCount;
@@ -184,13 +209,13 @@ namespace ReqRaportsApp
                 row.Add(roundedAvgReqValue);
 
                 rows.Add(row);
-                GridViewHandler.GridViewPopulate(colNames, rows, raportsDataGrid);
+                GridViewHand.GridViewPopulate(colNames, rows);
             }
         }
 
-        private static void ReqQuantByName(DataGridView raportsDataGrid)
+        private void ReqQuantByName()
         {
-            Dictionary<string, int> reqsListString = RapGenOperations.ProductReqIds(RequestList.ReqsList);
+            Dictionary<string, int> reqsListString = RapGenOps.ProductReqIds(ReqsList);
 
             string[] colNames = { "Nazwa produktu", "Ilość zamówień" };
             List<List<object>> rows = new List<List<object>>();
@@ -202,22 +227,22 @@ namespace ReqRaportsApp
 
                 rows.Add(row);
             }
-            GridViewHandler.GridViewPopulate(colNames, rows, raportsDataGrid);
+            GridViewHand.GridViewPopulate(colNames, rows);
         }
 
-        private static void ReqQuantByNameForClientId(DataGridView raportsDataGrid, ComboBox clientIdComboBox)
+        private void ReqQuantByNameForClientId()
         {
-            if (clientIdComboBox.SelectedItem != null)
+            if (ClientIdComboBox.SelectedItem != null)
             {
-                string currentClientId = clientIdComboBox.SelectedItem.ToString();
+                string currentClientId = ClientIdComboBox.SelectedItem.ToString();
 
-                IEnumerable<request> getClientsReqs = from request in RequestList.ReqsList
+                IEnumerable<request> getClientsReqs = from request in ReqsList
                                                       where request.clientId == currentClientId
                                                       select request;
 
                 List<request> currentClientRequests = getClientsReqs.ToList();
 
-                Dictionary<string, int> reqsListString = RapGenOperations.ProductReqIds(currentClientRequests);
+                Dictionary<string, int> reqsListString = RapGenOps.ProductReqIds(currentClientRequests);
 
                 string[] colNames = { "Identyfikator klienta", "Nazwa produktu", "Ilość zamówień" };
                 List<List<object>> rows = new List<List<object>>();
@@ -230,20 +255,20 @@ namespace ReqRaportsApp
 
                     rows.Add(row);
                 }
-                GridViewHandler.GridViewPopulate(colNames, rows, raportsDataGrid);
+                GridViewHand.GridViewPopulate(colNames, rows);
             }
         }
 
-        private static void ReqsForValueRange(DataGridView raportsDataGrid, TextBox minValueTextBox, TextBox maxValueTextBox)
+        private void ReqsForValueRange()
         {
             try
             {
-                double minValue = Double.Parse(minValueTextBox.Text, System.Globalization.CultureInfo.InvariantCulture);
-                double maxValue = Double.Parse(maxValueTextBox.Text, System.Globalization.CultureInfo.InvariantCulture);
+                double minValue = Double.Parse(MinValueTextBox.Text, System.Globalization.CultureInfo.InvariantCulture);
+                double maxValue = Double.Parse(MaxValueTextBox.Text, System.Globalization.CultureInfo.InvariantCulture);
 
                 List<RequestWithSummaricValue> requestWithSummaricValueList = new List<RequestWithSummaricValue>();
 
-                Dictionary<string, Dictionary<long, double>> allReqValsDict = RapGenOperations.wholeReqValueDict();
+                Dictionary<string, Dictionary<long, double>> allReqValsDict = RapGenOps.wholeReqValueDict();
                 foreach (string cid in allReqValsDict.Keys)
                 {
                     foreach (long rid in allReqValsDict[cid].Keys)
@@ -268,7 +293,7 @@ namespace ReqRaportsApp
 
                     rows.Add(row);
                 }
-                GridViewHandler.GridViewPopulate(colNames, rows, raportsDataGrid);
+                GridViewHand.GridViewPopulate(colNames, rows);
             }
             catch (Exception ex)
             {
@@ -276,44 +301,44 @@ namespace ReqRaportsApp
             }
         }
 
-        public static void RaportChoiceSwitch(ComboBox raportsComboBox, DataGridView raportsDataGrid, ComboBox clientIdComboBox, TextBox minValueTextBox, TextBox maxValueTextBox)
+        public void RaportChoiceSwitch()
         {
-            string raportType = raportsComboBox.SelectedItem.ToString();
+            string raportType = RaportsComboBox.SelectedItem.ToString();
 
             switch (raportType)
             {
                 case RaportTypes.ReqQuantType:
-                    ReqQuant(raportsDataGrid);
+                    ReqQuant();
                     break;
                 case RaportTypes.ReqQuantForClientType:
-                    ReqQuantForClient(raportsDataGrid, clientIdComboBox);
+                    ReqQuantForClient();
                     break;
                 case RaportTypes.ReqValueSumType:
-                    ReqValueSum(raportsDataGrid);
+                    ReqValueSum();
                     break;
                 case RaportTypes.ReqValueSumForClientType:
-                    ReqValueSumForClientId(raportsDataGrid, clientIdComboBox);
+                    ReqValueSumForClientId();
                     break;
                 case RaportTypes.AllReqsListType:
-                    AllReqsList(raportsDataGrid);
+                    AllReqsList();
                     break;
                 case RaportTypes.AllReqsListForClientType:
-                    ReqsListForClientId(raportsDataGrid, clientIdComboBox);
+                    ReqsListForClientId();
                     break;
                 case RaportTypes.AverageReqValueType:
-                    AverageReqValue(raportsDataGrid);
+                    AverageReqValue();
                     break;
                 case RaportTypes.AverageReqValueForClientType:
-                    AverageReqValueForClientId(raportsDataGrid, clientIdComboBox);
+                    AverageReqValueForClientId();
                     break;
                 case RaportTypes.ReqQuantByProdNameType:
-                    ReqQuantByName(raportsDataGrid);
+                    ReqQuantByName();
                     break;
                 case RaportTypes.ReqQuantByProdNameForClientType:
-                    ReqQuantByNameForClientId(raportsDataGrid, clientIdComboBox);
+                    ReqQuantByNameForClientId();
                     break;
                 case RaportTypes.ReqsInValueRangeType:
-                    ReqsForValueRange(raportsDataGrid, minValueTextBox, maxValueTextBox);
+                    ReqsForValueRange();
                     break;
             }
         }

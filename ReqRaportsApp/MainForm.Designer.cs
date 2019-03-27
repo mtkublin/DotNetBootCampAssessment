@@ -1,6 +1,6 @@
 ﻿namespace ReqRaportsApp
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,46 +28,46 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.addFilesDialog = new System.Windows.Forms.OpenFileDialog();
+            this.AddFilesDialog = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.deleteFilesBtn = new System.Windows.Forms.Button();
-            this.addedFilesListBox = new System.Windows.Forms.ListBox();
+            this.DeleteFilesBtn = new System.Windows.Forms.Button();
+            this.AddedFilesListBox = new System.Windows.Forms.ListBox();
             this.AddFilesBtn = new System.Windows.Forms.Button();
-            this.saveRaportBtn = new System.Windows.Forms.Button();
-            this.raportsDataGrid = new System.Windows.Forms.DataGridView();
-            this.valueRangeBox = new System.Windows.Forms.GroupBox();
-            this.maxMaxValLabel = new System.Windows.Forms.Label();
+            this.SaveRaportBtn = new System.Windows.Forms.Button();
+            this.RaportsDataGrid = new System.Windows.Forms.DataGridView();
+            this.ValueRangeBox = new System.Windows.Forms.GroupBox();
+            this.MaxMaxValLabel = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.maxMaxValue = new System.Windows.Forms.Label();
-            this.maxValueTextBox = new System.Windows.Forms.TextBox();
+            this.MaxValueTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.minValueTextBox = new System.Windows.Forms.TextBox();
+            this.MinValueTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.clientIdBox = new System.Windows.Forms.GroupBox();
-            this.clientIdLabel = new System.Windows.Forms.Label();
-            this.clientIdComboBox = new System.Windows.Forms.ComboBox();
+            this.ClientIdBox = new System.Windows.Forms.GroupBox();
+            this.ClientIdLabel = new System.Windows.Forms.Label();
+            this.ClientIdComboBox = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.raportsComboBox = new System.Windows.Forms.ComboBox();
+            this.RaportsComboBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.raportGenBtn = new System.Windows.Forms.Button();
-            this.saveRaportDialog = new System.Windows.Forms.SaveFileDialog();
+            this.RaportGenBtn = new System.Windows.Forms.Button();
+            this.SaveRaportDialog = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.raportsDataGrid)).BeginInit();
-            this.valueRangeBox.SuspendLayout();
-            this.clientIdBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.RaportsDataGrid)).BeginInit();
+            this.ValueRangeBox.SuspendLayout();
+            this.ClientIdBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // addFilesDialog
+            // AddFilesDialog
             // 
-            this.addFilesDialog.FileName = "openFileDialog1";
-            this.addFilesDialog.Filter = "xml, csv and json files (*.xml, *.csv, *.json)|*.csv; *.json; *.xml|xml files (*." +
+            this.AddFilesDialog.FileName = "openFileDialog1";
+            this.AddFilesDialog.Filter = "xml, csv and json files (*.xml, *.csv, *.json)|*.csv; *.json; *.xml|xml files (*." +
     "xml)|*.xml|csv files (*.csv)|*.csv|json files (*.json)|*.json";
-            this.addFilesDialog.InitialDirectory = "C:\\Users\\Użytkownik\\source\\repos\\WindowsFormsApp1\\SampleData";
-            this.addFilesDialog.Multiselect = true;
+            this.AddFilesDialog.InitialDirectory = "C:\\Users\\Użytkownik\\source\\repos\\WindowsFormsApp1\\SampleData";
+            this.AddFilesDialog.Multiselect = true;
             // 
             // splitContainer1
             // 
@@ -77,40 +77,40 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.deleteFilesBtn);
-            this.splitContainer1.Panel1.Controls.Add(this.addedFilesListBox);
+            this.splitContainer1.Panel1.Controls.Add(this.DeleteFilesBtn);
+            this.splitContainer1.Panel1.Controls.Add(this.AddedFilesListBox);
             this.splitContainer1.Panel1.Controls.Add(this.AddFilesBtn);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.saveRaportBtn);
-            this.splitContainer1.Panel2.Controls.Add(this.raportsDataGrid);
-            this.splitContainer1.Panel2.Controls.Add(this.valueRangeBox);
-            this.splitContainer1.Panel2.Controls.Add(this.clientIdBox);
+            this.splitContainer1.Panel2.Controls.Add(this.SaveRaportBtn);
+            this.splitContainer1.Panel2.Controls.Add(this.RaportsDataGrid);
+            this.splitContainer1.Panel2.Controls.Add(this.ValueRangeBox);
+            this.splitContainer1.Panel2.Controls.Add(this.ClientIdBox);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
-            this.splitContainer1.Panel2.Controls.Add(this.raportGenBtn);
+            this.splitContainer1.Panel2.Controls.Add(this.RaportGenBtn);
             this.splitContainer1.Size = new System.Drawing.Size(1099, 719);
             this.splitContainer1.SplitterDistance = 236;
             this.splitContainer1.TabIndex = 0;
             // 
-            // deleteFilesBtn
+            // DeleteFilesBtn
             // 
-            this.deleteFilesBtn.Location = new System.Drawing.Point(12, 41);
-            this.deleteFilesBtn.Name = "deleteFilesBtn";
-            this.deleteFilesBtn.Size = new System.Drawing.Size(197, 23);
-            this.deleteFilesBtn.TabIndex = 2;
-            this.deleteFilesBtn.Text = "Usuń pliki";
-            this.deleteFilesBtn.UseVisualStyleBackColor = true;
-            this.deleteFilesBtn.Click += new System.EventHandler(this.deleteFilesBtn_Click);
+            this.DeleteFilesBtn.Location = new System.Drawing.Point(12, 41);
+            this.DeleteFilesBtn.Name = "DeleteFilesBtn";
+            this.DeleteFilesBtn.Size = new System.Drawing.Size(197, 23);
+            this.DeleteFilesBtn.TabIndex = 2;
+            this.DeleteFilesBtn.Text = "Usuń pliki";
+            this.DeleteFilesBtn.UseVisualStyleBackColor = true;
+            this.DeleteFilesBtn.Click += new System.EventHandler(this.DeleteFilesBtn_Click);
             // 
-            // addedFilesListBox
+            // AddedFilesListBox
             // 
-            this.addedFilesListBox.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
-            this.addedFilesListBox.ItemHeight = 16;
-            this.addedFilesListBox.Location = new System.Drawing.Point(12, 74);
-            this.addedFilesListBox.Name = "addedFilesListBox";
-            this.addedFilesListBox.Size = new System.Drawing.Size(197, 628);
-            this.addedFilesListBox.TabIndex = 1;
+            this.AddedFilesListBox.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
+            this.AddedFilesListBox.ItemHeight = 16;
+            this.AddedFilesListBox.Location = new System.Drawing.Point(12, 74);
+            this.AddedFilesListBox.Name = "AddedFilesListBox";
+            this.AddedFilesListBox.Size = new System.Drawing.Size(197, 628);
+            this.AddedFilesListBox.TabIndex = 1;
             // 
             // AddFilesBtn
             // 
@@ -122,49 +122,49 @@
             this.AddFilesBtn.UseVisualStyleBackColor = true;
             this.AddFilesBtn.Click += new System.EventHandler(this.AddFilesBtn_Click);
             // 
-            // saveRaportBtn
+            // SaveRaportBtn
             // 
-            this.saveRaportBtn.Location = new System.Drawing.Point(680, 666);
-            this.saveRaportBtn.Name = "saveRaportBtn";
-            this.saveRaportBtn.Size = new System.Drawing.Size(160, 41);
-            this.saveRaportBtn.TabIndex = 14;
-            this.saveRaportBtn.Text = "Zapisz raport";
-            this.saveRaportBtn.UseVisualStyleBackColor = true;
-            this.saveRaportBtn.Click += new System.EventHandler(this.saveRaportBtn_Click);
+            this.SaveRaportBtn.Location = new System.Drawing.Point(680, 666);
+            this.SaveRaportBtn.Name = "SaveRaportBtn";
+            this.SaveRaportBtn.Size = new System.Drawing.Size(160, 41);
+            this.SaveRaportBtn.TabIndex = 14;
+            this.SaveRaportBtn.Text = "Zapisz raport";
+            this.SaveRaportBtn.UseVisualStyleBackColor = true;
+            this.SaveRaportBtn.Click += new System.EventHandler(this.SaveRaportBtn_Click);
             // 
-            // raportsDataGrid
+            // RaportsDataGrid
             // 
-            this.raportsDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.raportsDataGrid.Location = new System.Drawing.Point(10, 125);
-            this.raportsDataGrid.Name = "raportsDataGrid";
-            this.raportsDataGrid.RowTemplate.Height = 24;
-            this.raportsDataGrid.Size = new System.Drawing.Size(830, 530);
-            this.raportsDataGrid.TabIndex = 13;
+            this.RaportsDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.RaportsDataGrid.Location = new System.Drawing.Point(10, 125);
+            this.RaportsDataGrid.Name = "RaportsDataGrid";
+            this.RaportsDataGrid.RowTemplate.Height = 24;
+            this.RaportsDataGrid.Size = new System.Drawing.Size(830, 530);
+            this.RaportsDataGrid.TabIndex = 13;
             // 
-            // valueRangeBox
+            // ValueRangeBox
             // 
-            this.valueRangeBox.Controls.Add(this.maxMaxValLabel);
-            this.valueRangeBox.Controls.Add(this.label4);
-            this.valueRangeBox.Controls.Add(this.maxMaxValue);
-            this.valueRangeBox.Controls.Add(this.maxValueTextBox);
-            this.valueRangeBox.Controls.Add(this.label2);
-            this.valueRangeBox.Controls.Add(this.minValueTextBox);
-            this.valueRangeBox.Controls.Add(this.label3);
-            this.valueRangeBox.Location = new System.Drawing.Point(10, 68);
-            this.valueRangeBox.Name = "valueRangeBox";
-            this.valueRangeBox.Size = new System.Drawing.Size(664, 50);
-            this.valueRangeBox.TabIndex = 12;
-            this.valueRangeBox.TabStop = false;
-            this.valueRangeBox.Visible = false;
+            this.ValueRangeBox.Controls.Add(this.MaxMaxValLabel);
+            this.ValueRangeBox.Controls.Add(this.label4);
+            this.ValueRangeBox.Controls.Add(this.maxMaxValue);
+            this.ValueRangeBox.Controls.Add(this.MaxValueTextBox);
+            this.ValueRangeBox.Controls.Add(this.label2);
+            this.ValueRangeBox.Controls.Add(this.MinValueTextBox);
+            this.ValueRangeBox.Controls.Add(this.label3);
+            this.ValueRangeBox.Location = new System.Drawing.Point(10, 68);
+            this.ValueRangeBox.Name = "ValueRangeBox";
+            this.ValueRangeBox.Size = new System.Drawing.Size(664, 50);
+            this.ValueRangeBox.TabIndex = 12;
+            this.ValueRangeBox.TabStop = false;
+            this.ValueRangeBox.Visible = false;
             // 
-            // maxMaxValLabel
+            // MaxMaxValLabel
             // 
-            this.maxMaxValLabel.AutoSize = true;
-            this.maxMaxValLabel.Location = new System.Drawing.Point(599, 18);
-            this.maxMaxValLabel.Name = "maxMaxValLabel";
-            this.maxMaxValLabel.Size = new System.Drawing.Size(16, 17);
-            this.maxMaxValLabel.TabIndex = 12;
-            this.maxMaxValLabel.Text = "0";
+            this.MaxMaxValLabel.AutoSize = true;
+            this.MaxMaxValLabel.Location = new System.Drawing.Point(599, 18);
+            this.MaxMaxValLabel.Name = "MaxMaxValLabel";
+            this.MaxMaxValLabel.Size = new System.Drawing.Size(16, 17);
+            this.MaxMaxValLabel.TabIndex = 12;
+            this.MaxMaxValLabel.Text = "0";
             // 
             // label4
             // 
@@ -183,13 +183,13 @@
             this.maxMaxValue.Size = new System.Drawing.Size(0, 17);
             this.maxMaxValue.TabIndex = 10;
             // 
-            // maxValueTextBox
+            // MaxValueTextBox
             // 
-            this.maxValueTextBox.Location = new System.Drawing.Point(363, 15);
-            this.maxValueTextBox.Name = "maxValueTextBox";
-            this.maxValueTextBox.Size = new System.Drawing.Size(107, 22);
-            this.maxValueTextBox.TabIndex = 9;
-            this.maxValueTextBox.Leave += new System.EventHandler(this.maxValueTextBox_Leave);
+            this.MaxValueTextBox.Location = new System.Drawing.Point(363, 15);
+            this.MaxValueTextBox.Name = "MaxValueTextBox";
+            this.MaxValueTextBox.Size = new System.Drawing.Size(107, 22);
+            this.MaxValueTextBox.TabIndex = 9;
+            this.MaxValueTextBox.Leave += new System.EventHandler(this.MaxValueTextBox_Leave);
             // 
             // label2
             // 
@@ -200,13 +200,13 @@
             this.label2.TabIndex = 5;
             this.label2.Text = "Przedział cenowy:";
             // 
-            // minValueTextBox
+            // MinValueTextBox
             // 
-            this.minValueTextBox.Location = new System.Drawing.Point(195, 15);
-            this.minValueTextBox.Name = "minValueTextBox";
-            this.minValueTextBox.Size = new System.Drawing.Size(107, 22);
-            this.minValueTextBox.TabIndex = 6;
-            this.minValueTextBox.Leave += new System.EventHandler(this.minValueTextBox_Leave);
+            this.MinValueTextBox.Location = new System.Drawing.Point(195, 15);
+            this.MinValueTextBox.Name = "MinValueTextBox";
+            this.MinValueTextBox.Size = new System.Drawing.Size(107, 22);
+            this.MinValueTextBox.TabIndex = 6;
+            this.MinValueTextBox.Leave += new System.EventHandler(this.MinValueTextBox_Leave);
             // 
             // label3
             // 
@@ -217,39 +217,39 @@
             this.label3.TabIndex = 8;
             this.label3.Text = "do";
             // 
-            // clientIdBox
+            // ClientIdBox
             // 
-            this.clientIdBox.Controls.Add(this.clientIdLabel);
-            this.clientIdBox.Controls.Add(this.clientIdComboBox);
-            this.clientIdBox.Location = new System.Drawing.Point(10, 68);
-            this.clientIdBox.Name = "clientIdBox";
-            this.clientIdBox.Size = new System.Drawing.Size(664, 50);
-            this.clientIdBox.TabIndex = 11;
-            this.clientIdBox.TabStop = false;
+            this.ClientIdBox.Controls.Add(this.ClientIdLabel);
+            this.ClientIdBox.Controls.Add(this.ClientIdComboBox);
+            this.ClientIdBox.Location = new System.Drawing.Point(10, 68);
+            this.ClientIdBox.Name = "ClientIdBox";
+            this.ClientIdBox.Size = new System.Drawing.Size(664, 50);
+            this.ClientIdBox.TabIndex = 11;
+            this.ClientIdBox.TabStop = false;
             // 
-            // clientIdLabel
+            // ClientIdLabel
             // 
-            this.clientIdLabel.AutoSize = true;
-            this.clientIdLabel.Location = new System.Drawing.Point(6, 18);
-            this.clientIdLabel.Name = "clientIdLabel";
-            this.clientIdLabel.Size = new System.Drawing.Size(134, 17);
-            this.clientIdLabel.TabIndex = 4;
-            this.clientIdLabel.Text = "Identyfikator klienta:";
+            this.ClientIdLabel.AutoSize = true;
+            this.ClientIdLabel.Location = new System.Drawing.Point(6, 18);
+            this.ClientIdLabel.Name = "ClientIdLabel";
+            this.ClientIdLabel.Size = new System.Drawing.Size(134, 17);
+            this.ClientIdLabel.TabIndex = 4;
+            this.ClientIdLabel.Text = "Identyfikator klienta:";
             // 
-            // clientIdComboBox
+            // ClientIdComboBox
             // 
-            this.clientIdComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.clientIdComboBox.FormattingEnabled = true;
-            this.clientIdComboBox.Location = new System.Drawing.Point(195, 15);
-            this.clientIdComboBox.Name = "clientIdComboBox";
-            this.clientIdComboBox.Size = new System.Drawing.Size(458, 24);
-            this.clientIdComboBox.TabIndex = 1;
-            this.clientIdComboBox.Visible = false;
-            this.clientIdComboBox.Sorted = true;
+            this.ClientIdComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ClientIdComboBox.FormattingEnabled = true;
+            this.ClientIdComboBox.Location = new System.Drawing.Point(195, 15);
+            this.ClientIdComboBox.Name = "ClientIdComboBox";
+            this.ClientIdComboBox.Size = new System.Drawing.Size(458, 24);
+            this.ClientIdComboBox.TabIndex = 1;
+            this.ClientIdComboBox.Visible = false;
+            this.ClientIdComboBox.Sorted = true;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.raportsComboBox);
+            this.groupBox1.Controls.Add(this.RaportsComboBox);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(10, 12);
             this.groupBox1.Name = "groupBox1";
@@ -257,15 +257,15 @@
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             // 
-            // raportsComboBox
+            // RaportsComboBox
             // 
-            this.raportsComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.raportsComboBox.FormattingEnabled = true;
-            this.raportsComboBox.Location = new System.Drawing.Point(195, 15);
-            this.raportsComboBox.Name = "raportsComboBox";
-            this.raportsComboBox.Size = new System.Drawing.Size(458, 24);
-            this.raportsComboBox.TabIndex = 2;
-            this.raportsComboBox.SelectionChangeCommitted += new System.EventHandler(this.raportsComboBoxSelectionChange);
+            this.RaportsComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.RaportsComboBox.FormattingEnabled = true;
+            this.RaportsComboBox.Location = new System.Drawing.Point(195, 15);
+            this.RaportsComboBox.Name = "RaportsComboBox";
+            this.RaportsComboBox.Size = new System.Drawing.Size(458, 24);
+            this.RaportsComboBox.TabIndex = 2;
+            this.RaportsComboBox.SelectionChangeCommitted += new System.EventHandler(this.RaportsComboBoxSelectionChange);
             // 
             // label1
             // 
@@ -276,39 +276,39 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Raporty do wygenerowania:";
             // 
-            // raportGenBtn
+            // RaportGenBtn
             // 
-            this.raportGenBtn.Location = new System.Drawing.Point(680, 12);
-            this.raportGenBtn.Name = "raportGenBtn";
-            this.raportGenBtn.Size = new System.Drawing.Size(160, 107);
-            this.raportGenBtn.TabIndex = 3;
-            this.raportGenBtn.Text = "Generuj";
-            this.raportGenBtn.UseVisualStyleBackColor = true;
-            this.raportGenBtn.Click += new System.EventHandler(this.raportGenBtn_Click);
+            this.RaportGenBtn.Location = new System.Drawing.Point(680, 12);
+            this.RaportGenBtn.Name = "RaportGenBtn";
+            this.RaportGenBtn.Size = new System.Drawing.Size(160, 107);
+            this.RaportGenBtn.TabIndex = 3;
+            this.RaportGenBtn.Text = "Generuj";
+            this.RaportGenBtn.UseVisualStyleBackColor = true;
+            this.RaportGenBtn.Click += new System.EventHandler(this.RaportGenBtn_Click);
             // 
-            // saveRaportDialog
+            // SaveRaportDialog
             // 
-            this.saveRaportDialog.Filter = "csv files (*.csv)|*.csv";
-            this.saveRaportDialog.InitialDirectory = "C:";
-            this.saveRaportDialog.Title = "Zapisz raport";
+            this.SaveRaportDialog.Filter = "csv files (*.csv)|*.csv";
+            this.SaveRaportDialog.InitialDirectory = "C:";
+            this.SaveRaportDialog.Title = "Zapisz raport";
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1099, 719);
             this.Controls.Add(this.splitContainer1);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "MainForm";
+            this.Text = "MainForm";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.raportsDataGrid)).EndInit();
-            this.valueRangeBox.ResumeLayout(false);
-            this.valueRangeBox.PerformLayout();
-            this.clientIdBox.ResumeLayout(false);
-            this.clientIdBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.RaportsDataGrid)).EndInit();
+            this.ValueRangeBox.ResumeLayout(false);
+            this.ValueRangeBox.PerformLayout();
+            this.ClientIdBox.ResumeLayout(false);
+            this.ClientIdBox.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -317,29 +317,29 @@
 
         #endregion
 
-        private System.Windows.Forms.OpenFileDialog addFilesDialog;
+        private System.Windows.Forms.OpenFileDialog AddFilesDialog;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Button AddFilesBtn;
-        private System.Windows.Forms.ListBox addedFilesListBox;
+        private System.Windows.Forms.ListBox AddedFilesListBox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox raportsComboBox;
-        private System.Windows.Forms.Button raportGenBtn;
-        private System.Windows.Forms.Label clientIdLabel;
-        private System.Windows.Forms.ComboBox clientIdComboBox;
-        private System.Windows.Forms.TextBox minValueTextBox;
+        private System.Windows.Forms.ComboBox RaportsComboBox;
+        private System.Windows.Forms.Button RaportGenBtn;
+        private System.Windows.Forms.Label ClientIdLabel;
+        private System.Windows.Forms.ComboBox ClientIdComboBox;
+        private System.Windows.Forms.TextBox MinValueTextBox;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.GroupBox valueRangeBox;
-        private System.Windows.Forms.TextBox maxValueTextBox;
+        private System.Windows.Forms.GroupBox ValueRangeBox;
+        private System.Windows.Forms.TextBox MaxValueTextBox;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.GroupBox clientIdBox;
+        private System.Windows.Forms.GroupBox ClientIdBox;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label maxMaxValue;
-        private System.Windows.Forms.Label maxMaxValLabel;
+        private System.Windows.Forms.Label MaxMaxValLabel;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button deleteFilesBtn;
-        public System.Windows.Forms.DataGridView raportsDataGrid;
-        private System.Windows.Forms.Button saveRaportBtn;
-        private System.Windows.Forms.SaveFileDialog saveRaportDialog;
+        private System.Windows.Forms.Button DeleteFilesBtn;
+        public System.Windows.Forms.DataGridView RaportsDataGrid;
+        private System.Windows.Forms.Button SaveRaportBtn;
+        private System.Windows.Forms.SaveFileDialog SaveRaportDialog;
     }
 }
 

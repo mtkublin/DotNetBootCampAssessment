@@ -42,9 +42,18 @@ namespace ReqRaportsApp
         }
     }
 
-    public class MyXmlSerializer
+    public class Deserializer
     {
-        public static void DeserializeXmlObject(string path, List<request> MainReqList, Dictionary<string, List<request>> AddedFiles)
+        List<request> MainReqList { get; set; }
+        Dictionary<string, List<request>> AddedFiles { get; set; }
+
+        public Deserializer(List<request> rList, Dictionary<string, List<request>> afDict)
+        {
+            MainReqList = rList;
+            AddedFiles = afDict;
+        }
+
+        public void DeserializeXmlObject(string path)
         {
             try
             {
@@ -76,16 +85,13 @@ namespace ReqRaportsApp
                 MessageBox.Show(ex.Message);
             }
         }
-    }
 
-    public class MyJsonSerializer
-    {
-        public class JsonRequestsObject
+        private class JsonRequestsObject
         {
             public List<request> requests { get; set; }
         }
 
-        public static void DesarializeJsonObject(string path, List<request> MainReqList, Dictionary<string, List<request>> AddedFiles)
+        public void DesarializeJsonObject(string path)
         {
             try
             {
@@ -125,11 +131,8 @@ namespace ReqRaportsApp
                 MessageBox.Show(ex.Message);
             }
         }
-    }
 
-    public class MyCsvSerializer
-    {
-        public static void DeserializeCsvObject(string path, List<request> MainReqList, Dictionary<string, List<request>> AddedFiles)
+        public void DeserializeCsvObject(string path)
         {
             try
             {

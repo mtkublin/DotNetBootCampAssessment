@@ -6,9 +6,16 @@ namespace ReqRaportsApp
 {
     public class RapGenOperations
     {
-        public static HashSet<long> AllReqsForClient(string currentClientId)
+        List<request> ReqsList { get; set; }
+
+        public RapGenOperations(List<request> rList)
         {
-            IEnumerable<long> getClientReqs = from request in RequestList.ReqsList
+            ReqsList = rList;
+        }
+
+        public HashSet<long> AllReqsForClient(string currentClientId)
+        {
+            IEnumerable<long> getClientReqs = from request in ReqsList
                                               where request.clientId == currentClientId
                                               select request.requestId;
 
@@ -17,9 +24,9 @@ namespace ReqRaportsApp
             return reqIdsForClient;
         }
 
-        public static Dictionary<string, List<long>> AllRequests()
+        public Dictionary<string, List<long>> AllRequests()
         {
-            IEnumerable<string> getClientIds = from request in RequestList.ReqsList
+            IEnumerable<string> getClientIds = from request in ReqsList
                                                select request.clientId;
 
             HashSet<string> clientIds = getClientIds.ToHashSet();
@@ -35,7 +42,7 @@ namespace ReqRaportsApp
             return allReqsDict;
         }
 
-        public static Dictionary<string, Dictionary<long, double>> wholeReqValueDict()
+        public Dictionary<string, Dictionary<long, double>> wholeReqValueDict()
         {
             Dictionary<string, List<long>> allReqs = AllRequests();
 
@@ -45,7 +52,7 @@ namespace ReqRaportsApp
                 Dictionary<long, double> reqValuesDict = new Dictionary<long, double>();
                 foreach (long rid in allReqs[cid])
                 {
-                    IEnumerable<request> getCurrentRequest = from req in RequestList.ReqsList
+                    IEnumerable<request> getCurrentRequest = from req in ReqsList
                                                              where req.clientId == cid & req.requestId == rid
                                                              select req;
 
@@ -62,7 +69,7 @@ namespace ReqRaportsApp
             return clientReqWholeValDict;
         }
 
-        public static double maxPrice()
+        public double maxPrice()
         {
             List<double> reqValuesList = new List<double>();
 
@@ -80,7 +87,7 @@ namespace ReqRaportsApp
             return maxPr;
         }
 
-        public static double RequestsValuesSum(List<request> CurrentRequestsList)
+        public double RequestsValuesSum(List<request> CurrentRequestsList)
         {
             double allReqsValueSum = 0;
             foreach (request r in CurrentRequestsList)
@@ -95,9 +102,9 @@ namespace ReqRaportsApp
             return allReqsValueSum;
         }
 
-        public static double ClientsValuesSum(string currentClientId)
+        public double ClientsValuesSum(string currentClientId)
         {
-            var getClientReqs = from request in RequestList.ReqsList
+            var getClientReqs = from request in ReqsList
                                 where request.clientId == currentClientId
                                 select request;
             List<request> clientReqs = getClientReqs.ToList();
@@ -106,7 +113,7 @@ namespace ReqRaportsApp
             return clientReqsValueSum;
         }
 
-        public static Dictionary<string, int> ProductReqIds(List<request> currentRequestsList)
+        public Dictionary<string, int> ProductReqIds(List<request> currentRequestsList)
         {
             IEnumerable<string> getProdNames = from request in currentRequestsList
                                                select request.name;

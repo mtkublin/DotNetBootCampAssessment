@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ReqRaportsApp
+﻿namespace ReqRaportsApp
 {
     public class request
     {
@@ -9,13 +7,6 @@ namespace ReqRaportsApp
         public string name { get; set; }
         public int quantity { get; set; }
         public double price { get; set; }
-    }
-
-    public class RequestList
-    {
-        public static List<request> ReqsList = new List<request>();
-        public static Dictionary<string, List<request>> AddedFiles = new Dictionary<string, List<request>>();
-
     }
 
     public class RequestWithSummaricValue

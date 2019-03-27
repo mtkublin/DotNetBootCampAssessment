@@ -6,29 +6,36 @@ namespace ReqRaportsApp
 {
     public partial class GridViewHandler
     {
-        public static void GridViewPopulate(string[] colNames, List<List<object>> rows, DataGridView raportsDataGrid)
-        {
-            raportsDataGrid.Rows.Clear();
+        DataGridView RaportsDataGrid { get; set; }
 
-            raportsDataGrid.ColumnCount = colNames.Count();
+        public GridViewHandler(DataGridView rDataGrid)
+        {
+            RaportsDataGrid = rDataGrid;
+        }
+
+        public void GridViewPopulate(string[] colNames, List<List<object>> rows)
+        {
+            RaportsDataGrid.Rows.Clear();
+
+            RaportsDataGrid.ColumnCount = colNames.Count();
 
             int i = 0;
             foreach (string cn in colNames)
             {
-                raportsDataGrid.Columns[i].Name = cn;
+                RaportsDataGrid.Columns[i].Name = cn;
                 i++;
             }
 
             int rowCount = 0;
             foreach (List<object> row in rows)
             {
-                raportsDataGrid.Rows.Add();
+                RaportsDataGrid.Rows.Add();
 
                 int cellCount = 0;
                 foreach (object cellValue in row)
                 {
-                    raportsDataGrid.Rows[rowCount].Cells[cellCount].ValueType = cellValue.GetType();
-                    raportsDataGrid.Rows[rowCount].Cells[cellCount].Value = cellValue;
+                    RaportsDataGrid.Rows[rowCount].Cells[cellCount].ValueType = cellValue.GetType();
+                    RaportsDataGrid.Rows[rowCount].Cells[cellCount].Value = cellValue;
 
                     cellCount++;
                 }
@@ -37,31 +44,31 @@ namespace ReqRaportsApp
             }
         }
 
-        public static List<string> GatherGridDataToCsv(DataGridView raportsDataGrid)
+        public List<string> GatherGridDataToCsv()
         {
             List<string> textData = new List<string>();
 
             string rowText = string.Empty;
-            for (int col = 0; col < raportsDataGrid.ColumnCount; col++)
+            for (int col = 0; col < RaportsDataGrid.ColumnCount; col++)
             {
                 if (col != 0)
                 {
                     rowText += ",";
                 }
-                rowText += raportsDataGrid.Columns[col].Name;
+                rowText += RaportsDataGrid.Columns[col].Name;
             }
             textData.Add(rowText);
 
-            for (int row = 0; row < raportsDataGrid.RowCount; row++)
+            for (int row = 0; row < RaportsDataGrid.RowCount; row++)
             {
                 rowText = string.Empty;
-                for (int cell = 0; cell < raportsDataGrid.ColumnCount; cell++)
+                for (int cell = 0; cell < RaportsDataGrid.ColumnCount; cell++)
                 {
                     if (cell != 0)
                     {
                         rowText += ",";
                     }
-                    rowText += raportsDataGrid.Rows[row].Cells[cell].Value.ToString();
+                    rowText += RaportsDataGrid.Rows[row].Cells[cell].Value.ToString();
                 }
                 textData.Add(rowText);
             }
