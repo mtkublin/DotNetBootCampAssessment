@@ -66,7 +66,6 @@
             this.AddFilesDialog.FileName = "openFileDialog1";
             this.AddFilesDialog.Filter = "xml, csv and json files (*.xml, *.csv, *.json)|*.csv; *.json; *.xml|xml files (*." +
     "xml)|*.xml|csv files (*.csv)|*.csv|json files (*.json)|*.json";
-            this.AddFilesDialog.InitialDirectory = "C:\\Users\\Użytkownik\\source\\repos\\WindowsFormsApp1\\SampleData";
             this.AddFilesDialog.Multiselect = true;
             // 
             // splitContainer1
@@ -289,7 +288,6 @@
             // SaveRaportDialog
             // 
             this.SaveRaportDialog.Filter = "csv files (*.csv)|*.csv";
-            this.SaveRaportDialog.InitialDirectory = "C:";
             this.SaveRaportDialog.Title = "Zapisz raport";
             // 
             // MainForm

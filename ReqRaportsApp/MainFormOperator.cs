@@ -239,7 +239,7 @@ namespace ReqRaportsApp
                     ValueRangeBox.Visible = false;
                     showClientIdsComboBox();
                 }
-                else if (selectedItem == RaportTypes.dropListItemsList.Last())
+                else if (selectedItem == RaportTypes.ReqsInValueRangeType)
                 {
                     ClientIdBox.Visible = false;
                     ClientIdComboBox.Visible = false;

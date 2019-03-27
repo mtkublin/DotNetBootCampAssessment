@@ -14,7 +14,7 @@
         public const string ReqQuantByProdNameForClientType = "Ilość zamówień pogrupowanych po nazwie dla klienta o wskazanym identyfikatorze";
         public const string ReqsInValueRangeType = "Zamówienia w podanym przedziale cenowym";
 
-        public static string[] dropListItemsList = 
+        public static string[] dropListItemsList =
         {
             ReqQuantType,
             ReqQuantForClientType,
@@ -31,11 +31,11 @@
 
         public static string[] clientIdRaportsList =
         {
-            ReqQuantForClientType,
-            ReqValueSumForClientType,
-            AllReqsListForClientType,
-            AverageReqValueForClientType,
-            ReqQuantByProdNameForClientType,
+                ReqQuantForClientType,
+                ReqValueSumForClientType,
+                AllReqsListForClientType,
+                AverageReqValueForClientType,
+                ReqQuantByProdNameForClientType,
         };
     }
 }

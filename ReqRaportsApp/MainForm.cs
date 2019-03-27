@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.FileIO;
+using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace ReqRaportsApp
@@ -32,6 +34,17 @@ namespace ReqRaportsApp
             RaportsDataGrid.AllowUserToResizeRows = false;
             RaportsDataGrid.EditMode = DataGridViewEditMode.EditProgrammatically;
             RaportsDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+
+            string addFilesInitialDir = Directory.GetCurrentDirectory();
+            for (int i = 0; i < 3; i++)
+            {
+                addFilesInitialDir = addFilesInitialDir.Substring(addFilesInitialDir.LastIndexOf('\\'));
+            }
+            addFilesInitialDir += "SampleData";
+            AddFilesDialog.InitialDirectory = addFilesInitialDir;
+            
+            SaveRaportDialog.InitialDirectory = SpecialDirectories.MyDocuments;
 
             foreach (string n in RaportTypes.dropListItemsList)
             {

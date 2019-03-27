@@ -15,7 +15,6 @@ namespace ReqRaportsApp
         DataGridView RaportsDataGrid { get; set; }
 
         GridViewHandler GridViewHand { get; set; }
-
         RapGenOperations RapGenOps { get; set; }
 
         public RaportGenerators(GridViewHandler gvHand, RapGenOperations rgOps, List<request> rList, ComboBox rCombo, ComboBox cidCombo, TextBox minvTextBox, TextBox maxvTextBox, DataGridView rDataGrid)
@@ -28,7 +27,6 @@ namespace ReqRaportsApp
             RaportsDataGrid = rDataGrid;
 
             GridViewHand = gvHand;
-
             RapGenOps = rgOps;
         }
 
