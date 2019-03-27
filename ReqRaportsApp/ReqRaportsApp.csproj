@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainFormFunctions.cs" />
     <Compile Include="GridViewHandler.cs" />
     <Compile Include="RapGenOperations.cs" />
     <Compile Include="Extensions.cs" />

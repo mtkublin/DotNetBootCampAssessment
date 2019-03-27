@@ -31,7 +31,7 @@
             this.addFilesDialog = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.deleteFilesBtn = new System.Windows.Forms.Button();
-            this.addedFilesListView = new System.Windows.Forms.ListBox();
+            this.addedFilesListBox = new System.Windows.Forms.ListBox();
             this.AddFilesBtn = new System.Windows.Forms.Button();
             this.saveRaportBtn = new System.Windows.Forms.Button();
             this.raportsDataGrid = new System.Windows.Forms.DataGridView();
@@ -78,7 +78,7 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.deleteFilesBtn);
-            this.splitContainer1.Panel1.Controls.Add(this.addedFilesListView);
+            this.splitContainer1.Panel1.Controls.Add(this.addedFilesListBox);
             this.splitContainer1.Panel1.Controls.Add(this.AddFilesBtn);
             // 
             // splitContainer1.Panel2
@@ -103,14 +103,14 @@
             this.deleteFilesBtn.UseVisualStyleBackColor = true;
             this.deleteFilesBtn.Click += new System.EventHandler(this.deleteFilesBtn_Click);
             // 
-            // addedFilesListView
+            // addedFilesListBox
             // 
-            this.addedFilesListView.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
-            this.addedFilesListView.ItemHeight = 16;
-            this.addedFilesListView.Location = new System.Drawing.Point(12, 74);
-            this.addedFilesListView.Name = "addedFilesListView";
-            this.addedFilesListView.Size = new System.Drawing.Size(197, 628);
-            this.addedFilesListView.TabIndex = 1;
+            this.addedFilesListBox.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
+            this.addedFilesListBox.ItemHeight = 16;
+            this.addedFilesListBox.Location = new System.Drawing.Point(12, 74);
+            this.addedFilesListBox.Name = "addedFilesListBox";
+            this.addedFilesListBox.Size = new System.Drawing.Size(197, 628);
+            this.addedFilesListBox.TabIndex = 1;
             // 
             // AddFilesBtn
             // 
@@ -319,7 +319,7 @@
         private System.Windows.Forms.OpenFileDialog addFilesDialog;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Button AddFilesBtn;
-        private System.Windows.Forms.ListBox addedFilesListView;
+        private System.Windows.Forms.ListBox addedFilesListBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox raportsComboBox;
         private System.Windows.Forms.Button raportGenBtn;
