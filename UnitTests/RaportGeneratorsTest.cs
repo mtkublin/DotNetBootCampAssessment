@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Linq;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ReqRaportsApp;
@@ -42,24 +43,17 @@ namespace UnitTests
         [TestMethod]
         public void ReqQuantTest()
         {
-            int correctQuant = 11;
+            int expectedQuant = 11;
             GridViewData testData = RapGen.ReqQuant();
             int testQuant = Convert.ToInt32(testData.Rows[0][0]);
 
-            if (testQuant == correctQuant)
-            {
-                MessageBox.Show("Test passed");
-            }
-            else
-            {
-                MessageBox.Show("Test failed\n" + testQuant.ToString() + " != 11");
-            }
+            Assert.AreEqual(expectedQuant, testQuant);
         }
 
         [TestMethod]
         public void ReqQuantForClientTest()
         {
-            Dictionary<string, int> clientIdsWithCorrectValues = new Dictionary<string, int>()
+            Dictionary<string, int> clientIdsWithExpectedValues = new Dictionary<string, int>()
             {
                 { "1", 2 },
                 { "2", 2 },
@@ -69,44 +63,30 @@ namespace UnitTests
                 { "6", 1 }
             };
 
-            foreach (string cid in clientIdsWithCorrectValues.Keys)
+            foreach (string cid in clientIdsWithExpectedValues.Keys)
             {
                 GridViewData testData = RapGen.ReqQuantForClient(cid);
                 int testQuant = Convert.ToInt32(testData.Rows[0][1]);
 
-                if (testQuant == clientIdsWithCorrectValues[cid])
-                {
-                    MessageBox.Show("Test passed for client \"" + cid + "\"") ;
-                }
-                else
-                {
-                    MessageBox.Show("Test failed for client \"" + cid + "\"\n" + testQuant.ToString() + " != " + clientIdsWithCorrectValues[cid]);
-                }
+                Assert.AreEqual(clientIdsWithExpectedValues[cid], testQuant);
             }
         }
 
         [TestMethod]
         public void ReqValueSumTest()
         {
-            double correctValue = 319.46;
+            double expectedValue = 319.46;
 
             GridViewData testData = RapGen.ReqValueSum();
             double testValue = Convert.ToDouble(testData.Rows[0][0]);
 
-            if (testValue == correctValue)
-            {
-                MessageBox.Show("Test passed");
-            }
-            else
-            {
-                MessageBox.Show("Test failed\n" + testValue.ToString() + " != 319.46");
-            }
+            Assert.AreEqual(expectedValue, testValue);
         }
 
         [TestMethod]
         public void ReqValueSumForClientTest()
         {
-            Dictionary<string, double> clientIdsWithCorrectValues = new Dictionary<string, double>()
+            Dictionary<string, double> clientIdsWithExpectedValues = new Dictionary<string, double>()
             {
                 { "1", 48.94 },
                 { "2", 64.77 },
@@ -116,76 +96,40 @@ namespace UnitTests
                 { "6", 21 }
             };
 
-            foreach(string cid in clientIdsWithCorrectValues.Keys)
+            foreach(string cid in clientIdsWithExpectedValues.Keys)
             {
                 GridViewData testData = RapGen.ReqValueSumForClientId(cid);
                 double testValue = Math.Round(Convert.ToDouble(testData.Rows[0][1]), 2);
 
-                if (testValue == clientIdsWithCorrectValues[cid])
-                {
-                    MessageBox.Show("Test passed for client \"" + cid + "\"");
-                }
-                else
-                {
-                    MessageBox.Show("Test failed for client \"" + cid + "\"\n" + testValue.ToString() + " != " + clientIdsWithCorrectValues[cid]);
-                }
+                Assert.AreEqual(clientIdsWithExpectedValues[cid], testValue);
             }
         }
 
         [TestMethod]
         public void AllReqsTest()
         {
-            int correctRowQuant = 20;
+            int expectedRowCount = 20;
 
             GridViewData testData = RapGen.AllReqsList();
             List<List<object>> testRows = testData.Rows;
 
-            if (testRows.Count == correctRowQuant)
+            Assert.AreEqual(expectedRowCount, testRows.Count);
+
+            foreach (List<object> row in testRows)
             {
-                foreach (List<object> row in testRows)
-                {
-                    if (row.Count != 5)
-                    {
-                        MessageBox.Show("Row is missing elements");
-                        break;
-                    }
-                    else if (row[0].GetType() != typeof(string))
-                    {
-                        MessageBox.Show("Wrong type for client id");
-                        break;
-                    }
-                    else if (row[1].GetType() != typeof(long))
-                    {
-                        MessageBox.Show("Wrong type for request id");
-                        break;
-                    }
-                    else if (row[2].GetType() != typeof(string))
-                    {
-                        MessageBox.Show("Wrong type for name");
-                        break;
-                    }
-                    else if (row[3].GetType() != typeof(int))
-                    {
-                        MessageBox.Show("Wrong type for quantity");
-                        break;
-                    }
-                    else if (row[4].GetType() != typeof(double))
-                    {
-                        MessageBox.Show("Wrong type for price");
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Rows are missing");
+                Assert.AreEqual(5, row.Count);
+                Assert.AreEqual(typeof(string), row[0].GetType());
+                Assert.AreEqual(typeof(long), row[1].GetType());
+                Assert.AreEqual(typeof(string), row[2].GetType());
+                Assert.AreEqual(typeof(int), row[3].GetType());
+                Assert.AreEqual(typeof(double), row[4].GetType());
             }
         }
 
         [TestMethod]
         public void AllReqsForClientTest()
         {
-            Dictionary<string, int> clientIdsWithCorrectValues = new Dictionary<string, int>()
+            Dictionary<string, int> clientIdsWithexpectedValues = new Dictionary<string, int>()
             {
                 { "1", 3 },
                 { "2", 5 },
@@ -195,50 +139,21 @@ namespace UnitTests
                 { "6", 1 }
             };
 
-            foreach (string cid in clientIdsWithCorrectValues.Keys)
+            foreach (string cid in clientIdsWithexpectedValues.Keys)
             {
                 GridViewData testData = RapGen.ReqsListForClientId(cid);
                 List<List<object>> testRows = testData.Rows;
 
-                if (testRows.Count == clientIdsWithCorrectValues[cid])
+                Assert.AreEqual(clientIdsWithexpectedValues[cid], testRows.Count);
+
+                foreach (List<object> row in testRows)
                 {
-                    foreach (List<object> row in testRows)
-                    {
-                        if (row.Count != 5)
-                        {
-                            MessageBox.Show("Row is missing elements");
-                            break;
-                        }
-                        else if (row[0].GetType() != typeof(string))
-                        {
-                            MessageBox.Show("Wrong type for client id");
-                            break;
-                        }
-                        else if (row[1].GetType() != typeof(long))
-                        {
-                            MessageBox.Show("Wrong type for request id");
-                            break;
-                        }
-                        else if (row[2].GetType() != typeof(string))
-                        {
-                            MessageBox.Show("Wrong type for name");
-                            break;
-                        }
-                        else if (row[3].GetType() != typeof(int))
-                        {
-                            MessageBox.Show("Wrong type for quantity");
-                            break;
-                        }
-                        else if (row[4].GetType() != typeof(double))
-                        {
-                            MessageBox.Show("Wrong type for price");
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Rows are missing");
+                    Assert.AreEqual(5, row.Count);
+                    Assert.AreEqual(typeof(string), row[0].GetType());
+                    Assert.AreEqual(typeof(long), row[1].GetType());
+                    Assert.AreEqual(typeof(string), row[2].GetType());
+                    Assert.AreEqual(typeof(int), row[3].GetType());
+                    Assert.AreEqual(typeof(double), row[4].GetType());
                 }
             }
         }
@@ -246,46 +161,112 @@ namespace UnitTests
         [TestMethod]
         public void AverageReqValueTest()
         {
-            double correctAvgVal = 29.04;
+            double expectedAvgVal = 29.04;
 
             GridViewData testData = RapGen.AverageReqValue();
             double testValue = Convert.ToDouble(testData.Rows[0][0]);
 
-            if (testValue == correctAvgVal)
-            {
-                MessageBox.Show("Test passed");
-            }
-            else
-            {
-                MessageBox.Show("Test failed\n" + testValue.ToString() + " != 29.04");
-            }
+            Assert.AreEqual(expectedAvgVal, testValue);
         }
 
         [TestMethod]
         public void AverageReqValueForClientTest()
         {
-            Dictionary<string, double> clientIdsWithCorrectValues = new Dictionary<string, double>()
+            Dictionary<string, double> clientIdsWithexpectedValues = new Dictionary<string, double>()
             {
                 { "1", 24.47 },
                 { "2", 32.39 },
-                { "3", 71.48 },
+                { "3", 71.47 },
                 { "4", 10.49 },
                 { "5", 10.42 },
                 { "6", 21 }
             };
 
-            foreach (string cid in clientIdsWithCorrectValues.Keys)
+            foreach (string cid in clientIdsWithexpectedValues.Keys)
             {
                 GridViewData testData = RapGen.AverageReqValueForClientId(cid);
                 double testValue = Convert.ToDouble(testData.Rows[0][1]);
 
-                if (testValue == clientIdsWithCorrectValues[cid])
+                Assert.AreEqual(clientIdsWithexpectedValues[cid], testValue);
+            }
+        }
+
+        [TestMethod]
+        public void ReqQuantByNameTest()
+        {
+            Dictionary<string, int> prodNamesWithexpectedValues = new Dictionary<string, int>()
+            {
+                { "Bułka", 5 },
+                { "Chleb", 6 },
+                { "Masło", 4 },
+                { "Mleko", 2 }
+            };
+
+            GridViewData testData = RapGen.ReqQuantByName();
+
+            foreach (string name in prodNamesWithexpectedValues.Keys)
+            {
+                IEnumerable<object> getReqsByName = from row in testData.Rows
+                                                          where row[0] as string == name
+                                                          select row[1];
+
+                int testValue = Convert.ToInt32(getReqsByName.ToList()[0]);
+
+                Assert.AreEqual(prodNamesWithexpectedValues[name], testValue);
+            }
+        }
+
+        [TestMethod]
+        public void ReqQuantByNameForClientTest()
+        {
+            Dictionary<string, Dictionary<string, int>> prodNamesForClientsWithexpectedValues = new Dictionary<string, Dictionary<string, int>>();
+
+            prodNamesForClientsWithexpectedValues["1"] = new Dictionary<string, int>()
+            {
+                { "Chleb", 1 },
+                { "Masło", 2 },
+            };
+            prodNamesForClientsWithexpectedValues["2"] = new Dictionary<string, int>()
+            {
+                { "Bułka", 1 },
+                { "Chleb", 2 }
+            };
+            prodNamesForClientsWithexpectedValues["3"] = new Dictionary<string, int>()
+            {
+                { "Bułka", 1 },
+                { "Chleb", 1 },
+                { "Masło", 1 },
+            };
+            prodNamesForClientsWithexpectedValues["4"] = new Dictionary<string, int>()
+            {
+                { "Bułka", 2 },
+                { "Chleb", 1 },
+                { "Masło", 1 },
+            };
+            prodNamesForClientsWithexpectedValues["5"] = new Dictionary<string, int>()
+            {
+                { "Bułka", 1 },
+                { "Chleb", 1 },
+                { "Mleko", 1 }
+            };
+            prodNamesForClientsWithexpectedValues["6"] = new Dictionary<string, int>()
+            {
+                { "Mleko", 1 }
+            };
+
+            foreach (string cid in prodNamesForClientsWithexpectedValues.Keys)
+            {
+                GridViewData testData = RapGen.ReqQuantByNameForClientId(cid);
+
+                foreach (string name in prodNamesForClientsWithexpectedValues[cid].Keys)
                 {
-                    MessageBox.Show("Test passed for client \"" + cid + "\"");
-                }
-                else
-                {
-                    MessageBox.Show("Test failed for client \"" + cid + "\"\n" + testValue.ToString() + " != " + clientIdsWithCorrectValues[cid]);
+                    IEnumerable<object> getReqsByName = from row in testData.Rows
+                                                        where row[1] as string == name
+                                                        select row[2];
+
+                    int testValue = Convert.ToInt32(getReqsByName.ToList()[0]);
+
+                    Assert.AreEqual(prodNamesForClientsWithexpectedValues[cid][name], testValue);
                 }
             }
         }
