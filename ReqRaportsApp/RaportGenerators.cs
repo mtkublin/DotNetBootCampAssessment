@@ -29,7 +29,6 @@ namespace ReqRaportsApp
             List<List<object>> rows = new List<List<object>>();
             List<object> row = new List<object>();
             row.Add(allReqsCount);
-
             rows.Add(row);
 
             return new GridViewData(colNames, rows);
@@ -44,11 +43,13 @@ namespace ReqRaportsApp
 
                 string[] colNames = { "Identyfikator klienta", "Ilość zamówień" };
                 List<List<object>> rows = new List<List<object>>();
-                List<object> row = new List<object>();
-                row.Add(currentClientId);
-                row.Add(clientReqsCount);
-
+                List<object> row = new List<object>
+                {
+                    currentClientId,
+                    clientReqsCount
+                };
                 rows.Add(row);
+
                 return new GridViewData(colNames, rows);
             }
             catch
@@ -57,6 +58,7 @@ namespace ReqRaportsApp
 
                 string[] cN = { };
                 List<List<object>> rW = new List<List<object>>();
+
                 return new GridViewData(cN, rW);
             }
         }
@@ -67,10 +69,12 @@ namespace ReqRaportsApp
 
             string[] colNames = { "Łączna kwota zamówień" };
             List<List<object>> rows = new List<List<object>>();
-            List<object> row = new List<object>();
-            row.Add(Math.Round(allReqsValueSum, 2));
-
+            List<object> row = new List<object>
+            {
+                allReqsValueSum
+            };
             rows.Add(row);
+
             return new GridViewData(colNames, rows);
         }
 
@@ -82,9 +86,11 @@ namespace ReqRaportsApp
 
                 string[] colNames = { "Identyfikator klienta", "Łączna kwota zamówień" };
                 List<List<object>> rows = new List<List<object>>();
-                List<object> row = new List<object>();
-                row.Add(currentClientId);
-                row.Add(Math.Round(clientReqsValueSum, 2));
+                List<object> row = new List<object>
+                {
+                    currentClientId,
+                    clientReqsValueSum
+                };
 
                 rows.Add(row);
                 return new GridViewData(colNames, rows);
@@ -116,12 +122,14 @@ namespace ReqRaportsApp
                                                                     select req;
                     foreach (request r in getAllInstancesOfRequest)
                     {
-                        List<object> row = new List<object>();
-                        row.Add(cid);
-                        row.Add(rid);
-                        row.Add(r.name);
-                        row.Add(r.quantity);
-                        row.Add(Math.Round(r.price, 2));
+                        List<object> row = new List<object>
+                        {
+                            cid,
+                            rid,
+                            r.name,
+                            r.quantity,
+                            Math.Round(r.price, 2)
+                        };
 
                         rows.Add(row);
                     }
@@ -139,19 +147,21 @@ namespace ReqRaportsApp
                 string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Nazwa produktu", "Ilość", "Cena produktu" };
                 List<List<object>> rows = new List<List<object>>();
 
-                foreach (int rid in clientsReqs)
+                foreach (long rid in clientsReqs)
                 {
                     IEnumerable<request> getAllInstancesOfRequest = from req in ReqsList
                                                                     where req.clientId == currentClientId & req.requestId == rid
                                                                     select req;
                     foreach (request r in getAllInstancesOfRequest)
                     {
-                        List<object> row = new List<object>();
-                        row.Add(currentClientId);
-                        row.Add(rid);
-                        row.Add(r.name);
-                        row.Add(r.quantity);
-                        row.Add(Math.Round(r.price, 2));
+                        List<object> row = new List<object>
+                        {
+                            currentClientId,
+                            rid,
+                            r.name,
+                            r.quantity,
+                            Math.Round(r.price, 2)
+                        };
 
                         rows.Add(row);
                     }
@@ -180,12 +190,14 @@ namespace ReqRaportsApp
             }
 
             double avgReqValue = allReqsValueSum / allReqsCount;
-            double roundedAvgReqValue = Math.Round(avgReqValue, 2);
+            double roundedAvgReqValue = Math.Round(avgReqValue, 2, MidpointRounding.AwayFromZero);
 
             string[] colNames = { "Średnia wartość zamówienia" };
             List<List<object>> rows = new List<List<object>>();
-            List<object> row = new List<object>();
-            row.Add(roundedAvgReqValue);
+            List<object> row = new List<object>
+            {
+                roundedAvgReqValue
+            };
 
             rows.Add(row);
             return new GridViewData(colNames, rows);
@@ -201,13 +213,15 @@ namespace ReqRaportsApp
                 int clientReqsCount = reqIdsForClient.Count();
 
                 double avgReqValue = clientReqsValueSum / clientReqsCount;
-                double roundedAvgReqValue = Math.Round(avgReqValue, 2);
+                double roundedAvgReqValue = Math.Round(avgReqValue, 2, MidpointRounding.AwayFromZero);
 
                 string[] colNames = { "Identyfikator klienta", "Średnia wartość zamówienia" };
                 List<List<object>> rows = new List<List<object>>();
-                List<object> row = new List<object>();
-                row.Add(currentClientId);
-                row.Add(roundedAvgReqValue);
+                List<object> row = new List<object>
+                {
+                    currentClientId,
+                    roundedAvgReqValue
+                };
 
                 rows.Add(row);
                 return new GridViewData(colNames, rows);
@@ -230,11 +244,13 @@ namespace ReqRaportsApp
             List<List<object>> rows = new List<List<object>>();
             foreach (string prodName in reqsListString.Keys)
             {
-                List<object> row = new List<object>();
-                row.Add(prodName);
-                row.Add(reqsListString[prodName].requestQuantity);
-                row.Add(reqsListString[prodName].productQuantity);
-                row.Add(reqsListString[prodName].productValue);
+                List<object> row = new List<object>
+                {
+                    prodName,
+                    reqsListString[prodName].requestQuantity,
+                    reqsListString[prodName].productQuantity,
+                    reqsListString[prodName].productValue
+                };
 
                 rows.Add(row);
             }
@@ -257,12 +273,14 @@ namespace ReqRaportsApp
                 List<List<object>> rows = new List<List<object>>();
                 foreach (string prodName in reqsListString.Keys)
                 {
-                    List<object> row = new List<object>();
-                    row.Add(currentClientId);
-                    row.Add(prodName);
-                    row.Add(reqsListString[prodName].requestQuantity);
-                    row.Add(reqsListString[prodName].productQuantity);
-                    row.Add(reqsListString[prodName].productValue);
+                    List<object> row = new List<object>
+                    {
+                        currentClientId,
+                        prodName,
+                        reqsListString[prodName].requestQuantity,
+                        reqsListString[prodName].productQuantity,
+                        reqsListString[prodName].productValue
+                    };
 
                     rows.Add(row);
                 }
@@ -302,10 +320,12 @@ namespace ReqRaportsApp
                 List<List<object>> rows = new List<List<object>>();
                 foreach (RequestWithSummaricValue r in getReqValsInRange)
                 {
-                    List<object> row = new List<object>();
-                    row.Add(r.clientId);
-                    row.Add(r.requestId);
-                    row.Add(Math.Round(r.value, 2));
+                    List<object> row = new List<object>
+                    {
+                        r.clientId,
+                        r.requestId,
+                        Math.Round(r.value, 2)
+                    };
 
                     rows.Add(row);
                 }
