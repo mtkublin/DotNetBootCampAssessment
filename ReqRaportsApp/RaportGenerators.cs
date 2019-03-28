@@ -30,7 +30,19 @@ namespace ReqRaportsApp
             RapGenOps = rgOps;
         }
 
-        private void ReqQuant()
+        private class GridViewData
+        {
+            public string[] ColNames { get; set; }
+            public List<List<object>> Rows { get; set; }
+
+            public GridViewData(string[] cn, List<List<object>> r)
+            {
+                ColNames = cn;
+                Rows = r;
+            }
+        }
+
+        private GridViewData ReqQuant()
         {
             Dictionary<string, List<long>> allReqDict = RapGenOps.AllRequests();
             int allReqsCount = 0;
@@ -45,12 +57,13 @@ namespace ReqRaportsApp
             row.Add(allReqsCount);
 
             rows.Add(row);
-            GridViewHand.GridViewPopulate(colNames, rows);
+
+            return new GridViewData(colNames, rows);
         }
 
-        private void ReqQuantForClient()
+        private GridViewData ReqQuantForClient()
         {
-            if (ClientIdComboBox.SelectedItem != null)
+            try
             {
                 string currentClientId = ClientIdComboBox.SelectedItem.ToString();
 
@@ -64,11 +77,19 @@ namespace ReqRaportsApp
                 row.Add(clientReqsCount);
 
                 rows.Add(row);
-                GridViewHand.GridViewPopulate(colNames, rows);
+                return new GridViewData(colNames, rows);
+            }
+            catch
+            {
+                MessageBox.Show("Nie wybrano identyfikatora klienta");
+
+                string[] cN = { };
+                List<List<object>> rW = new List<List<object>>();
+                return new GridViewData(cN, rW);
             }
         }
 
-        private void ReqValueSum()
+        private GridViewData ReqValueSum()
         {
             double allReqsValueSum = RapGenOps.RequestsValuesSum(ReqsList);
 
@@ -78,12 +99,12 @@ namespace ReqRaportsApp
             row.Add(Math.Round(allReqsValueSum, 2));
 
             rows.Add(row);
-            GridViewHand.GridViewPopulate(colNames, rows);
+            return new GridViewData(colNames, rows);
         }
 
-        private void ReqValueSumForClientId()
+        private GridViewData ReqValueSumForClientId()
         {
-            if (ClientIdComboBox.SelectedItem != null)
+            try
             {
                 string currentClientId = ClientIdComboBox.SelectedItem.ToString();
 
@@ -96,11 +117,19 @@ namespace ReqRaportsApp
                 row.Add(Math.Round(clientReqsValueSum, 2));
 
                 rows.Add(row);
-                GridViewHand.GridViewPopulate(colNames, rows);
+                return new GridViewData(colNames, rows);
+            }
+            catch
+            {
+                MessageBox.Show("Nie wybrano identyfikatora klienta");
+
+                string[] cN = { };
+                List<List<object>> rW = new List<List<object>>();
+                return new GridViewData(cN, rW);
             }
         }
 
-        private void AllReqsList()
+        private GridViewData AllReqsList()
         {
             Dictionary<string, List<long>> allReqDict = RapGenOps.AllRequests();
             string reqsListString = string.Empty;
@@ -128,12 +157,12 @@ namespace ReqRaportsApp
                     }
                 }
             }
-            GridViewHand.GridViewPopulate(colNames, rows);
+            return new GridViewData(colNames, rows);
         }
 
-        private void ReqsListForClientId()
+        private GridViewData ReqsListForClientId()
         {
-            if (ClientIdComboBox.SelectedItem != null)
+            try
             {
                 string currentClientId = ClientIdComboBox.SelectedItem.ToString();
 
@@ -159,11 +188,19 @@ namespace ReqRaportsApp
                         rows.Add(row);
                     }
                 }
-                GridViewHand.GridViewPopulate(colNames, rows);
+                return new GridViewData(colNames, rows);
+            }
+            catch
+            {
+                MessageBox.Show("Nie wybrano identyfikatora klienta");
+
+                string[] cN = { };
+                List<List<object>> rW = new List<List<object>>();
+                return new GridViewData(cN, rW);
             }
         }
 
-        private void AverageReqValue()
+        private GridViewData AverageReqValue()
         {
             double allReqsValueSum = RapGenOps.RequestsValuesSum(ReqsList);
             Dictionary<string, List<long>> allReqDict = RapGenOps.AllRequests();
@@ -183,12 +220,12 @@ namespace ReqRaportsApp
             row.Add(roundedAvgReqValue);
 
             rows.Add(row);
-            GridViewHand.GridViewPopulate(colNames, rows);
+            return new GridViewData(colNames, rows);
         }
 
-        private void AverageReqValueForClientId()
+        private GridViewData AverageReqValueForClientId()
         {
-            if (ClientIdComboBox.SelectedItem != null)
+            try
             {
                 string currentClientId = ClientIdComboBox.SelectedItem.ToString();
 
@@ -207,11 +244,19 @@ namespace ReqRaportsApp
                 row.Add(roundedAvgReqValue);
 
                 rows.Add(row);
-                GridViewHand.GridViewPopulate(colNames, rows);
+                return new GridViewData(colNames, rows);
+            }
+            catch
+            {
+                MessageBox.Show("Nie wybrano identyfikatora klienta");
+
+                string[] cN = { };
+                List<List<object>> rW = new List<List<object>>();
+                return new GridViewData(cN, rW);
             }
         }
 
-        private void ReqQuantByName()
+        private GridViewData ReqQuantByName()
         {
             Dictionary<string, ProductObject> reqsListString = RapGenOps.ProductReqIds(ReqsList);
 
@@ -227,12 +272,12 @@ namespace ReqRaportsApp
 
                 rows.Add(row);
             }
-            GridViewHand.GridViewPopulate(colNames, rows);
+            return new GridViewData(colNames, rows);
         }
 
-        private void ReqQuantByNameForClientId()
+        private GridViewData ReqQuantByNameForClientId()
         {
-            if (ClientIdComboBox.SelectedItem != null)
+            try
             {
                 string currentClientId = ClientIdComboBox.SelectedItem.ToString();
 
@@ -257,11 +302,19 @@ namespace ReqRaportsApp
 
                     rows.Add(row);
                 }
-                GridViewHand.GridViewPopulate(colNames, rows);
+                return new GridViewData(colNames, rows);
+            }
+            catch
+            {
+                MessageBox.Show("Nie wybrano identyfikatora klienta");
+
+                string[] cN = { };
+                List<List<object>> rW = new List<List<object>>();
+                return new GridViewData(cN, rW);
             }
         }
 
-        private void ReqsForValueRange()
+        private GridViewData ReqsForValueRange()
         {
             try
             {
@@ -295,11 +348,15 @@ namespace ReqRaportsApp
 
                     rows.Add(row);
                 }
-                GridViewHand.GridViewPopulate(colNames, rows);
+                return new GridViewData(colNames, rows);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+
+                string[] cN = { };
+                List<List<object>> rW = new List<List<object>>();
+                return new GridViewData(cN, rW);
             }
         }
 
@@ -307,40 +364,53 @@ namespace ReqRaportsApp
         {
             string raportType = RaportsComboBox.SelectedItem.ToString();
 
+            GridViewData gridViewData;
+
             switch (raportType)
             {
                 case RaportTypes.ReqQuantType:
-                    ReqQuant();
+                    gridViewData = ReqQuant();
+                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.ReqQuantForClientType:
-                    ReqQuantForClient();
+                    gridViewData = ReqQuantForClient();
+                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.ReqValueSumType:
-                    ReqValueSum();
+                    gridViewData = ReqValueSum();
+                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.ReqValueSumForClientType:
-                    ReqValueSumForClientId();
+                    gridViewData = ReqValueSumForClientId();
+                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.AllReqsListType:
-                    AllReqsList();
+                    gridViewData = AllReqsList();
+                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.AllReqsListForClientType:
-                    ReqsListForClientId();
+                    gridViewData = ReqsListForClientId();
+                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.AverageReqValueType:
-                    AverageReqValue();
+                    gridViewData = AverageReqValue();
+                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.AverageReqValueForClientType:
-                    AverageReqValueForClientId();
+                    gridViewData = AverageReqValueForClientId();
+                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.ReqQuantByProdNameType:
-                    ReqQuantByName();
+                    gridViewData = ReqQuantByName();
+                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.ReqQuantByProdNameForClientType:
-                    ReqQuantByNameForClientId();
+                    gridViewData = ReqQuantByNameForClientId();
+                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.ReqsInValueRangeType:
-                    ReqsForValueRange();
+                    gridViewData = ReqsForValueRange();
+                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
             }
         }
