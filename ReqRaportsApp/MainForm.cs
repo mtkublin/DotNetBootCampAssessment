@@ -14,8 +14,8 @@ namespace ReqRaportsApp
             InitializeComponent();
 
             mainFormOperator = new MainFormOperator(AddFilesDialog, AddedFilesListBox, RaportsComboBox, ClientIdComboBox, RaportGenBtn,
-                                                                    DeleteFilesBtn, MaxMaxValLabel, MinValueTextBox, MaxValueTextBox, ClientIdBox, ValueRangeBox,
-                                                                    SaveRaportBtn, RaportsDataGrid, ClientIdLabel, SaveRaportDialog);
+                                                    DeleteFilesBtn, MaxMaxValLabel, MinValueTextBox, MaxValueTextBox, ClientIdBox, ValueRangeBox,
+                                                    SaveRaportBtn, RaportsDataGrid, ClientIdLabel, SaveRaportDialog);
 
             ClientIdBox.Visible = false;
             ClientIdComboBox.Visible = false;

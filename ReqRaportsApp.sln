@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReqRaportsApp", "ReqRaportsApp\ReqRaportsApp.csproj", "{E8E84048-C4A8-45E3-BE32-53E63BE3D569}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{88A85154-606D-4EE1-AE7B-94245BFF266B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{E8E84048-C4A8-45E3-BE32-53E63BE3D569}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8E84048-C4A8-45E3-BE32-53E63BE3D569}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8E84048-C4A8-45E3-BE32-53E63BE3D569}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88A85154-606D-4EE1-AE7B-94245BFF266B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88A85154-606D-4EE1-AE7B-94245BFF266B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88A85154-606D-4EE1-AE7B-94245BFF266B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88A85154-606D-4EE1-AE7B-94245BFF266B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
