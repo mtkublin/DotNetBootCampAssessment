@@ -8,29 +8,15 @@ namespace ReqRaportsApp
     public class RaportGenerators
     {
         List<request> ReqsList { get; set; }
-        ComboBox RaportsComboBox { get; set; }
-        ComboBox ClientIdComboBox { get; set; }
-        TextBox MinValueTextBox { get; set; }
-        TextBox MaxValueTextBox { get; set; }
-        DataGridView RaportsDataGrid { get; set; }
-
-        GridViewHandler GridViewHand { get; set; }
         RapGenOperations RapGenOps { get; set; }
 
-        public RaportGenerators(GridViewHandler gvHand, RapGenOperations rgOps, List<request> rList, ComboBox rCombo, ComboBox cidCombo, TextBox minvTextBox, TextBox maxvTextBox, DataGridView rDataGrid)
+        public RaportGenerators(RapGenOperations rgOps, List<request> rList)
         {
             ReqsList = rList;
-            RaportsComboBox = rCombo;
-            ClientIdComboBox = cidCombo;
-            MinValueTextBox = minvTextBox;
-            MaxValueTextBox = maxvTextBox;
-            RaportsDataGrid = rDataGrid;
-
-            GridViewHand = gvHand;
             RapGenOps = rgOps;
         }
 
-        private GridViewData ReqQuant()
+        public GridViewData ReqQuant()
         {
             Dictionary<string, List<long>> allReqDict = RapGenOps.AllRequests();
             int allReqsCount = 0;
@@ -49,12 +35,10 @@ namespace ReqRaportsApp
             return new GridViewData(colNames, rows);
         }
 
-        private GridViewData ReqQuantForClient()
+        public GridViewData ReqQuantForClient(string currentClientId)
         {
             try
             {
-                string currentClientId = ClientIdComboBox.SelectedItem.ToString();
-
                 HashSet<long> reqIdsForClient = RapGenOps.AllReqsForClient(currentClientId);
                 int clientReqsCount = reqIdsForClient.Count();
 
@@ -77,7 +61,7 @@ namespace ReqRaportsApp
             }
         }
 
-        private GridViewData ReqValueSum()
+        public GridViewData ReqValueSum()
         {
             double allReqsValueSum = RapGenOps.RequestsValuesSum(ReqsList);
 
@@ -90,12 +74,10 @@ namespace ReqRaportsApp
             return new GridViewData(colNames, rows);
         }
 
-        private GridViewData ReqValueSumForClientId()
+        public GridViewData ReqValueSumForClientId(string currentClientId)
         {
             try
             {
-                string currentClientId = ClientIdComboBox.SelectedItem.ToString();
-
                 double clientReqsValueSum = RapGenOps.ClientsValuesSum(currentClientId);
 
                 string[] colNames = { "Identyfikator klienta", "Łączna kwota zamówień" };
@@ -117,7 +99,7 @@ namespace ReqRaportsApp
             }
         }
 
-        private GridViewData AllReqsList()
+        public GridViewData AllReqsList()
         {
             Dictionary<string, List<long>> allReqDict = RapGenOps.AllRequests();
             string reqsListString = string.Empty;
@@ -148,12 +130,10 @@ namespace ReqRaportsApp
             return new GridViewData(colNames, rows);
         }
 
-        private GridViewData ReqsListForClientId()
+        public GridViewData ReqsListForClientId(string currentClientId)
         {
             try
             {
-                string currentClientId = ClientIdComboBox.SelectedItem.ToString();
-
                 HashSet<long> clientsReqs = RapGenOps.AllReqsForClient(currentClientId);
 
                 string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Nazwa produktu", "Ilość", "Cena produktu" };
@@ -188,7 +168,7 @@ namespace ReqRaportsApp
             }
         }
 
-        private GridViewData AverageReqValue()
+        public GridViewData AverageReqValue()
         {
             double allReqsValueSum = RapGenOps.RequestsValuesSum(ReqsList);
             Dictionary<string, List<long>> allReqDict = RapGenOps.AllRequests();
@@ -211,12 +191,10 @@ namespace ReqRaportsApp
             return new GridViewData(colNames, rows);
         }
 
-        private GridViewData AverageReqValueForClientId()
+        public GridViewData AverageReqValueForClientId(string currentClientId)
         {
             try
             {
-                string currentClientId = ClientIdComboBox.SelectedItem.ToString();
-
                 double clientReqsValueSum = RapGenOps.ClientsValuesSum(currentClientId);
 
                 HashSet<long> reqIdsForClient = RapGenOps.AllReqsForClient(currentClientId);
@@ -244,7 +222,7 @@ namespace ReqRaportsApp
             }
         }
 
-        private GridViewData ReqQuantByName()
+        public GridViewData ReqQuantByName()
         {
             Dictionary<string, ProductObject> reqsListString = RapGenOps.ProductReqIds(ReqsList);
 
@@ -263,12 +241,10 @@ namespace ReqRaportsApp
             return new GridViewData(colNames, rows);
         }
 
-        private GridViewData ReqQuantByNameForClientId()
+        public GridViewData ReqQuantByNameForClientId(string currentClientId)
         {
             try
             {
-                string currentClientId = ClientIdComboBox.SelectedItem.ToString();
-
                 IEnumerable<request> getClientsReqs = from request in ReqsList
                                                       where request.clientId == currentClientId
                                                       select request;
@@ -302,13 +278,10 @@ namespace ReqRaportsApp
             }
         }
 
-        private GridViewData ReqsForValueRange()
+        public GridViewData ReqsForValueRange(double minValue, double maxValue)
         {
             try
             {
-                double minValue = Double.Parse(MinValueTextBox.Text, System.Globalization.CultureInfo.InvariantCulture);
-                double maxValue = Double.Parse(MaxValueTextBox.Text, System.Globalization.CultureInfo.InvariantCulture);
-
                 List<RequestWithSummaricValue> requestWithSummaricValueList = new List<RequestWithSummaricValue>();
 
                 Dictionary<string, Dictionary<long, double>> allReqValsDict = RapGenOps.wholeReqValueDict();
@@ -346,54 +319,6 @@ namespace ReqRaportsApp
                 List<List<object>> rW = new List<List<object>>();
                 return new GridViewData(cN, rW);
             }
-        }
-
-        public GridViewData RaportChoiceSwitch()
-        {
-            string raportType = RaportsComboBox.SelectedItem.ToString();
-
-            string[] cN = { };
-            List<List<object>> rW = new List<List<object>>();
-            GridViewData gridViewData = new GridViewData(cN, rW);
-
-            switch (raportType)
-            {
-                case RaportTypes.ReqQuantType:
-                    gridViewData = ReqQuant();
-                    break;
-                case RaportTypes.ReqQuantForClientType:
-                    gridViewData = ReqQuantForClient();
-                    break;
-                case RaportTypes.ReqValueSumType:
-                    gridViewData = ReqValueSum();
-                    break;
-                case RaportTypes.ReqValueSumForClientType:
-                    gridViewData = ReqValueSumForClientId();
-                    break;
-                case RaportTypes.AllReqsListType:
-                    gridViewData = AllReqsList();
-                    break;
-                case RaportTypes.AllReqsListForClientType:
-                    gridViewData = ReqsListForClientId();
-                    break;
-                case RaportTypes.AverageReqValueType:
-                    gridViewData = AverageReqValue();
-                    break;
-                case RaportTypes.AverageReqValueForClientType:
-                    gridViewData = AverageReqValueForClientId();
-                    break;
-                case RaportTypes.ReqQuantByProdNameType:
-                    gridViewData = ReqQuantByName();
-                    break;
-                case RaportTypes.ReqQuantByProdNameForClientType:
-                    gridViewData = ReqQuantByNameForClientId();
-                    break;
-                case RaportTypes.ReqsInValueRangeType:
-                    gridViewData = ReqsForValueRange();
-                    break;
-            }
-
-            return gridViewData;
         }
     }
 }

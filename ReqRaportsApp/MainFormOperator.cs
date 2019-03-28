@@ -30,9 +30,8 @@ namespace ReqRaportsApp
         Deserializer Deserial { get; set; }
         GridViewHandler GridViewHand { get; set; }
         RapGenOperations RapGenOps { get; set; }
-        RaportGenerators RapGens { get; set; }
 
-        public MainFormOperator(OpenFileDialog afDialog, ListBox afListBox, ComboBox rCombo, ComboBox cidCombo, Button rgBtn, Button dfBtn,
+        public MainFormOperator(List<request> reqList, RapGenOperations rgOps, OpenFileDialog afDialog, ListBox afListBox, ComboBox rCombo, ComboBox cidCombo, Button rgBtn, Button dfBtn,
                                 Label maxmLabel, TextBox minvTextBox, TextBox maxvTextBox, GroupBox cidBox, GroupBox vrBox, Button srBtn,
                                 DataGridView rDataGrid, Label cidLabel, SaveFileDialog srDialog)
         {
@@ -52,13 +51,12 @@ namespace ReqRaportsApp
             ClientIdLabel = cidLabel;
             SaveRaportDialog = srDialog;
 
-            ReqsList = new List<request>();
+            ReqsList = reqList;
             AddedFiles = new Dictionary<string, List<request>>();
 
             Deserial = new Deserializer(ReqsList, AddedFiles);
             GridViewHand = new GridViewHandler(rDataGrid);
-            RapGenOps = new RapGenOperations(ReqsList);
-            RapGens = new RaportGenerators(GridViewHand, RapGenOps, ReqsList, rCombo, cidCombo, minvTextBox, maxvTextBox, rDataGrid);
+            RapGenOps = rgOps;
         }
 
         public void AddFiles()
@@ -330,12 +328,6 @@ namespace ReqRaportsApp
                     MaxValueTextBox.Text = null;
                 }
             }
-        }
-
-        public GridViewData GenerateRaport()
-        {
-            GridViewData gridViewData = RapGens.RaportChoiceSwitch();
-            return gridViewData;
         }
 
         public void SaveRaportToCsv()

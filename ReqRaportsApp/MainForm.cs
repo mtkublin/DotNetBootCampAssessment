@@ -2,18 +2,28 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace ReqRaportsApp
 {
     public partial class MainForm : Form
     {
         MainFormOperator mainFormOperator { get; set; }
+        RaportGenerators RapGens { get; set; }
+        RapGenOperations RapGenOps { get; set; }
+
+        List<request> ReqsList { get; set; }
 
         public MainForm()
         {
             InitializeComponent();
 
-            mainFormOperator = new MainFormOperator(AddFilesDialog, AddedFilesListBox, RaportsComboBox, ClientIdComboBox, RaportGenBtn,
+            ReqsList = new List<request>();
+
+            RapGenOps = new RapGenOperations(ReqsList);
+            RapGens = new RaportGenerators(RapGenOps, ReqsList);
+
+            mainFormOperator = new MainFormOperator(ReqsList, RapGenOps, AddFilesDialog, AddedFilesListBox, RaportsComboBox, ClientIdComboBox, RaportGenBtn,
                                                     DeleteFilesBtn, MaxMaxValLabel, MinValueTextBox, MaxValueTextBox, ClientIdBox, ValueRangeBox,
                                                     SaveRaportBtn, RaportsDataGrid, ClientIdLabel, SaveRaportDialog);
 
@@ -80,7 +90,7 @@ namespace ReqRaportsApp
 
         private void RaportGenBtn_Click(object sender, EventArgs e)
         {
-            GridViewData gridViewData = mainFormOperator.GenerateRaport();
+            GridViewData gridViewData = RaportChoiceSwitch();
             GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
         }
 
