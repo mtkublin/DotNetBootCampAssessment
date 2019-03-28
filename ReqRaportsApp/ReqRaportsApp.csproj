@@ -50,7 +50,6 @@
   <ItemGroup>
     <Compile Include="DataFormatValidator.cs" />
     <Compile Include="MainFormOperator.cs" />
-    <Compile Include="GridViewHandler.cs" />
     <Compile Include="MainFormUImodifier.cs">
       <SubType>Form</SubType>
     </Compile>

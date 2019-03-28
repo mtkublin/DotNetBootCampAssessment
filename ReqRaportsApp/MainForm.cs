@@ -90,13 +90,12 @@ namespace ReqRaportsApp
 
         private void RaportGenBtn_Click(object sender, EventArgs e)
         {
-            GridViewData gridViewData = RaportChoiceSwitch();
-            GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
+            GenerateRaport();
         }
 
         private void SaveRaportBtn_Click(object sender, EventArgs e)
         {
-            mainFormOperator.SaveRaportToCsv();
+            SaveRaportToCsv();
         }
     }
 }

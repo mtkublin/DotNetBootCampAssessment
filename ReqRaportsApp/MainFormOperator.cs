@@ -28,7 +28,6 @@ namespace ReqRaportsApp
         Dictionary<string, List<request>> AddedFiles { get; set; }
 
         Deserializer Deserial { get; set; }
-        GridViewHandler GridViewHand { get; set; }
         RapGenOperations RapGenOps { get; set; }
 
         public MainFormOperator(List<request> reqList, RapGenOperations rgOps, OpenFileDialog afDialog, ListBox afListBox, ComboBox rCombo, ComboBox cidCombo, Button rgBtn, Button dfBtn,
@@ -55,7 +54,6 @@ namespace ReqRaportsApp
             AddedFiles = new Dictionary<string, List<request>>();
 
             Deserial = new Deserializer(ReqsList, AddedFiles);
-            GridViewHand = new GridViewHandler(rDataGrid);
             RapGenOps = rgOps;
         }
 
@@ -326,22 +324,6 @@ namespace ReqRaportsApp
                 else
                 {
                     MaxValueTextBox.Text = null;
-                }
-            }
-        }
-
-        public void SaveRaportToCsv()
-        {
-            if (SaveRaportDialog.ShowDialog() == DialogResult.OK)
-            {
-                List<string> dataToWrite = GridViewHand.GatherGridDataToCsv();
-
-                using (StreamWriter outputFile = new StreamWriter(SaveRaportDialog.FileName))
-                {
-                    foreach (string line in dataToWrite)
-                    {
-                        outputFile.WriteLine(line);
-                    }
                 }
             }
         }
