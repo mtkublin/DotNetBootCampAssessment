@@ -29,7 +29,7 @@ namespace ReqRaportsApp
             IEnumerable<string> getClientIds = from request in ReqsList
                                                select request.clientId;
 
-            HashSet<string> clientIds = getClientIds.ToHashSet();
+            HashSet<string> clientIds = new HashSet<string>(getClientIds.ToList());
 
             Dictionary<string, List<long>> allReqsDict = new Dictionary<string, List<long>>();
             foreach (string cid in clientIds)

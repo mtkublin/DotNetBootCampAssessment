@@ -1,63 +1,22 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace ReqRaportsApp
 {
-    public class MainFormOperator
+    public partial class MainForm
     {
-        OpenFileDialog AddFilesDialog { get; set; }
-        ListBox AddedFilesListBox { get; set; }
-        ComboBox RaportsComboBox { get; set; }
-        ComboBox ClientIdComboBox { get; set; }
-        Button RaportGenBtn { get; set; }
-        Button DeleteFilesBtn { get; set; }
-        Label MaxMaxValLabel { get; set; }
-        TextBox MinValueTextBox { get; set; }
-        TextBox MaxValueTextBox { get; set; }
-        GroupBox ClientIdBox { get; set; }
-        GroupBox ValueRangeBox { get; set; }
-        Button SaveRaportBtn { get; set; }
-        DataGridView RaportsDataGrid { get; set; }
-        Label ClientIdLabel { get; set; }
-        SaveFileDialog SaveRaportDialog { get; set; }
-
-        List<request> ReqsList { get; set; }
-        Dictionary<string, List<request>> AddedFiles { get; set; }
-
-        Deserializer Deserial { get; set; }
-        RapGenOperations RapGenOps { get; set; }
-
-        public MainFormOperator(List<request> reqList, RapGenOperations rgOps, OpenFileDialog afDialog, ListBox afListBox, ComboBox rCombo, ComboBox cidCombo, Button rgBtn, Button dfBtn,
-                                Label maxmLabel, TextBox minvTextBox, TextBox maxvTextBox, GroupBox cidBox, GroupBox vrBox, Button srBtn,
-                                DataGridView rDataGrid, Label cidLabel, SaveFileDialog srDialog)
+        private void UpdateMaxValue()
         {
-            AddFilesDialog = afDialog;
-            AddedFilesListBox = afListBox;
-            RaportsComboBox = rCombo;
-            ClientIdComboBox = cidCombo;
-            RaportGenBtn = rgBtn;
-            DeleteFilesBtn = dfBtn;
-            MaxMaxValLabel = maxmLabel;
-            MinValueTextBox = minvTextBox;
-            MaxValueTextBox = maxvTextBox;
-            ClientIdBox = cidBox;
-            ValueRangeBox = vrBox;
-            SaveRaportBtn = srBtn;
-            RaportsDataGrid = rDataGrid;
-            ClientIdLabel = cidLabel;
-            SaveRaportDialog = srDialog;
-
-            ReqsList = reqList;
-            AddedFiles = new Dictionary<string, List<request>>();
-
-            Deserial = new Deserializer(ReqsList, AddedFiles);
-            RapGenOps = rgOps;
+            double maxPriceVal = RapGenOps.maxPrice();
+            MaxMaxValLabel.Text = maxPriceVal.ToString();
+            MinValueTextBox.Text = 0.ToString();
+            MaxValueTextBox.Text = maxPriceVal.ToString();
         }
 
-        public void AddFiles()
+        private void AddFiles()
         {
             try
             {
@@ -103,10 +62,7 @@ namespace ReqRaportsApp
                         DeleteFilesBtn.Enabled = true;
                     }
 
-                    double maxPriceVal = RapGenOps.maxPrice();
-                    MaxMaxValLabel.Text = maxPriceVal.ToString();
-                    MinValueTextBox.Text = 0.ToString();
-                    MaxValueTextBox.Text = maxPriceVal.ToString();
+                    UpdateMaxValue();
                 }
             }
             catch (Exception ex)
@@ -115,7 +71,7 @@ namespace ReqRaportsApp
             }
         }
 
-        public void DeleteFiles()
+        private void DeleteFiles()
         {
             try
             {
@@ -130,27 +86,15 @@ namespace ReqRaportsApp
                 {
                     AddedFilesListBox.Items.Remove(item);
 
-                    foreach (request r in AddedFiles[item.ToString()])
-                    {
-                        ReqsList.Remove(r);
-                        clientIdsToCheckList.Add(r.clientId);
-                    }
-
-                    AddedFiles.Remove(item.ToString());
+                    DataHandler.RemoveData(clientIdsToCheckList, item);
                 }
                 toRemove.Clear();
 
                 HashSet<string> clientIdsToCheckSet = new HashSet<string>(clientIdsToCheckList);
-                foreach (string cid in clientIdsToCheckSet)
+                List<string> clientIdsToRemove = DataHandler.checkClientIds(clientIdsToCheckSet);
+                foreach (string cid in clientIdsToRemove)
                 {
-                    IEnumerable<string> getClientIdsToRemove = from req in ReqsList
-                                                               where req.clientId == cid
-                                                               select req.clientId;
-
-                    if (getClientIdsToRemove.Count() == 0)
-                    {
-                        ClientIdComboBox.Items.Remove(cid);
-                    }
+                    ClientIdComboBox.Items.Remove(cid);
                 }
 
 
@@ -167,10 +111,7 @@ namespace ReqRaportsApp
                     RaportsDataGrid.ColumnCount = 0;
                 }
 
-                double maxPriceVal = RapGenOps.maxPrice();
-                MaxMaxValLabel.Text = maxPriceVal.ToString();
-                MinValueTextBox.Text = 0.ToString();
-                MaxValueTextBox.Text = maxPriceVal.ToString();
+                UpdateMaxValue();
             }
             catch (Exception ex)
             {
@@ -178,17 +119,7 @@ namespace ReqRaportsApp
             }
         }
 
-        private HashSet<string> getClientIds()
-        {
-            IEnumerable<string> getClientIdsQuery = from request in ReqsList
-                                                    select request.clientId;
-
-            HashSet<string> clientIds = new HashSet<string>(getClientIdsQuery.ToList());
-
-            return clientIds;
-        }
-
-        private void showClientIdsComboBox()
+        private void ShowClientIdsComboBox()
         {
             try
             {
@@ -196,7 +127,7 @@ namespace ReqRaportsApp
                 ClientIdComboBox.Visible = true;
                 ClientIdLabel.Visible = true;
 
-                HashSet<string> clientIds = getClientIds();
+                HashSet<string> clientIds = DataHandler.getClientIds();
 
                 List<object> toRemove = new List<object>();
                 foreach (object item in ClientIdComboBox.Items) if (!clientIds.Contains(item.ToString()))
@@ -233,7 +164,7 @@ namespace ReqRaportsApp
                 if (RaportTypes.clientIdRaportsList.Contains(selectedItem))
                 {
                     ValueRangeBox.Visible = false;
-                    showClientIdsComboBox();
+                    ShowClientIdsComboBox();
                 }
                 else if (selectedItem == RaportTypes.ReqsInValueRangeType)
                 {
@@ -244,10 +175,7 @@ namespace ReqRaportsApp
 
                     try
                     {
-                        double maxPriceVal = RapGenOps.maxPrice();
-                        MaxMaxValLabel.Text = maxPriceVal.ToString();
-                        MinValueTextBox.Text = 0.ToString();
-                        MaxValueTextBox.Text = maxPriceVal.ToString();
+                        UpdateMaxValue();
                     }
                     catch (Exception ex)
                     {
@@ -324,6 +252,165 @@ namespace ReqRaportsApp
                 else
                 {
                     MaxValueTextBox.Text = null;
+                }
+            }
+        }
+
+        private GridViewData RaportChoiceSwitch()
+        {
+            string raportType = RaportsComboBox.SelectedItem.ToString();
+
+            string[] cN = { };
+            List<List<object>> rW = new List<List<object>>();
+            GridViewData gridViewData = new GridViewData(cN, rW);
+
+            if (RaportTypes.clientIdRaportsList.Contains(raportType))
+            {
+                string currentClientId = ClientIdComboBox.SelectedItem.ToString();
+
+                switch (raportType)
+                {
+                    case RaportTypes.ReqQuantForClientType:
+                        gridViewData = RapGens.ReqQuantForClient(currentClientId);
+                        break;
+
+                    case RaportTypes.ReqValueSumForClientType:
+                        gridViewData = RapGens.ReqValueSumForClientId(currentClientId);
+                        break;
+
+                    case RaportTypes.AllReqsListForClientType:
+                        gridViewData = RapGens.ReqsListForClientId(currentClientId);
+                        break;
+
+                    case RaportTypes.AverageReqValueForClientType:
+                        gridViewData = RapGens.AverageReqValueForClientId(currentClientId);
+                        break;
+
+                    case RaportTypes.ReqQuantByProdNameForClientType:
+                        gridViewData = RapGens.ReqQuantByNameForClientId(currentClientId);
+                        break;
+                }
+            }
+            else
+            {
+                switch (raportType)
+                {
+                    case RaportTypes.ReqQuantType:
+                        gridViewData = RapGens.ReqQuant();
+                        break;
+                    
+                    case RaportTypes.ReqValueSumType:
+                        gridViewData = RapGens.ReqValueSum();
+                        break;
+                    
+                    case RaportTypes.AllReqsListType:
+                        gridViewData = RapGens.AllReqsList();
+                        break;
+                    
+                    case RaportTypes.AverageReqValueType:
+                        gridViewData = RapGens.AverageReqValue();
+                        break;
+                    
+                    case RaportTypes.ReqQuantByProdNameType:
+                        gridViewData = RapGens.ReqQuantByName();
+                        break;
+                    
+                    case RaportTypes.ReqsInValueRangeType:
+                        double minValue = Double.Parse(MinValueTextBox.Text);
+                        double maxValue = Double.Parse(MaxValueTextBox.Text);
+
+                        gridViewData = RapGens.ReqsForValueRange(minValue, maxValue);
+                        break;
+                }
+            }
+            return gridViewData;
+        }
+
+        private void GridViewPopulate(string[] colNames, List<List<object>> rows)
+        {
+            RaportsDataGrid.Rows.Clear();
+
+            RaportsDataGrid.ColumnCount = colNames.Count();
+
+            int i = 0;
+            foreach (string cn in colNames)
+            {
+                RaportsDataGrid.Columns[i].Name = cn;
+                i++;
+            }
+
+            int rowCount = 0;
+            foreach (List<object> row in rows)
+            {
+                RaportsDataGrid.Rows.Add();
+
+                int cellCount = 0;
+                foreach (object cellValue in row)
+                {
+                    RaportsDataGrid.Rows[rowCount].Cells[cellCount].ValueType = cellValue.GetType();
+                    RaportsDataGrid.Rows[rowCount].Cells[cellCount].Value = cellValue;
+
+                    cellCount++;
+                }
+
+                rowCount++;
+            }
+
+            if (RaportsDataGrid.ColumnCount != 0)
+            {
+                SaveRaportBtn.Enabled = true;
+            }
+        }
+
+        private void GenerateRaport()
+        {
+            GridViewData gridViewData = RaportChoiceSwitch();
+            GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
+        }
+
+        private List<string> GatherGridDataToCsv()
+        {
+            List<string> textData = new List<string>();
+
+            string rowText = string.Empty;
+            for (int col = 0; col < RaportsDataGrid.ColumnCount; col++)
+            {
+                if (col != 0)
+                {
+                    rowText += ",";
+                }
+                rowText += RaportsDataGrid.Columns[col].Name;
+            }
+            textData.Add(rowText);
+
+            for (int row = 0; row < RaportsDataGrid.RowCount; row++)
+            {
+                rowText = string.Empty;
+                for (int cell = 0; cell < RaportsDataGrid.ColumnCount; cell++)
+                {
+                    if (cell != 0)
+                    {
+                        rowText += ",";
+                    }
+                    rowText += RaportsDataGrid.Rows[row].Cells[cell].Value.ToString();
+                }
+                textData.Add(rowText);
+            }
+            return textData;
+        }
+
+        private void SaveRaportToCsv()
+        {
+            if (SaveRaportDialog.ShowDialog() == DialogResult.OK)
+            {
+                List<string> dataToWrite = GatherGridDataToCsv();
+
+                using (StreamWriter outputFile = new StreamWriter(SaveRaportDialog.FileName))
+                {
+                    foreach (string line in dataToWrite)
+                    {
+                        outputFile.WriteLine(line);
+                    }
                 }
             }
         }

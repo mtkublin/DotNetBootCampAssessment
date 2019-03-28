@@ -8,25 +8,27 @@ namespace ReqRaportsApp
 {
     public partial class MainForm : Form
     {
-        MainFormOperator mainFormOperator { get; set; }
+        DataHandler DataHandler { get; set; }
         RaportGenerators RapGens { get; set; }
         RapGenOperations RapGenOps { get; set; }
+        Deserializer Deserial { get; set; }
 
         List<request> ReqsList { get; set; }
+        Dictionary<string, List<request>> AddedFiles { get; set; }
+
 
         public MainForm()
         {
             InitializeComponent();
 
             ReqsList = new List<request>();
+            AddedFiles = new Dictionary<string, List<request>>();
 
+            Deserial = new Deserializer(ReqsList, AddedFiles);
             RapGenOps = new RapGenOperations(ReqsList);
             RapGens = new RaportGenerators(RapGenOps, ReqsList);
-
-            mainFormOperator = new MainFormOperator(ReqsList, RapGenOps, AddFilesDialog, AddedFilesListBox, RaportsComboBox, ClientIdComboBox, RaportGenBtn,
-                                                    DeleteFilesBtn, MaxMaxValLabel, MinValueTextBox, MaxValueTextBox, ClientIdBox, ValueRangeBox,
-                                                    SaveRaportBtn, RaportsDataGrid, ClientIdLabel, SaveRaportDialog);
-
+            DataHandler = new DataHandler(AddedFiles, ReqsList);
+            
             ClientIdBox.Visible = false;
             ClientIdComboBox.Visible = false;
             ClientIdLabel.Visible = false;
@@ -65,27 +67,27 @@ namespace ReqRaportsApp
 
         private void AddFilesBtn_Click(object sender, EventArgs e)
         {
-            mainFormOperator.AddFiles();
+            AddFiles();
         }
 
         private void DeleteFilesBtn_Click(object sender, EventArgs e)
         {
-            mainFormOperator.DeleteFiles();
+            DeleteFiles();
         }
 
         private void RaportsComboBoxSelectionChange(object sender, EventArgs e)
         {
-            mainFormOperator.RaportTypeChanged();
+            RaportTypeChanged();
         }
 
         private void MinValueTextBox_Leave(object sender, EventArgs e)
         {
-            mainFormOperator.MinMaxValueValidate(true);
+            MinMaxValueValidate(true);
         }
 
         private void MaxValueTextBox_Leave(object sender, EventArgs e)
         {
-            mainFormOperator.MinMaxValueValidate(false);
+            MinMaxValueValidate(false);
         }
 
         private void RaportGenBtn_Click(object sender, EventArgs e)
