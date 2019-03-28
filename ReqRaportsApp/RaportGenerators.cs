@@ -30,18 +30,6 @@ namespace ReqRaportsApp
             RapGenOps = rgOps;
         }
 
-        private class GridViewData
-        {
-            public string[] ColNames { get; set; }
-            public List<List<object>> Rows { get; set; }
-
-            public GridViewData(string[] cn, List<List<object>> r)
-            {
-                ColNames = cn;
-                Rows = r;
-            }
-        }
-
         private GridViewData ReqQuant()
         {
             Dictionary<string, List<long>> allReqDict = RapGenOps.AllRequests();
@@ -360,59 +348,52 @@ namespace ReqRaportsApp
             }
         }
 
-        public void RaportChoiceSwitch()
+        public GridViewData RaportChoiceSwitch()
         {
             string raportType = RaportsComboBox.SelectedItem.ToString();
 
-            GridViewData gridViewData;
+            string[] cN = { };
+            List<List<object>> rW = new List<List<object>>();
+            GridViewData gridViewData = new GridViewData(cN, rW);
 
             switch (raportType)
             {
                 case RaportTypes.ReqQuantType:
                     gridViewData = ReqQuant();
-                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.ReqQuantForClientType:
                     gridViewData = ReqQuantForClient();
-                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.ReqValueSumType:
                     gridViewData = ReqValueSum();
-                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.ReqValueSumForClientType:
                     gridViewData = ReqValueSumForClientId();
-                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.AllReqsListType:
                     gridViewData = AllReqsList();
-                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.AllReqsListForClientType:
                     gridViewData = ReqsListForClientId();
-                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.AverageReqValueType:
                     gridViewData = AverageReqValue();
-                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.AverageReqValueForClientType:
                     gridViewData = AverageReqValueForClientId();
-                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.ReqQuantByProdNameType:
                     gridViewData = ReqQuantByName();
-                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.ReqQuantByProdNameForClientType:
                     gridViewData = ReqQuantByNameForClientId();
-                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
                 case RaportTypes.ReqsInValueRangeType:
                     gridViewData = ReqsForValueRange();
-                    GridViewHand.GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
                     break;
             }
+
+            return gridViewData;
         }
     }
 }

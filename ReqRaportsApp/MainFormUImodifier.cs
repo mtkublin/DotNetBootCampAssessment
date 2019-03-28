@@ -37,6 +37,11 @@ namespace ReqRaportsApp
 
                 rowCount++;
             }
+
+            if (RaportsDataGrid.ColumnCount != 0)
+            {
+                SaveRaportBtn.Enabled = true;
+            }
         }
     }
 }

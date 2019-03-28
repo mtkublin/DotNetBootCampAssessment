@@ -332,14 +332,10 @@ namespace ReqRaportsApp
             }
         }
 
-        public void RaportChoiceChanged()
+        public GridViewData GenerateRaport()
         {
-            RapGens.RaportChoiceSwitch();
-
-            if (RaportsDataGrid.ColumnCount != 0)
-            {
-                SaveRaportBtn.Enabled = true;
-            }
+            GridViewData gridViewData = RapGens.RaportChoiceSwitch();
+            return gridViewData;
         }
 
         public void SaveRaportToCsv()

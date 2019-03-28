@@ -1,4 +1,6 @@
-﻿namespace ReqRaportsApp
+﻿using System.Collections.Generic;
+
+namespace ReqRaportsApp
 {
     public class request
     {
@@ -34,6 +36,18 @@
             requestQuantity = rq;
             productQuantity = pq;
             productValue = pv;
+        }
+    }
+
+    public class GridViewData
+    {
+        public string[] ColNames { get; set; }
+        public List<List<object>> Rows { get; set; }
+
+        public GridViewData(string[] cn, List<List<object>> r)
+        {
+            ColNames = cn;
+            Rows = r;
         }
     }
 }

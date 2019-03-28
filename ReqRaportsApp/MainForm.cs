@@ -80,7 +80,8 @@ namespace ReqRaportsApp
 
         private void RaportGenBtn_Click(object sender, EventArgs e)
         {
-            mainFormOperator.RaportChoiceChanged();
+            GridViewData gridViewData = mainFormOperator.GenerateRaport();
+            GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
         }
 
         private void SaveRaportBtn_Click(object sender, EventArgs e)
