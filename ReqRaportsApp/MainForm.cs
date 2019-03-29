@@ -11,7 +11,7 @@ namespace ReqRaportsApp
         DataHandler DataHandler { get; set; }
         RaportGenerators RapGens { get; set; }
         RapGenOperations RapGenOps { get; set; }
-        Deserializer Deserial { get; set; }
+        Serializers Serializer { get; set; }
 
         List<request> ReqsList { get; set; }
         Dictionary<string, List<request>> AddedFiles { get; set; }
@@ -24,10 +24,10 @@ namespace ReqRaportsApp
             ReqsList = new List<request>();
             AddedFiles = new Dictionary<string, List<request>>();
 
-            Deserial = new Deserializer(ReqsList, AddedFiles);
+            Serializer = new Serializers(ReqsList, AddedFiles);
             RapGenOps = new RapGenOperations(ReqsList);
             RapGens = new RaportGenerators(RapGenOps, ReqsList);
-            DataHandler = new DataHandler(AddedFiles, ReqsList);
+            DataHandler = new DataHandler(AddedFiles, ReqsList, Serializer);
             
             ClientIdBox.Visible = false;
             ClientIdComboBox.Visible = false;

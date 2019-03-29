@@ -5,15 +5,16 @@ using System.Linq;
 using System.Web.Script.Serialization;
 using System.Xml.Serialization;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace ReqRaportsApp
 {
-    public class Deserializer
+    public class Serializers
     {
         List<request> MainReqList { get; set; }
         Dictionary<string, List<request>> AddedFiles { get; set; }
 
-        public Deserializer(List<request> rList, Dictionary<string, List<request>> afDict)
+        public Serializers(List<request> rList, Dictionary<string, List<request>> afDict)
         {
             MainReqList = rList;
             AddedFiles = afDict;
@@ -190,6 +191,27 @@ namespace ReqRaportsApp
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        public List<string> SerializeToCsv(List<List<string>> RowsList)
+        {
+            List<string> textData = new List<string>();
+
+            foreach (List<string> row in RowsList)
+            {
+                string rowText = string.Empty;
+                for (int cell = 0; cell < row.Count; cell++)
+                {
+                    if (cell != 0)
+                    {
+                        rowText += ",";
+                    }
+                    string cellToAdd = Regex.Replace(row[cell], ",", ".");
+                    rowText += cellToAdd;
+                }
+                textData.Add(rowText);
+            }
+            return textData;
         }
     }
 

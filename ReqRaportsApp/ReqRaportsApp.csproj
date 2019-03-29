@@ -56,7 +56,7 @@
     <Compile Include="RaportGenerators.cs" />
     <Compile Include="RaportTypes.cs" />
     <Compile Include="RequestObjects.cs" />
-    <Compile Include="Deserializer.cs" />
+    <Compile Include="Serializers.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

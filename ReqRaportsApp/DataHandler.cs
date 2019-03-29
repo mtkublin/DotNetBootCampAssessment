@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ReqRaportsApp
 {
@@ -7,11 +9,13 @@ namespace ReqRaportsApp
     {
         List<request> ReqsList { get; set; }
         Dictionary<string, List<request>> AddedFiles { get; set; }
+        Serializers Serializer { get; set; }
 
-        public DataHandler(Dictionary<string, List<request>> addFiles, List<request> reqList)
+        public DataHandler(Dictionary<string, List<request>> addFiles, List<request> reqList, Serializers serial)
         {
             ReqsList = reqList;
             AddedFiles = addFiles;
+            Serializer = serial;
         }
 
         public void RemoveData(List<string> clientIdsToCheckList, object item)
@@ -50,6 +54,24 @@ namespace ReqRaportsApp
             HashSet<string> clientIds = new HashSet<string>(getClientIdsQuery.ToList());
 
             return clientIds;
+        }
+
+        public void ExportGridDataToFile(List<List<string>> RowsList, string fileName)
+        {
+            List<string> textData = new List<string>();
+
+            if (fileName.EndsWith(".csv"))
+            {
+                textData = Serializer.SerializeToCsv(RowsList);
+            }
+
+            using (StreamWriter outputFile = new StreamWriter(fileName))
+            {
+                foreach (string line in textData)
+                {
+                    outputFile.WriteLine(line);
+                }
+            }
         }
     }
 }
