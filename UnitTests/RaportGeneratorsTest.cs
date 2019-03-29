@@ -43,10 +43,19 @@ namespace UnitTests
         public void ReqQuantTest()
         {
             int expectedQuant = 11;
+
             GridViewData testData = RapGen.ReqQuant();
             int testQuant = Convert.ToInt32(testData.Rows[0][0]);
             int testName = testData.ColNames[0][0];
+
             Assert.AreEqual(expectedQuant, testQuant);
+
+            string[] expectedColNames = { "Ilość zamówień" };
+            string[] testColNames = testData.ColNames;
+            for (int i = 0; i < expectedColNames.Count(); i++)
+            {
+                Assert.AreEqual(expectedColNames[i], testColNames[i]);
+            }
         }
 
         [TestMethod]
@@ -68,6 +77,13 @@ namespace UnitTests
                 int testQuant = Convert.ToInt32(testData.Rows[0][1]);
 
                 Assert.AreEqual(clientIdsWithExpectedValues[cid], testQuant);
+
+                string[] expectedColNames = { "Identyfikator klienta", "Ilość zamówień" };
+                string[] testColNames = testData.ColNames;
+                for (int i = 0; i < expectedColNames.Count(); i++)
+                {
+                    Assert.AreEqual(expectedColNames[i], testColNames[i]);
+                }
             }
         }
 
@@ -80,6 +96,13 @@ namespace UnitTests
             double testValue = Convert.ToDouble(testData.Rows[0][0]);
 
             Assert.AreEqual(expectedValue, testValue);
+
+            string[] expectedColNames = { "Łączna kwota zamówień" };
+            string[] testColNames = testData.ColNames;
+            for (int i = 0; i < expectedColNames.Count(); i++)
+            {
+                Assert.AreEqual(expectedColNames[i], testColNames[i]);
+            }
         }
 
         [TestMethod]
@@ -101,6 +124,13 @@ namespace UnitTests
                 double testValue = Math.Round(Convert.ToDouble(testData.Rows[0][1]), 2);
 
                 Assert.AreEqual(clientIdsWithExpectedValues[cid], testValue);
+
+                string[] expectedColNames = { "Identyfikator klienta", "Łączna kwota zamówień" };
+                string[] testColNames = testData.ColNames;
+                for (int i = 0; i < expectedColNames.Count(); i++)
+                {
+                    Assert.AreEqual(expectedColNames[i], testColNames[i]);
+                }
             }
         }
 
@@ -122,6 +152,13 @@ namespace UnitTests
                 Assert.AreEqual(typeof(string), row[2].GetType());
                 Assert.AreEqual(typeof(int), row[3].GetType());
                 Assert.AreEqual(typeof(double), row[4].GetType());
+            }
+
+            string[] expectedColNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Nazwa produktu", "Ilość", "Cena produktu" };
+            string[] testColNames = testData.ColNames;
+            for (int i = 0; i < expectedColNames.Count(); i++)
+            {
+                Assert.AreEqual(expectedColNames[i], testColNames[i]);
             }
         }
 
@@ -154,6 +191,13 @@ namespace UnitTests
                     Assert.AreEqual(typeof(int), row[3].GetType());
                     Assert.AreEqual(typeof(double), row[4].GetType());
                 }
+
+                string[] expectedColNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Nazwa produktu", "Ilość", "Cena produktu" };
+                string[] testColNames = testData.ColNames;
+                for (int i = 0; i < expectedColNames.Count(); i++)
+                {
+                    Assert.AreEqual(expectedColNames[i], testColNames[i]);
+                }
             }
         }
 
@@ -166,6 +210,13 @@ namespace UnitTests
             double testValue = Convert.ToDouble(testData.Rows[0][0]);
 
             Assert.AreEqual(expectedAvgVal, testValue);
+
+            string[] expectedColNames = { "Średnia wartość zamówienia" };
+            string[] testColNames = testData.ColNames;
+            for (int i = 0; i < expectedColNames.Count(); i++)
+            {
+                Assert.AreEqual(expectedColNames[i], testColNames[i]);
+            }
         }
 
         [TestMethod]
@@ -187,6 +238,13 @@ namespace UnitTests
                 double testValue = Convert.ToDouble(testData.Rows[0][1]);
 
                 Assert.AreEqual(clientIdsWithexpectedValues[cid], testValue);
+
+                string[] expectedColNames = { "Identyfikator klienta", "Średnia wartość zamówienia" };
+                string[] testColNames = testData.ColNames;
+                for (int i = 0; i < expectedColNames.Count(); i++)
+                {
+                    Assert.AreEqual(expectedColNames[i], testColNames[i]);
+                }
             }
         }
 
@@ -212,6 +270,13 @@ namespace UnitTests
                 int testValue = Convert.ToInt32(getReqsByName.ToList()[0]);
 
                 Assert.AreEqual(prodNamesWithexpectedValues[name], testValue);
+            }
+
+            string[] expectedColNames = { "Nazwa produktu", "Ilość zamówień", "Ilość produktu we wszystkich zamówienia", "Sumaryczna kwota produktu" };
+            string[] testColNames = testData.ColNames;
+            for (int i = 0; i < expectedColNames.Count(); i++)
+            {
+                Assert.AreEqual(expectedColNames[i], testColNames[i]);
             }
         }
 
@@ -266,6 +331,13 @@ namespace UnitTests
                     int testValue = Convert.ToInt32(getReqsByName.ToList()[0]);
 
                     Assert.AreEqual(prodNamesForClientsWithexpectedValues[cid][name], testValue);
+                }
+
+                string[] expectedColNames = { "Identyfikator klienta", "Nazwa produktu", "Ilość zamówień", "Ilość produktu we wszystkich zamówienia", "Sumaryczna kwota produktu" };
+                string[] testColNames = testData.ColNames;
+                for (int i = 0; i < expectedColNames.Count(); i++)
+                {
+                    Assert.AreEqual(expectedColNames[i], testColNames[i]);
                 }
             }
         }
@@ -334,6 +406,13 @@ namespace UnitTests
                     Assert.IsTrue(reqsWithexpectedValues[Convert.ToDouble(row[2])].Keys.Contains(row[0].ToString()));
                     Assert.AreEqual(Convert.ToInt32(row[1]), reqsWithexpectedValues[Convert.ToDouble(row[2])][row[0].ToString()]);
                 }
+
+                string[] expectedColNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Wartość zamówienia" };
+                string[] testColNames = testData.ColNames;
+                for (int i = 0; i < expectedColNames.Count(); i++)
+                {
+                    Assert.AreEqual(expectedColNames[i], testColNames[i]);
+                }
             }
 
             foreach (double value in reqsWithexpectedValues.Keys)
@@ -353,6 +432,13 @@ namespace UnitTests
                 }
 
                 expectedRowCount -= reqsWithexpectedValues[value].Count;
+
+                string[] expectedColNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Wartość zamówienia" };
+                string[] testColNames = testData.ColNames;
+                for (int i = 0; i < expectedColNames.Count(); i++)
+                {
+                    Assert.AreEqual(expectedColNames[i], testColNames[i]);
+                }
             }
         }
     }
