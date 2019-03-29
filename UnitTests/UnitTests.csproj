@@ -53,6 +53,7 @@
     <Compile Include="RapGenOpsTests.cs" />
     <Compile Include="RaportGeneratorsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
