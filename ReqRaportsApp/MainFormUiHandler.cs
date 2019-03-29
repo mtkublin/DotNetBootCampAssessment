@@ -198,12 +198,13 @@ namespace ReqRaportsApp
 
         public void MinMaxValueValidate(bool isMin)
         {
+            double maxMaxValue = Double.Parse(MaxMaxValLabel.Text);
+
             try
             {
                 TextBox minMaxValueTextBox = new TextBox();
                 TextBox otherTextBox = new TextBox();
 
-                double maxMaxValue = Double.Parse(MaxMaxValLabel.Text);
                 double defaultVal;
                 if (isMin)
                 {
@@ -242,88 +243,100 @@ namespace ReqRaportsApp
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show(ex.Message);
                 if (isMin)
                 {
-                    MinValueTextBox.Text = null;
+                    MinValueTextBox.Text = 0.ToString();
                 }
                 else
                 {
-                    MaxValueTextBox.Text = null;
+                    MaxValueTextBox.Text = maxMaxValue.ToString();
                 }
             }
         }
 
         private GridViewData RaportChoiceSwitch()
         {
-            string raportType = RaportsComboBox.SelectedItem.ToString();
-
-            string[] cN = { };
-            List<List<object>> rW = new List<List<object>>();
-            GridViewData gridViewData = new GridViewData(cN, rW);
-
-            if (RaportTypes.clientIdRaportsList.Contains(raportType))
+            try
             {
-                string currentClientId = ClientIdComboBox.SelectedItem.ToString();
+                string raportType = RaportsComboBox.SelectedItem.ToString();
 
-                switch (raportType)
+                string[] cN = { };
+                List<List<object>> rW = new List<List<object>>();
+                GridViewData gridViewData = new GridViewData(cN, rW);
+
+                if (RaportTypes.clientIdRaportsList.Contains(raportType))
                 {
-                    case RaportTypes.ReqQuantForClientType:
-                        gridViewData = RapGens.ReqQuantForClient(currentClientId);
-                        break;
+                    string currentClientId = ClientIdComboBox.SelectedItem.ToString();
 
-                    case RaportTypes.ReqValueSumForClientType:
-                        gridViewData = RapGens.ReqValueSumForClientId(currentClientId);
-                        break;
+                    switch (raportType)
+                    {
+                        case RaportTypes.ReqQuantForClientType:
+                            gridViewData = RapGens.ReqQuantForClient(currentClientId);
+                            break;
 
-                    case RaportTypes.AllReqsListForClientType:
-                        gridViewData = RapGens.ReqsListForClientId(currentClientId);
-                        break;
+                        case RaportTypes.ReqValueSumForClientType:
+                            gridViewData = RapGens.ReqValueSumForClientId(currentClientId);
+                            break;
 
-                    case RaportTypes.AverageReqValueForClientType:
-                        gridViewData = RapGens.AverageReqValueForClientId(currentClientId);
-                        break;
+                        case RaportTypes.AllReqsListForClientType:
+                            gridViewData = RapGens.ReqsListForClientId(currentClientId);
+                            break;
 
-                    case RaportTypes.ReqQuantByProdNameForClientType:
-                        gridViewData = RapGens.ReqQuantByNameForClientId(currentClientId);
-                        break;
+                        case RaportTypes.AverageReqValueForClientType:
+                            gridViewData = RapGens.AverageReqValueForClientId(currentClientId);
+                            break;
+
+                        case RaportTypes.ReqQuantByProdNameForClientType:
+                            gridViewData = RapGens.ReqQuantByNameForClientId(currentClientId);
+                            break;
+                    }
                 }
+                else
+                {
+                    switch (raportType)
+                    {
+                        case RaportTypes.ReqQuantType:
+                            gridViewData = RapGens.ReqQuant();
+                            break;
+
+                        case RaportTypes.ReqValueSumType:
+                            gridViewData = RapGens.ReqValueSum();
+                            break;
+
+                        case RaportTypes.AllReqsListType:
+                            gridViewData = RapGens.AllReqsList();
+                            break;
+
+                        case RaportTypes.AverageReqValueType:
+                            gridViewData = RapGens.AverageReqValue();
+                            break;
+
+                        case RaportTypes.ReqQuantByProdNameType:
+                            gridViewData = RapGens.ReqQuantByName();
+                            break;
+
+                        case RaportTypes.ReqsInValueRangeType:
+                            double minValue = Double.Parse(MinValueTextBox.Text);
+                            double maxValue = Double.Parse(MaxValueTextBox.Text);
+
+                            gridViewData = RapGens.ReqsForValueRange(minValue, maxValue);
+                            break;
+                    }
+                }
+                return gridViewData;
             }
-            else
+            catch(Exception ex)
             {
-                switch (raportType)
-                {
-                    case RaportTypes.ReqQuantType:
-                        gridViewData = RapGens.ReqQuant();
-                        break;
-                    
-                    case RaportTypes.ReqValueSumType:
-                        gridViewData = RapGens.ReqValueSum();
-                        break;
-                    
-                    case RaportTypes.AllReqsListType:
-                        gridViewData = RapGens.AllReqsList();
-                        break;
-                    
-                    case RaportTypes.AverageReqValueType:
-                        gridViewData = RapGens.AverageReqValue();
-                        break;
-                    
-                    case RaportTypes.ReqQuantByProdNameType:
-                        gridViewData = RapGens.ReqQuantByName();
-                        break;
-                    
-                    case RaportTypes.ReqsInValueRangeType:
-                        double minValue = Double.Parse(MinValueTextBox.Text);
-                        double maxValue = Double.Parse(MaxValueTextBox.Text);
+                MessageBox.Show(ex.Message);
 
-                        gridViewData = RapGens.ReqsForValueRange(minValue, maxValue);
-                        break;
-                }
+                string[] cN = { };
+                List<List<object>> rW = new List<List<object>>();
+                GridViewData gridViewData = new GridViewData(cN, rW);
+                return gridViewData;
             }
-            return gridViewData;
+            
         }
 
         private void GridViewPopulate(string[] colNames, List<List<object>> rows)
