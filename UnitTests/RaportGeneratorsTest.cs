@@ -1,9 +1,8 @@
-﻿using System;
-using System.Windows.Forms;
-using System.Linq;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ReqRaportsApp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace UnitTests
 {
@@ -268,6 +267,92 @@ namespace UnitTests
 
                     Assert.AreEqual(prodNamesForClientsWithexpectedValues[cid][name], testValue);
                 }
+            }
+        }
+
+        [TestMethod]
+        public void ReqsForValueRangeTest()
+        {
+            Dictionary<double, Dictionary<string, int>> reqsWithexpectedValues = new Dictionary<double, Dictionary<string, int>>();
+            reqsWithexpectedValues[8.4] = new Dictionary<string, int>()
+            {
+                { "5", 2 }
+            };
+            reqsWithexpectedValues[8.54] = new Dictionary<string, int>()
+            {
+                { "4", 2 }
+            };
+            reqsWithexpectedValues[12.43] = new Dictionary<string, int>()
+            {
+                { "4", 1 },
+                { "5", 1 }
+            };
+            reqsWithexpectedValues[20.02] = new Dictionary<string, int>()
+            {
+                { "1", 1 }
+            };
+            reqsWithexpectedValues[21] = new Dictionary<string, int>()
+            {
+                { "6", 6 }
+            };
+            reqsWithexpectedValues[28.92] = new Dictionary<string, int>()
+            {
+                { "1", 7 }
+            };
+            reqsWithexpectedValues[31.41] = new Dictionary<string, int>()
+            {
+                { "2", 1 }
+            };
+            reqsWithexpectedValues[33.36] = new Dictionary<string, int>()
+            {
+                { "2", 3 }
+            };
+            reqsWithexpectedValues[70.65] = new Dictionary<string, int>()
+            {
+                { "3", 1 }
+            };
+            reqsWithexpectedValues[72.3] = new Dictionary<string, int>()
+            {
+                { "3", 2 }
+            };
+
+            int expectedRowCount = 0;
+            foreach (double value in reqsWithexpectedValues.Keys)
+            {
+                expectedRowCount += reqsWithexpectedValues[value].Count;
+
+                double minValue = 0;
+                double maxValue = value;
+
+                GridViewData testData = RapGen.ReqsForValueRange(minValue, maxValue);
+
+                Assert.AreEqual(expectedRowCount, testData.Rows.Count);
+
+                foreach (List<object> row in testData.Rows)
+                {
+                    Assert.IsTrue(reqsWithexpectedValues.Keys.Contains(Convert.ToDouble(row[2])));
+                    Assert.IsTrue(reqsWithexpectedValues[Convert.ToDouble(row[2])].Keys.Contains(row[0].ToString()));
+                    Assert.AreEqual(Convert.ToInt32(row[1]), reqsWithexpectedValues[Convert.ToDouble(row[2])][row[0].ToString()]);
+                }
+            }
+
+            foreach (double value in reqsWithexpectedValues.Keys)
+            {
+                double minValue = value;
+                double maxValue = reqsWithexpectedValues.Keys.Last();
+
+                GridViewData testData = RapGen.ReqsForValueRange(minValue, maxValue);
+
+                Assert.AreEqual(expectedRowCount, testData.Rows.Count);
+
+                foreach (List<object> row in testData.Rows)
+                {
+                    Assert.IsTrue(reqsWithexpectedValues.Keys.Contains(Convert.ToDouble(row[2])));
+                    Assert.IsTrue(reqsWithexpectedValues[Convert.ToDouble(row[2])].Keys.Contains(row[0].ToString()));
+                    Assert.AreEqual(Convert.ToInt32(row[1]), reqsWithexpectedValues[Convert.ToDouble(row[2])][row[0].ToString()]);
+                }
+
+                expectedRowCount -= reqsWithexpectedValues[value].Count;
             }
         }
     }

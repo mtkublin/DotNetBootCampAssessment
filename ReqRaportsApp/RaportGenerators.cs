@@ -313,7 +313,7 @@ namespace ReqRaportsApp
                 }
 
                 IEnumerable<RequestWithSummaricValue> getReqValsInRange = from req in requestWithSummaricValueList
-                                                                          where req.value >= minValue & req.value <= maxValue
+                                                                          where Math.Round(req.value, 2) >= minValue & Math.Round(req.value, 2) <= maxValue
                                                                           select req;
 
                 string[] colNames = { "Identyfikator klienta", "Identyfikator zamówienia", "Wartość zamówienia" };
