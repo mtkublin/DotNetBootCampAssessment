@@ -19,6 +19,49 @@ namespace ReqRaportsApp
             AddedFiles = afDict;
         }
 
+        private Dictionary<bool, string> DataFormatValidate(request r)
+        {
+            bool isRequestFormatCorrect = true;
+            string errMessage = string.Empty;
+
+            Dictionary<bool, string> dictToReturn = new Dictionary<bool, string>();
+
+            if (r.clientId.Length > 6 || r.clientId.Contains(" "))
+            {
+                isRequestFormatCorrect = false;
+                errMessage = "Zły format identyfikatora klienta w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
+            }
+            else if (r.clientId == null || r.clientId == string.Empty)
+            {
+                isRequestFormatCorrect = false;
+                errMessage = "Brak identyfikatora klienta w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
+            }
+            else if (r.name == null || r.name == string.Empty)
+            {
+                isRequestFormatCorrect = false;
+                errMessage = "Brak nazwy produktu w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
+            }
+            else if (r.name.Length > 255)
+            {
+                isRequestFormatCorrect = false;
+                errMessage = "Za długa nazwa produktu w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
+            }
+            else if (r.price == 0)
+            {
+                isRequestFormatCorrect = false;
+                errMessage = "Brak ceny produktu w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
+            }
+            else if (r.quantity == 0)
+            {
+                isRequestFormatCorrect = false;
+                errMessage = "Brak ilości produktu w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
+            }
+
+            dictToReturn[isRequestFormatCorrect] = errMessage;
+
+            return dictToReturn;
+        }
+
         public void DeserializeXmlObject(string path)
         {
             try
@@ -31,18 +74,18 @@ namespace ReqRaportsApp
 
                 AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)] = new List<request>();
                 foreach (request r in XmlRequestsList)
-                {
-                    bool isRequestFormatCorrect = true;
-                    string errMessage = string.Empty;
-                    DataFormatValidator dataFormatValidator = new DataFormatValidator(isRequestFormatCorrect, errMessage, r);
-                    if (dataFormatValidator.isRequestFormatCorrect)
+                { 
+                    Dictionary<bool, string> dataValidDict = DataFormatValidate(r);
+                    bool isRequestFormatCorrect = dataValidDict.Keys.ToList()[0];
+                    string errMessage = dataValidDict[isRequestFormatCorrect];
+                    if (isRequestFormatCorrect)
                     {
                         MainReqList.Add(r);
                         AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)].Add(r);
                     }
                     else
                     {
-                        MessageBox.Show(dataFormatValidator.errMessage);
+                        MessageBox.Show(errMessage);
                     }
                 }
             }
@@ -78,17 +121,17 @@ namespace ReqRaportsApp
                 AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)] = new List<request>();
                 foreach (request r in JsonRequestsList)
                 {
-                    bool isRequestFormatCorrect = true;
-                    string errMessage = string.Empty;
-                    DataFormatValidator dataFormatValidator = new DataFormatValidator(isRequestFormatCorrect, errMessage, r);
-                    if (dataFormatValidator.isRequestFormatCorrect)
+                    Dictionary<bool, string> dataValidDict = DataFormatValidate(r);
+                    bool isRequestFormatCorrect = dataValidDict.Keys.ToList()[0];
+                    string errMessage = dataValidDict[isRequestFormatCorrect];
+                    if (isRequestFormatCorrect)
                     {
                         MainReqList.Add(r);
                         AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)].Add(r);
                     }
                     else
                     {
-                        MessageBox.Show(dataFormatValidator.errMessage);
+                        MessageBox.Show(errMessage);
                     }
                 }
             }
@@ -124,17 +167,17 @@ namespace ReqRaportsApp
                     AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)] = new List<request>();
                     foreach (request r in CsvRequestsList)
                     {
-                        bool isRequestFormatCorrect = true;
-                        string errMessage = string.Empty;
-                        DataFormatValidator dataFormatValidator = new DataFormatValidator(isRequestFormatCorrect, errMessage, r);
-                        if (dataFormatValidator.isRequestFormatCorrect)
+                        Dictionary<bool, string> dataValidDict = DataFormatValidate(r);
+                        bool isRequestFormatCorrect = dataValidDict.Keys.ToList()[0];
+                        string errMessage = dataValidDict[isRequestFormatCorrect];
+                        if (isRequestFormatCorrect)
                         {
                             MainReqList.Add(r);
                             AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)].Add(r);
                         }
                         else
                         {
-                            MessageBox.Show(dataFormatValidator.errMessage);
+                            MessageBox.Show(errMessage);
                         }
                     }
                 }

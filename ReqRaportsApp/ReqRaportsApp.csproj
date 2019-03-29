@@ -48,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataFormatValidator.cs" />
     <Compile Include="DataHandler.cs" />
     <Compile Include="MainFormUiHandler.cs">
       <SubType>Form</SubType>

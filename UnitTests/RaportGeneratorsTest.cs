@@ -45,7 +45,7 @@ namespace UnitTests
             int expectedQuant = 11;
             GridViewData testData = RapGen.ReqQuant();
             int testQuant = Convert.ToInt32(testData.Rows[0][0]);
-
+            int testName = testData.ColNames[0][0];
             Assert.AreEqual(expectedQuant, testQuant);
         }
 
