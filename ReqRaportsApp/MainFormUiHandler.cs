@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace ReqRaportsApp
 {
@@ -28,15 +29,15 @@ namespace ReqRaportsApp
                         {
                             if (fp.EndsWith(".xml"))
                             {
-                                Deserial.DeserializeXmlObject(fp);
+                                Serializer.DeserializeXmlObject(fp);
                             }
                             else if (fp.EndsWith(".json"))
                             {
-                                Deserial.DesarializeJsonObject(fp);
+                                Serializer.DesarializeJsonObject(fp);
                             }
                             else if (fp.EndsWith(".csv"))
                             {
-                                Deserial.DeserializeCsvObject(fp);
+                                Serializer.DeserializeCsvObject(fp);
                             }
 
                             string fileName = fp.Substring(fp.LastIndexOf("\\") + 1);
@@ -381,50 +382,36 @@ namespace ReqRaportsApp
             GridViewPopulate(gridViewData.ColNames, gridViewData.Rows);
         }
 
-        private List<string> GatherGridDataToCsv()
-        {
-            List<string> textData = new List<string>();
-
-            string rowText = string.Empty;
-            for (int col = 0; col < RaportsDataGrid.ColumnCount; col++)
-            {
-                if (col != 0)
-                {
-                    rowText += ",";
-                }
-                rowText += RaportsDataGrid.Columns[col].Name;
-            }
-            textData.Add(rowText);
-
-            for (int row = 0; row < RaportsDataGrid.RowCount; row++)
-            {
-                rowText = string.Empty;
-                for (int cell = 0; cell < RaportsDataGrid.ColumnCount; cell++)
-                {
-                    if (cell != 0)
-                    {
-                        rowText += ",";
-                    }
-                    rowText += RaportsDataGrid.Rows[row].Cells[cell].Value.ToString();
-                }
-                textData.Add(rowText);
-            }
-            return textData;
-        }
-
         private void SaveRaportToCsv()
         {
+            string selectedItem = RaportsComboBox.SelectedItem.ToString();
+            string raportName = "raport_" + Regex.Replace(selectedItem, " ", "-") + "_" + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss");
+            SaveRaportDialog.FileName = raportName;
+
             if (SaveRaportDialog.ShowDialog() == DialogResult.OK)
             {
-                List<string> dataToWrite = GatherGridDataToCsv();
+                List<List<string>> RowsList = new List<List<string>>();
 
-                using (StreamWriter outputFile = new StreamWriter(SaveRaportDialog.FileName))
+                List<string> rowText = new List<string>();
+                for (int col = 0; col < RaportsDataGrid.ColumnCount; col++)
                 {
-                    foreach (string line in dataToWrite)
-                    {
-                        outputFile.WriteLine(line);
-                    }
+                    rowText.Add(RaportsDataGrid.Columns[col].Name);
                 }
+                RowsList.Add(rowText);
+
+                for (int row = 0; row < RaportsDataGrid.RowCount; row++)
+                {
+                    rowText = new List<string>();
+                    for (int cell = 0; cell < RaportsDataGrid.ColumnCount; cell++)
+                    {
+                        rowText.Add(RaportsDataGrid.Rows[row].Cells[cell].Value.ToString());
+                    }
+                    RowsList.Add(rowText);
+                }
+
+                DataHandler.ExportGridDataToFile(RowsList, SaveRaportDialog.FileName);
+
+                SaveRaportDialog.FileName = string.Empty;
             }
         }
     }

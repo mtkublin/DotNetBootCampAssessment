@@ -5,18 +5,62 @@ using System.Linq;
 using System.Web.Script.Serialization;
 using System.Xml.Serialization;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace ReqRaportsApp
 {
-    public class Deserializer
+    public class Serializers
     {
         List<request> MainReqList { get; set; }
         Dictionary<string, List<request>> AddedFiles { get; set; }
 
-        public Deserializer(List<request> rList, Dictionary<string, List<request>> afDict)
+        public Serializers(List<request> rList, Dictionary<string, List<request>> afDict)
         {
             MainReqList = rList;
             AddedFiles = afDict;
+        }
+
+        private Dictionary<bool, string> DataFormatValidate(request r)
+        {
+            bool isRequestFormatCorrect = true;
+            string errMessage = string.Empty;
+
+            Dictionary<bool, string> dictToReturn = new Dictionary<bool, string>();
+
+            if (r.clientId.Length > 6 || r.clientId.Contains(" "))
+            {
+                isRequestFormatCorrect = false;
+                errMessage = "Zły format identyfikatora klienta w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
+            }
+            else if (r.clientId == null || r.clientId == string.Empty)
+            {
+                isRequestFormatCorrect = false;
+                errMessage = "Brak identyfikatora klienta w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
+            }
+            else if (r.name == null || r.name == string.Empty)
+            {
+                isRequestFormatCorrect = false;
+                errMessage = "Brak nazwy produktu w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
+            }
+            else if (r.name.Length > 255)
+            {
+                isRequestFormatCorrect = false;
+                errMessage = "Za długa nazwa produktu w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
+            }
+            else if (r.price == 0)
+            {
+                isRequestFormatCorrect = false;
+                errMessage = "Brak ceny produktu w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
+            }
+            else if (r.quantity == 0)
+            {
+                isRequestFormatCorrect = false;
+                errMessage = "Brak ilości produktu w zamówieniu \"" + r.requestId.ToString() + "\" klienta \"" + r.clientId + "\"";
+            }
+
+            dictToReturn[isRequestFormatCorrect] = errMessage;
+
+            return dictToReturn;
         }
 
         public void DeserializeXmlObject(string path)
@@ -31,18 +75,18 @@ namespace ReqRaportsApp
 
                 AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)] = new List<request>();
                 foreach (request r in XmlRequestsList)
-                {
-                    bool isRequestFormatCorrect = true;
-                    string errMessage = string.Empty;
-                    DataFormatValidator dataFormatValidator = new DataFormatValidator(isRequestFormatCorrect, errMessage, r);
-                    if (dataFormatValidator.isRequestFormatCorrect)
+                { 
+                    Dictionary<bool, string> dataValidDict = DataFormatValidate(r);
+                    bool isRequestFormatCorrect = dataValidDict.Keys.ToList()[0];
+                    string errMessage = dataValidDict[isRequestFormatCorrect];
+                    if (isRequestFormatCorrect)
                     {
                         MainReqList.Add(r);
                         AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)].Add(r);
                     }
                     else
                     {
-                        MessageBox.Show(dataFormatValidator.errMessage);
+                        MessageBox.Show(errMessage);
                     }
                 }
             }
@@ -78,17 +122,17 @@ namespace ReqRaportsApp
                 AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)] = new List<request>();
                 foreach (request r in JsonRequestsList)
                 {
-                    bool isRequestFormatCorrect = true;
-                    string errMessage = string.Empty;
-                    DataFormatValidator dataFormatValidator = new DataFormatValidator(isRequestFormatCorrect, errMessage, r);
-                    if (dataFormatValidator.isRequestFormatCorrect)
+                    Dictionary<bool, string> dataValidDict = DataFormatValidate(r);
+                    bool isRequestFormatCorrect = dataValidDict.Keys.ToList()[0];
+                    string errMessage = dataValidDict[isRequestFormatCorrect];
+                    if (isRequestFormatCorrect)
                     {
                         MainReqList.Add(r);
                         AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)].Add(r);
                     }
                     else
                     {
-                        MessageBox.Show(dataFormatValidator.errMessage);
+                        MessageBox.Show(errMessage);
                     }
                 }
             }
@@ -124,17 +168,17 @@ namespace ReqRaportsApp
                     AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)] = new List<request>();
                     foreach (request r in CsvRequestsList)
                     {
-                        bool isRequestFormatCorrect = true;
-                        string errMessage = string.Empty;
-                        DataFormatValidator dataFormatValidator = new DataFormatValidator(isRequestFormatCorrect, errMessage, r);
-                        if (dataFormatValidator.isRequestFormatCorrect)
+                        Dictionary<bool, string> dataValidDict = DataFormatValidate(r);
+                        bool isRequestFormatCorrect = dataValidDict.Keys.ToList()[0];
+                        string errMessage = dataValidDict[isRequestFormatCorrect];
+                        if (isRequestFormatCorrect)
                         {
                             MainReqList.Add(r);
                             AddedFiles[path.Substring(path.LastIndexOf("\\") + 1)].Add(r);
                         }
                         else
                         {
-                            MessageBox.Show(dataFormatValidator.errMessage);
+                            MessageBox.Show(errMessage);
                         }
                     }
                 }
@@ -147,6 +191,27 @@ namespace ReqRaportsApp
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        public List<string> SerializeToCsv(List<List<string>> RowsList)
+        {
+            List<string> textData = new List<string>();
+
+            foreach (List<string> row in RowsList)
+            {
+                string rowText = string.Empty;
+                for (int cell = 0; cell < row.Count; cell++)
+                {
+                    if (cell != 0)
+                    {
+                        rowText += ",";
+                    }
+                    string cellToAdd = Regex.Replace(row[cell], ",", ".");
+                    rowText += cellToAdd;
+                }
+                textData.Add(rowText);
+            }
+            return textData;
         }
     }
 

@@ -62,7 +62,7 @@ namespace ReqRaportsApp
                     {
                         reqValue += r.quantity * r.price;
                     }
-                    reqValuesDict[rid] = reqValue;
+                    reqValuesDict[rid] = Math.Round(reqValue, 2, MidpointRounding.AwayFromZero);
                 }
                 clientReqWholeValDict[cid] = reqValuesDict;
             }
@@ -83,7 +83,7 @@ namespace ReqRaportsApp
             }
 
             double maxPr = reqValuesList.Max();
-            maxPr = Math.Round(maxPr, 2);
+            maxPr = Math.Round(maxPr, 2, MidpointRounding.AwayFromZero);
             return maxPr;
         }
 
@@ -99,7 +99,7 @@ namespace ReqRaportsApp
                 allReqsValueSum += val;
             }
 
-            return allReqsValueSum;
+            return Math.Round(allReqsValueSum, 2, MidpointRounding.AwayFromZero);
         }
 
         public double ClientsValuesSum(string currentClientId)
@@ -151,7 +151,7 @@ namespace ReqRaportsApp
                     prodQuant += r.quantity;
                     prodPrice += r.price * r.quantity;
                 }
-                prodReqIdsDict[pn] = new ProductObject(reqCounter, prodQuant, Math.Round(prodPrice, 2));
+                prodReqIdsDict[pn] = new ProductObject(reqCounter, prodQuant, Math.Round(prodPrice, 2, MidpointRounding.AwayFromZero));
             }
             return prodReqIdsDict;
         }
