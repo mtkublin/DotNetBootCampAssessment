@@ -20,7 +20,7 @@ namespace ReqRaportsApp
             AddedFiles = afDict;
         }
 
-        private Dictionary<bool, string> DataFormatValidate(request r)
+        public Dictionary<bool, string> DataFormatValidate(request r)
         {
             bool isRequestFormatCorrect = true;
             string errMessage = string.Empty;

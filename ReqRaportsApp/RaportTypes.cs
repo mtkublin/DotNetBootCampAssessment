@@ -31,11 +31,11 @@
 
         public static string[] clientIdRaportsList =
         {
-                ReqQuantForClientType,
-                ReqValueSumForClientType,
-                AllReqsListForClientType,
-                AverageReqValueForClientType,
-                ReqQuantByProdNameForClientType,
+            ReqQuantForClientType,
+            ReqValueSumForClientType,
+            AllReqsListForClientType,
+            AverageReqValueForClientType,
+            ReqQuantByProdNameForClientType,
         };
     }
 }
