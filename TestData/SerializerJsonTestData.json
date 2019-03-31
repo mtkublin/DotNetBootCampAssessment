@@ -131,14 +131,14 @@
       "requestId": 2,
       "name": "Mleko",
       "quantity": 2,
-      "price": 4.20
+      "price": 4.2
     },
     {
       "clientId": "6",
       "requestId": 6,
       "name": "Mleko",
       "quantity": 5,
-      "price": 4.20
+      "price": 4.2
     }
   ]
 }

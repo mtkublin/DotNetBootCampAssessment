@@ -87,7 +87,7 @@ namespace UnitTests
         long[] ridList = { 1, 1, 7, 1, 1, 1, 1, 3, 1, 1, 1, 2, 1, 1, 2, 2, 1, 1, 2, 6 };
         string[] nameList = { "Chleb", "Masło", "Masło", "Bułka", "Bułka", "Bułka", "Chleb", "Chleb", "Bułka", "Chleb", "Chleb", "Masło", "Bułka", "Chleb", "Bułka", "Masło", "Bułka", "Chleb", "Mleko", "Mleko" };
         int[] quantList = { 1, 2, 4, 2, 2, 3, 4, 6, 3, 5, 7, 10, 1, 2, 1, 1, 1, 2, 2, 5 };
-        double[] priceList = { 5.56, 7.23, 7.23, 1.31, 1.31, 1.31, 5.56, 5.56, 1.31, 5.56, 5.56, 7.23, 1.31, 5.56, 1.31, 7.23, 1.31, 5.56, 4.20, 4.20 };
+        double[] priceList = { 5.56, 7.23, 7.23, 1.31, 1.31, 1.31, 5.56, 5.56, 1.31, 5.56, 5.56, 7.23, 1.31, 5.56, 1.31, 7.23, 1.31, 5.56, 4.2, 4.2 };
 
         public SerializerTests()
         {
@@ -180,6 +180,42 @@ namespace UnitTests
             }
 
             ActualReqsList.Clear();
+        }
+
+        [TestMethod]
+        public void SerializeToCsvTest()
+        {
+            List<List<string>> RowsList = new List<List<string>>();
+
+            RowsList.Add(new List<string>() { "Client_Id", "Request_id", "Name", "Quantity", "Price" });
+            for (int row = 0; row < ExpectedReqsList.Count; row++)
+            {
+                List<string> rowText = new List<string>();
+
+                rowText.Add(cidList[row]);
+                rowText.Add(ridList[row].ToString());
+                rowText.Add(nameList[row]);
+                rowText.Add(quantList[row].ToString());
+                rowText.Add(priceList[row].ToString());
+
+                RowsList.Add(rowText);
+            }
+
+            List<string> testTextList = Serializer.SerializeToCsv(RowsList);
+
+            string filePath = Directory.GetCurrentDirectory();
+            for (int i = 0; i < 3; i++)
+            {
+                filePath = filePath.Substring(0, filePath.LastIndexOf('\\'));
+            }
+            filePath += "\\TestData\\SerializerCsvTestData.csv";
+            string[] expectedTextList = File.ReadAllLines(filePath);
+            
+            for (int i = 0; i < testTextList.Count; i++)
+            {
+                Assert.AreEqual(expectedTextList[i], testTextList[i]);
+            }
+
         }
     }
 }
