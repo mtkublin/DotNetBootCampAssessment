@@ -1,0 +1,144 @@
+﻿{
+  "requests": [
+    {
+      "clientId": "1",
+      "requestId": 1,
+      "name": "Chleb",
+      "quantity": 1,
+      "price": 5.56
+    },
+    {
+      "clientId": "1",
+      "requestId": 1,
+      "name": "Masło",
+      "quantity": 2,
+      "price": 7.23
+    },
+    {
+      "clientId": "1",
+      "requestId": 7,
+      "name": "Masło",
+      "quantity": 4,
+      "price": 7.23
+    },
+    {
+      "clientId": "2",
+      "requestId": 1,
+      "name": "Bułka",
+      "quantity": 2,
+      "price": 1.31
+    },
+    {
+      "clientId": "2",
+      "requestId": 1,
+      "name": "Bułka",
+      "quantity": 2,
+      "price": 1.31
+    },
+    {
+      "clientId": "2",
+      "requestId": 1,
+      "name": "Bułka",
+      "quantity": 3,
+      "price": 1.31
+    },
+    {
+      "clientId": "2",
+      "requestId": 1,
+      "name": "Chleb",
+      "quantity": 4,
+      "price": 5.56
+    },
+    {
+      "clientId": "2",
+      "requestId": 3,
+      "name": "Chleb",
+      "quantity": 6,
+      "price": 5.56
+    },
+    {
+      "clientId": "3",
+      "requestId": 1,
+      "name": "Bułka",
+      "quantity": 3,
+      "price": 1.31
+    },
+    {
+      "clientId": "3",
+      "requestId": 1,
+      "name": "Chleb",
+      "quantity": 5,
+      "price": 5.56
+    },
+    {
+      "clientId": "3",
+      "requestId": 1,
+      "name": "Chleb",
+      "quantity": 7,
+      "price": 5.56
+    },
+    {
+      "clientId": "3",
+      "requestId": 2,
+      "name": "Masło",
+      "quantity": 10,
+      "price": 7.23
+    },
+    {
+      "clientId": "4",
+      "requestId": 1,
+      "name": "Bułka",
+      "quantity": 1,
+      "price": 1.31
+    },
+    {
+      "clientId": "4",
+      "requestId": 1,
+      "name": "Chleb",
+      "quantity": 2,
+      "price": 5.56
+    },
+    {
+      "clientId": "4",
+      "requestId": 2,
+      "name": "Bułka",
+      "quantity": 1,
+      "price": 1.31
+    },
+    {
+      "clientId": "4",
+      "requestId": 2,
+      "name": "Masło",
+      "quantity": 1,
+      "price": 7.23
+    },
+    {
+      "clientId": "5",
+      "requestId": 1,
+      "name": "Bułka",
+      "quantity": 1,
+      "price": 1.31
+    },
+    {
+      "clientId": "5",
+      "requestId": 1,
+      "name": "Chleb",
+      "quantity": 2,
+      "price": 5.56
+    },
+    {
+      "clientId": "5",
+      "requestId": 2,
+      "name": "Mleko",
+      "quantity": 2,
+      "price": 4.2
+    },
+    {
+      "clientId": "6",
+      "requestId": 6,
+      "name": "Mleko",
+      "quantity": 5,
+      "price": 4.2
+    }
+  ]
+}

@@ -101,7 +101,7 @@ namespace ReqRaportsApp
             public List<request> requests { get; set; }
         }
 
-        public void DesarializeJsonObject(string path)
+        public void DeserializeJsonObject(string path)
         {
             try
             {

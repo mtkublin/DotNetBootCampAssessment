@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace ReqRaportsApp
 {
@@ -33,7 +32,7 @@ namespace ReqRaportsApp
                             }
                             else if (fp.EndsWith(".json"))
                             {
-                                Serializer.DesarializeJsonObject(fp);
+                                Serializer.DeserializeJsonObject(fp);
                             }
                             else if (fp.EndsWith(".csv"))
                             {
