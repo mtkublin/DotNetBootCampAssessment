@@ -2,6 +2,7 @@
 using ReqRaportsApp;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.IO;
 
 namespace UnitTests
@@ -82,11 +83,11 @@ namespace UnitTests
         Serializers Serializer { get; set; }
         Dictionary<string, List<request>> AddedFiles { get; set; }
 
-        string[] cidList = { "1", "2", "3", "4", "2", "3", "3", "3", "4", "1", "2", "4", "4", "2", "6", "5", "5", "1", "2", "5" };
-        long[] ridList = { 1, 1, 1, 1, 1, 1, 2, 1, 1, 7, 1, 2, 2, 3, 6, 2, 1, 1, 1, 1 };
-        string[] nameList = { "Chleb", "Bułka", "Chleb", "Bułka", "Bułka", "Bułka", "Masło", "Chleb", "Chleb", "Masło", "Chleb", "Masło", "Bułka", "Chleb", "Mleko", "Mleko", "Bułka", "Masło", "Bułka", "Chleb" };
-        int[] quantList = { 1, 2, 5, 1, 2, 3, 10, 7, 2, 4, 4, 1, 1, 6, 5, 2, 1, 2, 3, 2 };
-        double[] priceList = { 5.56, 1.31, 5.56, 1.31, 1.31, 1.31, 7.23, 5.56, 5.56, 7.23, 5.56, 7.23, 1.31, 5.56, 4.20, 4.20, 1.31, 7.23, 1.31, 5.56 };
+        string[] cidList = { "1", "1", "1", "2", "2", "2", "2", "2", "3", "3", "3", "3", "4", "4", "4", "4", "5", "5", "5", "6" };
+        long[] ridList = { 1, 1, 7, 1, 1, 1, 1, 3, 1, 1, 1, 2, 1, 1, 2, 2, 1, 1, 2, 6 };
+        string[] nameList = { "Chleb", "Masło", "Masło", "Bułka", "Bułka", "Bułka", "Chleb", "Chleb", "Bułka", "Chleb", "Chleb", "Masło", "Bułka", "Chleb", "Bułka", "Masło", "Bułka", "Chleb", "Mleko", "Mleko" };
+        int[] quantList = { 1, 2, 4, 2, 2, 3, 4, 6, 3, 5, 7, 10, 1, 2, 1, 1, 1, 2, 2, 5 };
+        double[] priceList = { 5.56, 7.23, 7.23, 1.31, 1.31, 1.31, 5.56, 5.56, 1.31, 5.56, 5.56, 7.23, 1.31, 5.56, 1.31, 7.23, 1.31, 5.56, 4.20, 4.20 };
 
         public SerializerTests()
         {
@@ -110,16 +111,75 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void DeserializeXmlObjectTest()
+        public void DeserializeXmlTest()
         {
             string filePath = Directory.GetCurrentDirectory();
             for (int i = 0; i < 3; i++)
             {
                 filePath = filePath.Substring(0, filePath.LastIndexOf('\\'));
             }
-            filePath += "\\TestData";
-
+            filePath += "\\TestData\\SerializerXmlTestData.xml";
             Serializer.DeserializeXmlObject(filePath);
+
+
+            for (int r = 0; r < ActualReqsList.Count; r++)
+            {
+                Assert.AreEqual(ExpectedReqsList[r].clientId, ActualReqsList[r].clientId);
+                Assert.AreEqual(ExpectedReqsList[r].requestId, ActualReqsList[r].requestId);
+                Assert.AreEqual(ExpectedReqsList[r].name, ActualReqsList[r].name);
+                Assert.AreEqual(ExpectedReqsList[r].price, ActualReqsList[r].price);
+                Assert.AreEqual(ExpectedReqsList[r].quantity, ActualReqsList[r].quantity);
+            }
+
+            ActualReqsList.Clear();
+        }
+
+        [TestMethod]
+        public void DeserializeCsvTest()
+        {
+            string filePath = Directory.GetCurrentDirectory();
+            for (int i = 0; i < 3; i++)
+            {
+                filePath = filePath.Substring(0, filePath.LastIndexOf('\\'));
+            }
+            filePath += "\\TestData\\SerializerCsvTestData.csv";
+            Serializer.DeserializeCsvObject(filePath);
+
+
+            for (int r = 0; r < ActualReqsList.Count; r++)
+            {
+                Assert.AreEqual(ExpectedReqsList[r].clientId, ActualReqsList[r].clientId);
+                Assert.AreEqual(ExpectedReqsList[r].requestId, ActualReqsList[r].requestId);
+                Assert.AreEqual(ExpectedReqsList[r].name, ActualReqsList[r].name);
+                Assert.AreEqual(ExpectedReqsList[r].price, ActualReqsList[r].price);
+                Assert.AreEqual(ExpectedReqsList[r].quantity, ActualReqsList[r].quantity);
+            }
+
+            ActualReqsList.Clear();
+        }
+
+        [TestMethod]
+        public void DeserializeJsonTest()
+        {
+            string filePath = Directory.GetCurrentDirectory();
+            for (int i = 0; i < 3; i++)
+            {
+                filePath = filePath.Substring(0, filePath.LastIndexOf('\\'));
+            }
+            filePath += "\\TestData\\SerializerJsonTestData.json";
+            Serializer.DeserializeJsonObject(filePath);
+
+
+            for (int r = 0; r < ActualReqsList.Count; r++)
+            {
+                Assert.AreEqual(ExpectedReqsList[r].clientId, ActualReqsList[r].clientId);
+                Assert.AreEqual(ExpectedReqsList[r].requestId, ActualReqsList[r].requestId);
+                Assert.AreEqual(ExpectedReqsList[r].name, ActualReqsList[r].name);
+                Assert.AreEqual(ExpectedReqsList[r].price, ActualReqsList[r].price);
+                Assert.AreEqual(ExpectedReqsList[r].quantity, ActualReqsList[r].quantity);
+            }
+
+            ActualReqsList.Clear();
         }
     }
 }
